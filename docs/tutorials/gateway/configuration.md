@@ -91,7 +91,6 @@ cp ~/.openclaw/openclaw.json ~/.openclaw/openclaw.json.bak
 OpenClaw 仅接受完全匹配 schema 的配置。未知键、格式错误的类型或无效值会导致网关（Gateway）**拒绝启动**。唯一的根级例外是 `$schema`（string），以便编辑器可以附加 JSON Schema 元数据。
 :::
 
-这句话翻成人话就是：
 配置文件里多写、写错、写成不该有的类型，Gateway 可能会直接不启动。
 所以改配置以后，先运行 doctor 检查。
 
