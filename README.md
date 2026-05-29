@@ -13,11 +13,11 @@
 
 ## 📚 文档覆盖范围
 
-本文档站包含 **710 篇**中文教程，分为 4 条学习主线：
+本文档站包含 **767 篇**中文教程，分为 4 条学习主线：
 
 | 主线 | 内容覆盖 | 篇数 | 链接 |
 |---|---|---|---|
-| **Track 0** 安装教程 | 零基础照着做、快速安装、onboard、Web 控制 UI、节点、AI 服务商接入、通道接入、Gateway 运维、常见问题排查 | 623 篇 | [→ 教程中心](https://openclaw-docs.dx3n.cn/tutorials/) |
+| **Track 0** 安装教程 | 零基础照着做、快速安装、onboard、Web 控制 UI、节点、AI 服务商接入、通道接入、Gateway 运维、常见问题排查 | 680 篇 | [→ 教程中心](https://openclaw-docs.dx3n.cn/tutorials/) |
 | **Track A** 完整工程主线 | CLI 启动框架、Gateway 控制平面、插件与通道适配器、节点、路由与会话键、Agent 执行链路、函数级源码剖析 | 62 篇 | [→ 工程主线](https://openclaw-docs.dx3n.cn/beginner-openclaw-guide/) |
 | **Track B** AI 核心框架 | 上下文工程、Agent 状态机、工具策略与审批、模型回退、记忆系统、Hook 插件注入机制 | 24 篇 | [→ AI 框架](https://openclaw-docs.dx3n.cn/beginner-openclaw-framework-focus/) |
 | **Track C** 通道适配器 | 接口合同、注册链路、账号生命周期、入站路由、出站发送解耦 | 含于 Track A | [→ 适配器索引](https://openclaw-docs.dx3n.cn/beginner-openclaw-guide/59-%E9%80%9A%E9%81%93%E9%80%82%E9%85%8D%E5%99%A8%E5%AE%9E%E7%8E%B0%E7%B4%A2%E5%BC%95) |
@@ -62,7 +62,7 @@ npm run docs:preview  # 本地预览构建结果
 openclaw-docs/
 ├── docs/
 │   ├── index.md                            # 首页
-│   ├── tutorials/                          # Track 0：安装教程（623 篇）
+│   ├── tutorials/                          # Track 0：安装教程（680 篇）
 │   │   ├── getting-started/                #   快速入门与向导安装
 │   │   ├── installation/                   #   Docker / Node / 云服务器部署
 │   │   ├── gateway/                        #   Gateway 配置与运维
@@ -98,7 +98,7 @@ openclaw-docs/
 - **保姆级讲解**：先讲人话，再讲术语，零基础也能跟着跑起来
 - **可直接复刻**：每个核心能力都给出落地步骤，可直接用于自己的项目
 - **持续更新**：跟随 OpenClaw 版本迭代，覆盖最新 API 与配置方式
-- **SEO 完备**：710 页独立 description、sitemap、IndexNow 自动推送
+- **SEO 完备**：767 页独立 description、sitemap、IndexNow 自动推送
 
 ---
 

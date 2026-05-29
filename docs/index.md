@@ -1,7 +1,7 @@
 ---
 layout: home
 title: OpenClaw 中文文档 | 安装教程 · 源码剖析 · AI智能体框架
-description: OpenClaw 中文完整文档，710篇教程。安装部署、Gateway配置、Web控制UI、节点、WhatsApp/Telegram/Discord/飞书多通道接入，支持 Claude、DeepSeek、Ollama 本地模型，源码剖析与架构分析。
+description: OpenClaw 中文完整文档，767篇教程。安装部署、Gateway配置、Web控制UI、节点、WhatsApp/Telegram/Discord/飞书多通道接入，支持 Claude、DeepSeek、Ollama 本地模型，源码剖析与架构分析。
 head:
   - - meta
     - name: keywords
@@ -83,7 +83,7 @@ hero:
 <div class="oc-metric-sep"></div>
 <div class="oc-metric"><span class="oc-metric-val">3</span><span class="oc-metric-key">学习主线</span></div>
 <div class="oc-metric-sep"></div>
-<div class="oc-metric"><span class="oc-metric-val">623</span><span class="oc-metric-key">教程文档</span></div>
+<div class="oc-metric"><span class="oc-metric-val">680</span><span class="oc-metric-key">教程文档</span></div>
 <div class="oc-metric-sep"></div>
 <div class="oc-metric"><span class="oc-metric-val">40+</span><span class="oc-metric-key">函数级剖析</span></div>
 </section>

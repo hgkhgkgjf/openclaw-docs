@@ -1,22 +1,22 @@
 ---
 title: "iMessage"
 sidebarTitle: "iMessage"
-description: "OpenClaw 通道接入：iMessage（旧版：imsg）。对于新的 iMessage 部署，请使用 BlueBubbles。"
+description: "OpenClaw 通道接入：iMessage 当前使用内置 imessage 插件和 imsg。BlueBubbles 已移除。"
 ---
 
-# iMessage（旧版：imsg）
+# iMessage（imsg）
 
 ::: warning 注意
-对于新的 iMessage 部署，请使用 <a href="/tutorials/channels/bluebubbles">BlueBubbles</a>。
+对于新的 iMessage 部署，请使用本页的内置 `imessage` 插件 + `imsg` 路线。
 
-`imsg` 集成是旧版，可能在未来版本中移除。
+BlueBubbles 支持已经移除；旧的 `channels.bluebubbles` 配置需要迁移到 `channels.imessage`。
 :::
 
 
-状态：旧版外部 CLI 集成。网关启动 `imsg rpc` 并通过 stdio 上的 JSON-RPC 进行通信（没有单独的守护进程/端口）。
+状态：当前推荐的 iMessage 集成。网关启动 `imsg rpc` 并通过 stdio 上的 JSON-RPC 进行通信（没有单独的守护进程/端口）。
 
 
-  - [BlueBubbles（推荐）](/tutorials/channels/bluebubbles) — 新设置首选的 iMessage 方案。
+  - [从 BlueBubbles 迁移](/tutorials/channels/imessage-from-bluebubbles) — 旧配置迁移到 `channels.imessage`。
 
   - [配对](/tutorials/channels/pairing) — iMessage 私信默认为配对模式。
 

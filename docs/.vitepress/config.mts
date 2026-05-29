@@ -122,7 +122,7 @@ const jsonLd = JSON.stringify({
       url: `${SITE_URL}/`,
       name: 'OpenClaw 中文文档',
       alternateName: ['ClawdBot 文档', 'ClawdBot Docs', 'openclaw docs', 'OpenClaw 源码剖析'],
-      description: 'OpenClaw 中文完整文档，710篇教程，覆盖安装部署、源码剖析、Gateway配置、Web控制UI、节点、多通道接入与AI模型集成。',
+      description: 'OpenClaw 中文完整文档，767篇教程，覆盖安装部署、源码剖析、Gateway配置、Web控制UI、节点、多通道接入与AI模型集成。',
       inLanguage: 'zh-CN',
       potentialAction: {
         '@type': 'SearchAction',
@@ -232,7 +232,7 @@ export default withMermaid(defineConfig({
   lang: 'zh-CN',
   title: 'OpenClaw 中文文档 | 源码剖析 · 安装教程 · AI智能体框架',
   titleTemplate: ':title | OpenClaw 中文文档',
-  description: 'OpenClaw 中文完整文档，710篇教程，覆盖安装部署、源码剖析、Gateway配置、Web控制UI、节点、WhatsApp/Telegram/Discord/飞书多通道接入，支持 Claude、DeepSeek、Ollama 本地模型。',
+  description: 'OpenClaw 中文完整文档，767篇教程，覆盖安装部署、源码剖析、Gateway配置、Web控制UI、节点、WhatsApp/Telegram/Discord/飞书多通道接入，支持 Claude、DeepSeek、Ollama 本地模型。',
   cleanUrls: true,
   lastUpdated: true,
   ignoreDeadLinks: true,
@@ -282,7 +282,7 @@ export default withMermaid(defineConfig({
       .replace(/\.md$/, '')
     const canonical = path ? `${SITE_URL}/${path}` : `${SITE_URL}/`
     const ogTitle = title || 'OpenClaw 中文文档 | 源码剖析 · 安装教程 · AI智能体框架'
-    const ogDesc = pageDesc || 'OpenClaw 中文完整文档，710篇教程，覆盖安装部署、源码剖析、Gateway配置、Web控制UI、节点、WhatsApp/Telegram/Discord/飞书多通道接入，支持 Claude、DeepSeek、Ollama 本地模型。'
+    const ogDesc = pageDesc || 'OpenClaw 中文完整文档，767篇教程，覆盖安装部署、源码剖析、Gateway配置、Web控制UI、节点、WhatsApp/Telegram/Discord/飞书多通道接入，支持 Claude、DeepSeek、Ollama 本地模型。'
     return [
       ['link', { rel: 'canonical', href: canonical }],
       ['meta', { property: 'og:url', content: canonical }],

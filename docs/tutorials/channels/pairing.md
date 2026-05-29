@@ -116,6 +116,6 @@ openclaw devices reject <requestId>
   - WhatsApp：[WhatsApp](/tutorials/channels/whatsapp)
   - Signal：[Signal](/tutorials/channels/signal)
   - BlueBubbles（iMessage）：[BlueBubbles](/tutorials/channels/bluebubbles)
-  - iMessage（旧版）：[iMessage](/tutorials/channels/imessage)
+  - iMessage：[iMessage](/tutorials/channels/imessage)
   - Discord：[Discord](/tutorials/channels/discord)
   - Slack：[Slack](/tutorials/channels/slack)
