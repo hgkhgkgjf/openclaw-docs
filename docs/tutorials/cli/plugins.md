@@ -15,8 +15,13 @@ openclaw plugins list --enabled
 openclaw plugins enable <name>
 openclaw plugins disable <name>
 openclaw plugins install <path-or-spec>
+openclaw plugins update <id-or-spec>
+openclaw plugins update --all
 openclaw plugins inspect <id>
 openclaw plugins doctor
+openclaw plugins marketplace entries
+openclaw plugins marketplace list <source>
+openclaw plugins marketplace refresh
 ```
 
 ## 什么时候用
@@ -52,6 +57,40 @@ openclaw plugins enable example
 openclaw gateway restart
 openclaw plugins doctor
 ```
+
+## Marketplace 相关命令怎么分
+
+如果你最近看到文档或终端里出现 `marketplace entries`，可以这样理解：
+
+- `openclaw plugins marketplace entries`
+  看的是**当前配置好的 OpenClaw marketplace feed** 里有哪些条目
+- `openclaw plugins marketplace list <source>`
+  看的是你手动指定的某个 marketplace 文件、仓库或 URL
+- `openclaw plugins marketplace refresh`
+  刷新当前配置的 hosted feed 快照，并告诉你这次到底用了线上结果、已接受快照，还是 bundled fallback
+
+常见写法：
+
+```bash
+openclaw plugins marketplace entries
+openclaw plugins marketplace entries --offline
+openclaw plugins marketplace entries --json
+openclaw plugins marketplace list <source> --json
+openclaw plugins marketplace refresh --json
+```
+
+如果你只想看“官方 feed 目前认得哪些插件”，优先用 `marketplace entries`。
+
+## `update` 和 `dry-run` 的一个细节
+
+如果某个 npm 插件当初是**精确版本 pin** 装进去的，那么：
+
+- `openclaw plugins update <id>` 会继续沿用这个已记录的安装规格
+- `openclaw plugins update <id> --dry-run` 不会偷偷替你跳到 `latest`
+
+但如果 OpenClaw 同时发现这个包的 registry 默认线更新了，dry run 会把“你当前还锁在旧 pin 上”这件事说清楚，并提示你显式执行对应的 `@latest` 升级命令。
+
+这对排查“为什么 dry run 说有更新，但真正 `update <id>` 没跳版本”很有帮助。
 
 ## 看不懂输出怎么办
 

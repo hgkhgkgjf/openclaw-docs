@@ -123,6 +123,7 @@ openclaw dashboard
 | 节点管理 | 管理 iOS、Android、macOS、远程机器等外接设备 |
 | 安全认证 | 检查 token、密码、Tailscale、可信代理和配对关系 |
 | 状态通知 | 把在线状态、回复进度、健康信息推给客户端 |
+| 外部集成 | 给脚本、CI、仪表盘、IDE 扩展暴露协议和 RPC 接口 |
 
 这些事情看起来多，但你日常只需要知道：Gateway 是总服务台，所有入口都先找它。
 
@@ -218,6 +219,8 @@ openclaw pairing list
 ---
 
 ## 继续阅读
+
+- 想让脚本、CI 或仪表盘接 OpenClaw：看 [外部应用接入 Gateway](/tutorials/gateway/external-apps)
 
 - [Web 控制 UI](/tutorials/web/)
 - [节点入门](/tutorials/nodes/)

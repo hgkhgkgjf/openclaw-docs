@@ -63,6 +63,7 @@ sidebarTitle: "工具系统"
 - [ACP 设置](/tutorials/tools/acp-agents-setup)：配置 acpx、权限和外部 CLI
 - [Agent Send CLI](/tutorials/tools/agent-send)：从命令行把消息发给 Agent
 - [ClawHub](/tutorials/tools/clawhub)：搜索、安装、更新和发布 ClawHub 技能/插件
+- [Parallel Search](/tutorials/tools/parallel-search)：免 Key 或付费的 LLM 友好网页搜索
 - [插件专题](/tutorials/plugins/)：通过 `openclaw.plugin.json` 声明和注册新能力
 - [Tokenjuice](/tutorials/tools/tokenjuice)：压短 noisy 命令输出
 - [轨迹导出](/tutorials/tools/trajectory)：导出会话飞行记录
@@ -97,6 +98,7 @@ sidebarTitle: "工具系统"
 - [Ollama Web Search](/tutorials/tools/ollama-search)
 - [SearXNG Search](/tutorials/tools/searxng-search)
 - [Firecrawl](/tutorials/tools/firecrawl)
+- [Parallel Search](/tutorials/tools/parallel-search)
 
 ---
 

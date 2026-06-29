@@ -1,122 +1,85 @@
 ---
 title: "模型 CLI"
 sidebarTitle: "模型 CLI"
-description: "OpenClaw 核心概念：模型 CLI。参见 /concepts/model-failover 了解认证配置文件轮换、冷却以及与回退的交互方式。 快速提供商概览 + 示例：/concepts/mo…"
+description: "OpenClaw 核心概念：模型 CLI。涵盖模型选择、会话固定模型、allowlist、fallback 和 /model default。"
 ---
 
 # 模型 CLI
 
-参见 [/concepts/model-failover](/tutorials/concepts/model-failover) 了解认证配置文件轮换、冷却以及与回退的交互方式。
-快速提供商概览 + 示例：[/concepts/model-providers](/tutorials/concepts/model-providers)。
+先记住一句：
 
----
+```text
+provider/model 选择的是模型来源，不一定等于底层运行时。
+```
+
+特别是 `openai/gpt-*` 这类模型，在当前 OpenClaw 里经常会和 Codex 运行时一起出现，所以“模型名”和“实际运行时”要分开看。
 
 ## 模型选择如何工作
 
 OpenClaw 按以下顺序选择模型：
 
-1. **主模型**（`agents.defaults.model.primary` 或 `agents.defaults.model`）。
-2. `agents.defaults.model.fallbacks` 中的 **回退模型**（按顺序）。
-3. **提供商认证故障转移** 在移到下一个模型之前在提供商内部发生。
+1. `agents.defaults.model.primary`
+2. `agents.defaults.model.fallbacks`
+3. 先做 provider 内部认证故障转移，再决定是否换到下一个 fallback
 
-相关：
+## 一个最近很重要的变化：会话固定模型
 
-- `agents.defaults.models` 是 OpenClaw 可以使用的模型白名单/目录（加别名）。
-- `agents.defaults.imageModel` **仅在** 主模型无法接受图像时使用。
-- 每智能体默认值可以通过 `agents.list[].model` 加绑定覆盖 `agents.defaults.model`（参见 [/concepts/multi-agent](/tutorials/concepts/multi-agent)）。
+现在要把“配置默认模型”和“会话手动固定模型”分开理解。
 
----
+### 配置默认模型
 
-## 快速模型推荐（经验之谈）
+这是你在 `agents.defaults.model.primary` 里设置的值，影响：
 
-- **GLM**：编码/工具调用方面略胜一筹。
-- **MiniMax**：写作和氛围方面更好。
+- 新会话
+- 没被手动固定模型的会话
 
----
+### 会话固定模型
 
-## 设置向导（推荐）
+这些动作会把当前会话固定到某个模型：
 
-如果不想手动编辑配置，运行入门向导：
+- `/model ...`
+- 某些 session patch / picker 操作
 
-```bash
-openclaw onboard --install-daemon
-```
+一旦固定后，这个会话不会自动跟随你后面改的默认配置。
 
-它可以为常见提供商设置模型 + 认证，包括 **OpenAI Code (Codex) 订阅**（OAuth）和 **Anthropic**（推荐 API 密钥；也支持 `claude setup-token`）。
-
----
-
-## 配置键（概览）
-
-- `agents.defaults.model.primary` 和 `agents.defaults.model.fallbacks`
-- `agents.defaults.imageModel.primary` 和 `agents.defaults.imageModel.fallbacks`
-- `agents.defaults.models`（白名单 + 别名 + 提供商参数）
-- `models.providers`（写入 `models.json` 的自定义提供商）
-
-模型引用会规范化为小写。提供商别名如 `z.ai/*` 规范化为 `zai/*`。
-
-提供商配置示例（包括 OpenCode Zen）位于 [/gateway/configuration](/tutorials/gateway/configuration)。
-
----
-
-## "Model is not allowed"（以及为什么回复停止）
-
-如果设置了 `agents.defaults.models`，它会成为 `/model` 和会话覆盖的 **白名单**。当用户选择不在该白名单中的模型时，OpenClaw 返回：
+### 想恢复继承默认配置怎么办
 
 ```text
-Model "provider/model" is not allowed. Use /model to list available models.
+/model default
 ```
 
-这发生在正常回复生成 **之前**，因此消息可能感觉"没有响应"。修复方法是：
+这是最关键的恢复命令。
 
-- 将模型添加到 `agents.defaults.models`，或
-- 清除白名单（移除 `agents.defaults.models`），或
-- 从 `/model list` 中选择一个模型。
+## allowlist 现在更值得注意
 
-白名单配置示例：
+如果你配置了 `agents.defaults.models`，它不只是展示目录，还会成为 `/model` 和会话覆盖的白名单。
 
-```json5
-{
-  agents: {
-    defaults: {
-      model: { primary: "anthropic/claude-sonnet-4-5" },
-      models: {
-        "anthropic/claude-sonnet-4-5": { alias: "Sonnet" },
-        "anthropic/claude-opus-4-6": { alias: "Opus" },
-      },
-    },
-  },
-}
-```
+因此选了不在白名单里的模型时，OpenClaw 会在正常回复**之前**直接拒绝，用户侧很容易感觉成“没响应”。
 
----
-
-## 在聊天中切换模型（`/model`）
-
-你可以在不重启的情况下切换当前会话的模型：
+## 在聊天中切换模型
 
 ```text
 /model
 /model list
 /model 3
 /model openai/gpt-5.2
+/model default
 /model status
 ```
 
-注意：
+最实用的记法：
 
-- `/model`（和 `/model list`）是紧凑的编号选择器（模型系列 + 可用提供商）。
-- `/model <#>` 从该选择器中选择。
-- `/model status` 是详细视图（认证候选项，以及配置时的提供商端点 `baseUrl` + `api` 模式）。
-- 模型引用通过在 **第一个** `/` 处分割来解析。输入 `/model <ref>` 时使用 `provider/model`。
-- 如果模型 ID 本身包含 `/`（OpenRouter 风格），你必须包含提供商前缀（例如：`/model openrouter/moonshotai/kimi-k2`）。
-- 如果省略提供商，OpenClaw 将输入视为别名或 **默认提供商** 的模型（仅在模型 ID 中没有 `/` 时有效）。
+- `/model xxx`：把当前会话固定到某个模型
+- `/model status`：看当前会话到底在用什么
+- `/model default`：清除当前会话固定模型，恢复继承默认配置
 
-完整命令行为/配置：[斜杠命令](/tutorials/tools/slash-commands)。
+## 什么时候会走 fallback，什么时候不会
 
----
+- **配置默认模型**：出问题时还能走 `fallbacks`
+- **用户手动 `/model` 固定的模型**：这是严格选择，挂了就直接报错，不会静默切到别的模型
+- **cron 单任务指定模型**：默认仍可使用配置回退链，除非任务自己显式清空 `fallbacks`
 
-## CLI 命令
+## 常用 CLI
 
 ```bash
 openclaw models list
@@ -132,75 +95,18 @@ openclaw models fallbacks list
 openclaw models fallbacks add <provider/model>
 openclaw models fallbacks remove <provider/model>
 openclaw models fallbacks clear
-
-openclaw models image-fallbacks list
-openclaw models image-fallbacks add <provider/model>
-openclaw models image-fallbacks remove <provider/model>
-openclaw models image-fallbacks clear
 ```
 
-`openclaw models`（无子命令）是 `models status` 的快捷方式。
+## 什么时候优先看这页
 
-### `models list`
+- 改了默认模型，但旧会话还在用老模型
+- `/model` 后回复直接失败
+- 想判断是模型不可用，还是 allowlist 拦住了
+- 想搞清楚当前 provider/model 和 runtime 的关系
 
-默认显示已配置的模型。有用的标志：
+## 相关页面
 
-- `--all`：完整目录
-- `--local`：仅本地提供商
-- `--provider <name>`：按提供商过滤
-- `--plain`：每行一个模型
-- `--json`：机器可读输出
-
-### `models status`
-
-显示解析后的主模型、回退、图像模型，以及已配置提供商的认证概览。它还会显示认证存储中找到的配置文件的 OAuth 到期状态（默认在 24 小时内警告）。`--plain` 仅打印解析后的主模型。
-OAuth 状态始终显示（并包含在 `--json` 输出中）。如果已配置的提供商没有凭证，`models status` 会打印一个 **Missing auth** 部分。
-JSON 包含 `auth.oauth`（警告窗口 + 配置文件）和 `auth.providers`（每提供商的有效认证）。
-使用 `--check` 进行自动化（缺失/过期时退出 `1`，即将过期时退出 `2`）。
-
-推荐的 Anthropic 认证是 Claude Code CLI setup-token（在任何地方运行；如需则在网关主机上粘贴）：
-
-```bash
-claude setup-token
-openclaw models status
-```
-
----
-
-## 扫描（OpenRouter 免费模型）
-
-`openclaw models scan` 检查 OpenRouter 的 **免费模型目录**，可以选择性地探测模型的工具和图像支持。
-
-关键标志：
-
-- `--no-probe`：跳过实时探测（仅元数据）
-- `--min-params <b>`：最小参数量（十亿）
-- `--max-age-days <days>`：跳过较旧的模型
-- `--provider <name>`：提供商前缀过滤
-- `--max-candidates <n>`：回退列表大小
-- `--set-default`：将 `agents.defaults.model.primary` 设置为第一个选择
-- `--set-image`：将 `agents.defaults.imageModel.primary` 设置为第一个图像选择
-
-探测需要 OpenRouter API 密钥（来自认证配置文件或 `OPENROUTER_API_KEY`）。没有密钥时，使用 `--no-probe` 仅列出候选。
-
-扫描结果按以下排序：
-
-1. 图像支持
-2. 工具延迟
-3. 上下文大小
-4. 参数量
-
-输入
-
-- OpenRouter `/models` 列表（过滤 `:free`）
-- 需要来自认证配置文件或 `OPENROUTER_API_KEY` 的 OpenRouter API 密钥（参见 [/environment](/tutorials/help/environment)）
-- 可选过滤器：`--max-age-days`、`--min-params`、`--provider`、`--max-candidates`
-- 探测控制：`--timeout`、`--concurrency`
-
-在 TTY 中运行时，你可以交互式选择回退。在非交互模式下，传递 `--yes` 接受默认值。
-
----
-
-## 模型注册表（`models.json`）
-
-`models.providers` 中的自定义提供商写入智能体目录下的 `models.json`（默认 `~/.openclaw/agents/<agentId>/models.json`）。除非 `models.mode` 设置为 `replace`，否则此文件默认被合并。
+- [斜杠命令](/tutorials/tools/slash-commands)
+- [openclaw status](/tutorials/cli/status)
+- [模型提供商](/tutorials/concepts/model-providers)
+- [模型回退](/tutorials/concepts/model-failover)

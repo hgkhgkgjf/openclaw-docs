@@ -106,6 +106,7 @@ API Key 不要发到群里，不要写进公开仓库，也不要贴到截图里
 - [Anthropic](/tutorials/providers/anthropic)：Claude 系列模型
 - [Google Gemini](/tutorials/providers/google)：文本、多模态与媒体能力
 - [OpenRouter](/tutorials/providers/openrouter)：一个入口访问多家模型
+- [Cohere](/tutorials/providers/cohere)：兼容 OpenAI 的 Command A 路线
 - [Mistral](/tutorials/providers/mistral)：Mistral 系列模型
 - [Groq](/tutorials/providers/groq)：高速推理
 - [Cerebras](/tutorials/providers/cerebras)：高速推理服务
