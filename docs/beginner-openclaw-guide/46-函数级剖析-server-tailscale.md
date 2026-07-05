@@ -134,14 +134,14 @@ export async function disableTailscaleFunnel(exec: typeof runExec = runExec) {
 }
 ```
 
-**execWithSudoFallback**：先尝试直接执行，失败后自动重试 `sudo tailscale ...`（适配某些 OS 需要 sudo）。
+execWithSudoFallback：先尝试直接执行，失败后自动重试 `sudo tailscale ...`（适配某些 OS 需要 sudo）。
 
 ## 四、serve vs funnel 区别
 
 | 维度 | `serve` | `funnel` |
 |------|---------|---------|
 | 访问范围 | tailnet 内（同一 tailnet 的设备）| 互联网（任意公网 IP）|
-| 认证前提 | 无强制 auth 要求（Tailscale 身份认证）| **必须** `authMode=password` |
+| 认证前提 | 无强制 auth 要求（Tailscale 身份认证）| 必须 `authMode=password` |
 | 安全约束 | 较宽松 | 较严格（见 45 约束 2）|
 | 适用场景 | 团队内部工具共享 | 公开 webhook、外部集成 |
 
@@ -160,7 +160,7 @@ logTailscale.warn(...)   ← 记录警告
 网关正常启动（无 tailscale 暴露，但本地依然可用）
 ```
 
-**为什么这样设计？**
+为什么这样设计？
 - tailscale 是"额外网络能力"，不是核心功能。
 - 常见失败原因：tailscale 未安装、tailscale daemon 未运行、权限不足。
 - 这些失败不影响网关本地提供 API 服务。

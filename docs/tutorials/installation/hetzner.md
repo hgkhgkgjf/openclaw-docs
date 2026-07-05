@@ -140,7 +140,7 @@ XDG_CONFIG_HOME=/home/node/.openclaw
 openssl rand -hex 32
 ```
 
-**不要提交此文件。**
+不要提交此文件。
 
 ---
 
@@ -190,14 +190,14 @@ services:
 
 ---
 
-## 7) 将所需二进制文件烘焙到镜像中（关键）
+## 7) 将所需二进制文件烘焙到镜像中（主要）
 
 在运行中的容器内安装二进制文件是一个陷阱。
 运行时安装的任何内容都会在重启后丢失。
 
 所有技能所需的外部二进制文件必须在镜像构建时安装。
 
-以下示例仅展示三个常用二进制文件：
+以下示例仅显示三个常用二进制文件：
 
 - `gog` 用于 Gmail 访问
 - `goplaces` 用于 Google Places
@@ -212,7 +212,7 @@ services:
 2. 重建镜像
 3. 重启容器
 
-**示例 Dockerfile**
+示例 Dockerfile
 
 ```dockerfile
 FROM node:22-bookworm
@@ -334,11 +334,11 @@ OpenClaw 运行在 Docker 中，但 Docker 不是权威来源。
 - 安全加固（防火墙、UFW、仅 SSH 访问）
 - 用于网关访问的 SSH 隧道配置
 
-**仓库：**
+仓库：
 
 - 基础设施：[openclaw-terraform-hetzner](https://github.com/andreesg/openclaw-terraform-hetzner)
 - Docker 配置：[openclaw-docker-config](https://github.com/andreesg/openclaw-docker-config)
 
 此方法通过可重现的部署、版本控制的基础设施和自动化灾难恢复来补充上述 Docker 部署。
 
-> **注意：** 由社区维护。如有问题或贡献，请查看上述仓库链接。
+> 注意： 由社区维护。如有问题或贡献，请查看上述仓库链接。

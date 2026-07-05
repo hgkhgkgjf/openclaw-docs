@@ -223,48 +223,48 @@ plugins, while unsafe schemas and ambiguous ownership still fail closed:
 
 ## Troubleshooting
 
-**`auth_required`:** migration installed the plugin, but one of its apps still
+`auth_required`: migration installed the plugin, but one of its apps still
 needs authentication. The explicit plugin entry is written disabled until you
 reauthorize and enable it.
 
-**`app_inaccessible`, `app_disabled`, or `app_missing`:**
+`app_inaccessible`, `app_disabled`, or `app_missing`:
 migration did not install the plugin because the source Codex app inventory did
 not show all owned apps as present, enabled, and accessible while
 `--verify-plugin-apps` was set. Reauthorize or enable the app in Codex, then
 rerun migration with `--verify-plugin-apps`.
 
-**`app_inventory_unavailable`:** migration did not install the plugin because
+`app_inventory_unavailable`: migration did not install the plugin because
 strict source app verification was requested and source Codex app inventory
 refresh failed. Fix source Codex app-server access or retry without
 `--verify-plugin-apps` if you accept the faster account-gated plan.
 
-**`codex_subscription_required`:** migration did not install the app-backed
+`codex_subscription_required`: migration did not install the app-backed
 plugin because the source Codex app-server account was not logged in with a
 ChatGPT subscription account. Log in to the Codex app with subscription auth,
 then rerun migration.
 
-**`codex_account_unavailable`:** migration did not install the app-backed plugin
+`codex_account_unavailable`: migration did not install the app-backed plugin
 because the source Codex app-server account could not be read. Fix source Codex
 app-server auth or rerun with `--verify-plugin-apps` if you want source app
 inventory to decide eligibility when account lookup fails.
 
-**`marketplace_missing` or `plugin_missing`:** the target Codex app-server
+`marketplace_missing` or `plugin_missing`: the target Codex app-server
 cannot see the expected `openai-curated` marketplace or plugin. Rerun migration
 against the target runtime or inspect Codex app-server plugin status.
 
-**`app_inventory_missing` or `app_inventory_stale`:** app readiness came from an
+`app_inventory_missing` or `app_inventory_stale`: app readiness came from an
 empty or stale cache. OpenClaw schedules an async refresh and excludes plugin
 apps until ownership and readiness are known.
 
-**`app_ownership_ambiguous`:** app inventory only matched by display name, so
+`app_ownership_ambiguous`: app inventory only matched by display name, so
 the app is not exposed to the Codex thread.
 
-**Config changed but the agent cannot see the plugin:** use `/codex plugins
+Config changed but the agent cannot see the plugin: use `/codex plugins
 list` to confirm the configured state, then use `/new` or `/reset`. Existing
 Codex thread bindings keep the app config they started with until OpenClaw
 establishes a new harness session or replaces a stale binding.
 
-**Destructive action is declined:** check the global and per-plugin
+Destructive action is declined: check the global and per-plugin
 `allow_destructive_actions` values. Even when policy is true, unsafe elicitation
 schemas and ambiguous plugin identity still fail closed.
 

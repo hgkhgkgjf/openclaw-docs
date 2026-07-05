@@ -8,7 +8,7 @@ message lifecycle.
 
 The short version:
 
-- The core primitives should be **receive** and **send**, not **reply**.
+- The core primitives should be receive and send, not reply.
 - A reply is only a relation on an outbound message.
 - A turn is an inbound-processing convenience, not the owner of delivery.
 - Sending must be context based: `begin`, render, preview or stream, final send,
@@ -322,13 +322,13 @@ platform event
 
 Ack is not one thing. The receive contract must keep these signals separate:
 
-- **Transport ack:** tells the platform webhook or socket that OpenClaw accepted
+- Transport ack: tells the platform webhook or socket that OpenClaw accepted
   the event envelope. Some platforms require this before dispatch.
-- **Polling offset ack:** advances a cursor so the same event is not fetched
+- Polling offset ack: advances a cursor so the same event is not fetched
   again. This must not advance past work that cannot be recovered.
-- **Inbound record ack:** confirms OpenClaw persisted enough inbound metadata to
+- Inbound record ack: confirms OpenClaw persisted enough inbound metadata to
   dedupe and route a redelivery.
-- **User-visible receipt:** optional read/status/typing behavior; never a
+- User-visible receipt: optional read/status/typing behavior; never a
   durability boundary.
 
 `ReceiveAckPolicy` controls transport or polling acknowledgement only. It must

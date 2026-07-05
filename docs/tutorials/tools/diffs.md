@@ -1,13 +1,13 @@
 ---
 title: "Diffs"
-sidebarTitle: "Diffs 差异展示"
+sidebarTitle: "Diffs 差异视图"
 ---
 
-# Diffs：把修改内容展示成清楚的对比图
+# Diffs：把修改内容变成清楚的对比图
 
 `diffs` 是一个可选插件工具，用来把修改前后或 unified patch 渲染成只读差异视图。
 
-它适合让 Agent 在聊天或画布里展示“改了什么”。
+它适合让 Agent 在聊天或画布里说明“改了什么”。
 
 ---
 
@@ -52,7 +52,7 @@ openclaw plugins install diffs
 
 适合：
 
-- 给非技术用户展示文档改动。
+- 给非技术用户说明文档改动。
 - 在聊天里发送补丁预览。
 - 让 Agent 生成可查看的 diff 文件。
 
@@ -60,7 +60,7 @@ openclaw plugins install diffs
 
 - 真正应用补丁。
 - 代替 Git。
-- 展示敏感代码给不可信通道。
+- 把敏感代码发到不可信通道。
 
 ---
 

@@ -3,11 +3,11 @@ title: "WebChat (macOS)"
 ---
 
 The macOS menu bar app embeds the WebChat UI as a native SwiftUI view. It
-connects to the Gateway and defaults to the **main session** for the selected
+connects to the Gateway and defaults to the main session for the selected
 agent (with a session switcher for other sessions).
 
-- **Local mode**: connects directly to the local Gateway WebSocket.
-- **Remote mode**: forwards the Gateway control port over SSH and uses that
+- Local mode: connects directly to the local Gateway WebSocket.
+- Remote mode: forwards the Gateway control port over SSH and uses that
   tunnel as the data plane.
 
 ## Launch & debugging

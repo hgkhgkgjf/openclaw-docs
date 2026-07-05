@@ -10,14 +10,14 @@ sidebarTitle: "核心概念"
 
 OpenClaw 的核心结构可以先这样记：
 
-- **Gateway**：总机，所有消息和连接都先到这里
-- **Control UI**：浏览器里的管理台，用来看状态和配置
-- **Channel**：聊天入口，比如 Telegram、WhatsApp、Slack
-- **Provider**：AI 大脑，比如 OpenAI、Anthropic、本地模型
-- **Agent**：真正处理任务的 AI 助手
-- **Tool**：AI 能使用的工具，比如浏览器、命令行、网页搜索
-- **Plugin**：扩展包，用来增加频道、工具和能力
-- **Node**：连接到网关的手机、桌面或远程设备
+- Gateway：总机，所有消息和连接都先到这里
+- Control UI：浏览器里的管理台，用来看状态和配置
+- Channel：聊天入口，比如 Telegram、WhatsApp、Slack
+- Provider：AI 大脑，比如 OpenAI、Anthropic、本地模型
+- Agent：真正处理任务的 AI 助手
+- Tool：AI 能使用的工具，比如浏览器、命令行、网页搜索
+- Plugin：扩展包，用来增加频道、工具和能力
+- Node：连接到网关的手机、桌面或远程设备
 
 ---
 
@@ -64,7 +64,7 @@ OpenClaw 的核心结构可以先这样记：
 - [发现与传输](/tutorials/gateway/discovery)：网关和设备怎么互相找到
 - [配对](/tutorials/gateway/pairing)：设备如何建立信任关系
 
-这部分是新版架构里很重要的底座。
+这部分是新版架构里很需要留意的底座。
 以后你看到频道、插件、工具，大多都绕不开 Gateway。
 
 ---

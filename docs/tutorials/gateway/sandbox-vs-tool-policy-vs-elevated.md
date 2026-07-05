@@ -9,9 +9,9 @@ description: "OpenClaw Gateway：沙箱（Sandbox）vs 工具策略 vs 提权。
 
 OpenClaw 有三个相关（但不同）的控制：
 
-1. **沙箱（Sandbox）**（`agents.defaults.sandbox.*` / `agents.list[].sandbox.*`）决定**工具在哪里运行**（Docker vs 宿主机）。
-2. **工具策略**（`tools.*`、`tools.sandbox.tools.*`、`agents.list[].tools.*`）决定**哪些工具可用/被允许**。
-3. **提权**（`tools.elevated.*`、`agents.list[].tools.elevated.*`）是一个**仅限 exec 的逃生通道**，在沙箱（Sandbox）中运行时可在宿主机上执行。
+1. 沙箱（Sandbox）（`agents.defaults.sandbox.*` / `agents.list[].sandbox.*`）决定工具在哪里运行（Docker vs 宿主机）。
+2. 工具策略（`tools.*`、`tools.sandbox.tools.*`、`agents.list[].tools.*`）决定哪些工具可用/被允许。
+3. 提权（`tools.elevated.*`、`agents.list[].tools.elevated.*`）是一个仅限 exec 的逃生通道，在沙箱（Sandbox）中运行时可在宿主机上执行。
 
 ::: tip 先用人话分清楚
 这三个开关管的不是同一件事：
@@ -72,11 +72,11 @@ openclaw sandbox explain --json
 
 两个层级重要：
 
-- **工具 profile**：`tools.profile` 和 `agents.list[].tools.profile`（基础白名单）
-- **模型提供商（Provider）工具 profile**：`tools.byProvider[provider].profile` 和 `agents.list[].tools.byProvider[provider].profile`
-- **全局/每智能体（Agent）工具策略**：`tools.allow`/`tools.deny` 和 `agents.list[].tools.allow`/`agents.list[].tools.deny`
-- **模型提供商（Provider）工具策略**：`tools.byProvider[provider].allow/deny` 和 `agents.list[].tools.byProvider[provider].allow/deny`
-- **沙箱（Sandbox）工具策略**（仅在沙箱（Sandbox）化时适用）：`tools.sandbox.tools.allow`/`tools.sandbox.tools.deny` 和 `agents.list[].tools.sandbox.tools.*`
+- 工具 profile：`tools.profile` 和 `agents.list[].tools.profile`（基础白名单）
+- 模型提供商（Provider）工具 profile：`tools.byProvider[provider].profile` 和 `agents.list[].tools.byProvider[provider].profile`
+- 全局/每智能体（Agent）工具策略：`tools.allow`/`tools.deny` 和 `agents.list[].tools.allow`/`agents.list[].tools.deny`
+- 模型提供商（Provider）工具策略：`tools.byProvider[provider].allow/deny` 和 `agents.list[].tools.byProvider[provider].allow/deny`
+- 沙箱（Sandbox）工具策略（仅在沙箱（Sandbox）化时适用）：`tools.sandbox.tools.allow`/`tools.sandbox.tools.deny` 和 `agents.list[].tools.sandbox.tools.*`
 
 经验法则：
 
@@ -120,12 +120,12 @@ openclaw sandbox explain --json
 
 ## 提权：仅限 exec 的"在宿主机运行"
 
-提权**不会**授予额外工具；它仅影响 `exec`。
+提权不会授予额外工具；它仅影响 `exec`。
 
 - 如果你在沙箱（Sandbox）中，`/elevated on`（或带 `elevated: true` 的 `exec`）在宿主机上运行（审批可能仍然适用）。
 - 使用 `/elevated full` 跳过当前会话（Session）的 exec 审批。
 - 如果你已经在直接运行，提权实际上是空操作（仍然受门控）。
-- 提权**不是**技能作用域的，**不会**覆盖工具允许/拒绝。
+- 提权不是技能作用域的，不会覆盖工具允许/拒绝。
 - `/exec` 与提权是分开的。它仅为授权发送者调整每会话（Session）的 exec 默认值。
 
 门控：

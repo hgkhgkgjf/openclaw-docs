@@ -6,9 +6,9 @@ description: "OpenClaw 模型接入：vLLM。vLLM 可以通过 OpenAI 兼容的 
 
 # vLLM
 
-vLLM 可以通过 **OpenAI 兼容的** HTTP API 提供开源（及部分自定义）模型的服务。OpenClaw 可以使用 `openai-completions` API 连接到 vLLM。
+vLLM 可以通过 OpenAI 兼容的 HTTP API 提供开源（及部分自定义）模型的服务。OpenClaw 可以使用 `openai-completions` API 连接到 vLLM。
 
-当你通过 `VLLM_API_KEY`（如果你的服务器不强制认证，任何值都可以）选择加入且未定义显式的 `models.providers.vllm` 条目时，OpenClaw 还可以**自动发现** vLLM 上的可用模型。
+当你通过 `VLLM_API_KEY`（如果你的服务器不强制认证，任何值都可以）选择加入且未定义显式的 `models.providers.vllm` 条目时，OpenClaw 还可以自动发现 vLLM 上的可用模型。
 
 ---
 
@@ -42,7 +42,7 @@ export VLLM_API_KEY="vllm-local"
 
 ## 模型发现（隐式提供商）
 
-当设置了 `VLLM_API_KEY`（或存在认证配置文件）且你**未**定义 `models.providers.vllm` 时，OpenClaw 会查询：
+当设置了 `VLLM_API_KEY`（或存在认证配置文件）且你未定义 `models.providers.vllm` 时，OpenClaw 会查询：
 
 - `GET http://127.0.0.1:8000/v1/models`
 

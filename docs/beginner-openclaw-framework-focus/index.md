@@ -67,5 +67,5 @@
 
 </div>
 
-<div class="oc-focus"><strong>重点优先级：</strong><ul><li>优先掌握：16、17、18、19、20、21 —— 这些是实现实战系列</li><li>它们就是你做同类项目时最核心的可复刻骨架，原理篇提供 Why，实战篇提供 How</li></ul></div>
+<div class="oc-focus"><strong>阅读顺序：</strong><ul><li>优先掌握：16、17、18、19、20、21 :: 这些是实现实战系列</li><li>它们就是你做同类项目时可复刻的骨架，原理篇提供 Why，实战篇提供 How</li></ul></div>
 </div>

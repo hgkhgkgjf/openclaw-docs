@@ -2,7 +2,7 @@
 
 <div class="oc-portal">
 <h1 class="oc-portal-title">先拿全局，再进细节</h1>
-<p class="oc-portal-desc">这条主线帮助你建立 OpenClaw 的整体工程脑图：从入口、执行链路、控制面到关键函数级实现。建议按从上到下顺序阅读，每完成一阶段就动手做最小实现。</p>
+<p class="oc-portal-desc">这条主线帮助你建立 OpenClaw 的整体工程脑图：从入口、执行链路、控制面到主要函数级实现。建议按从上到下顺序阅读，每完成一阶段就动手做最小实现。</p>
 
 <div class="oc-portal-grid">
 
@@ -18,7 +18,7 @@
 </section>
 
 <section class="oc-track">
-<h2 class="oc-track-title">阶段二 · 吃透 AI 执行主链</h2>
+<h2 class="oc-track-title">阶段二 · 弄清楚 AI 执行主链</h2>
 <p>围绕 run / attempt / subscribe 形成可复刻的智能体执行链路。</p>
 <div class="oc-links">
 <a href="/beginner-openclaw-guide/12-智能体框架总览">智能体框架总览</a>

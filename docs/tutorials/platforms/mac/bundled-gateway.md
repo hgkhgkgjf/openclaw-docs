@@ -3,7 +3,7 @@ title: "Gateway on macOS"
 ---
 
 OpenClaw.app no longer bundles Node/Bun or the Gateway runtime. The macOS app
-expects an **external** `openclaw` CLI install, does not spawn the Gateway as a
+expects an external `openclaw` CLI install, does not spawn the Gateway as a
 child process, and manages a per‑user launchd service to keep the Gateway
 running (or attaches to an existing local Gateway if one is already running).
 
@@ -15,7 +15,7 @@ Node 24 is the default runtime on the Mac. Node 22 LTS, currently `22.19+`, stil
 npm install -g openclaw@<version>
 ```
 
-The macOS app’s **Install CLI** button runs the same global install flow the app
+The macOS app’s Install CLI button runs the same global install flow the app
 uses internally: it prefers npm first, then pnpm, then bun if that is the only
 detected package manager. Node remains the recommended Gateway runtime.
 
@@ -38,7 +38,7 @@ Manager:
 Behavior:
 
 - “OpenClaw Active” enables/disables the LaunchAgent.
-- App quit does **not** stop the gateway (launchd keeps it alive).
+- App quit does not stop the gateway (launchd keeps it alive).
 - If a Gateway is already running on the configured port, the app attaches to
   it instead of starting a new one.
 

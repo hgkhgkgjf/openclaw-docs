@@ -8,7 +8,7 @@ description: "OpenClaw 源码剖析：函数级剖析：server-discovery-runtime
 ## 模块定位
 
 网关启动时的服务发现广播管理器。
-负责两路发现机制：**mDNS/Bonjour**（局域网自动发现）和**广域 DNS-SD**（跨网络发现，依赖 Tailscale）。
+负责两路发现机制：mDNS/Bonjour（局域网自动发现）和广域 DNS-SD（跨网络发现，依赖 Tailscale）。
 
 ## 一、startGatewayDiscovery（完整签名）
 
@@ -45,7 +45,7 @@ export type MdnsDiscoveryConfig = {
 };
 ```
 
-**三种模式的区别：**
+三种模式的区别：
 
 | 模式 | cliPath | sshPort | 适用场景 |
 |------|---------|---------|---------|
@@ -139,7 +139,7 @@ const tailnetDns = needsTailnetDns
 
 ```ts
 return {
-  bonjourStop,         // (() => Promise<void>) | null — 关闭时停止广播
+  bonjourStop,         // (() => Promise<void>) | null : 关闭时停止广播
   // （广域发现无需显式 stop，写入的 DNS 记录 TTL 自然过期）
 };
 ```

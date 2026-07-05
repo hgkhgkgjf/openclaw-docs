@@ -25,7 +25,7 @@ export async function handleOpenAiHttpRequest(
 ): Promise<boolean>  // 返回 true 表示已处理该请求
 ```
 
-**只处理一种请求：** `POST /v1/chat/completions`。其他路径返回 `false`（由上层继续路由）。
+只处理一种请求： `POST /v1/chat/completions`。其他路径返回 `false`（由上层继续路由）。
 
 ## 二、执行链路
 
@@ -37,16 +37,16 @@ POST /v1/chat/completions
     │
     ▼
 2. authorizeGatewayConnect（Bearer token 鉴权）
-   失败 → 401 / 429（限速）
+   失败 : 401 / 429（限速）
     │
     ▼
 3. 读取 + 解析 JSON body
-   格式错误 → 400
+   格式错误 : 400
     │
     ▼
 4. 构建 agent prompt
-   - system/developer → extraSystemPrompt
-   - user/assistant/tool → 对话内容（归一为内部 ConversationEntry）
+   - system/developer : extraSystemPrompt
+   - user/assistant/tool : 对话内容（归一为内部 ConversationEntry）
     │
     ▼
 5. 解析 agentId + sessionKey
@@ -56,16 +56,16 @@ POST /v1/chat/completions
     ▼
 6. agentCommand(...) 执行 agent
     │
-    ├─ 非流式（stream=false）→ 等待完成，返回一次性 chat.completion
+    ├─ 非流式（stream=false）: 等待完成，返回一次性 chat.completion
     │
-    └─ 流式（stream=true）→ SSE，监听 agent 事件 → chat.completion.chunk
+    └─ 流式（stream=true）: SSE，监听 agent 事件 : chat.completion.chunk
                                            最后发送 [DONE]
 ```
 
 ## 三、prompt 构建（不是直接拼 messages）
 
 ```ts
-// OpenAI messages → 内部统一格式
+// OpenAI messages : 内部统一格式
 
 const entries: ConversationEntry[] = [];
 for (const msg of body.messages) {
@@ -80,7 +80,7 @@ for (const msg of body.messages) {
 const prompt = buildPromptFromConversation(entries);
 ```
 
-**为什么不直接拼 messages：**
+为什么不直接拼 messages：
 - tool/function 类型消息结构不同，需要可控降级
 - 不同来源（user/assistant/tool_result）需要统一格式后才能发给 agent
 
@@ -97,7 +97,7 @@ const runId = `chatcmpl_${generateShortId()}`;
 ## 五、流式模式（SSE）
 
 ```ts
-// 流式：监听 agent 事件 → 转换为 chat.completion.chunk
+// 流式：监听 agent 事件 : 转换为 chat.completion.chunk
 
 res.setHeader("Content-Type", "text/event-stream");
 res.setHeader("Cache-Control", "no-cache");
@@ -113,7 +113,7 @@ agentEventEmitter.on("done", () => {
 });
 ```
 
-**"兜底补发"机制：** 如果因为某些原因没收到任何 delta（如 agent 直接返回完整结果），代码在执行完成后把整段结果补发一次，防止客户端空白。
+"兜底补发"机制： 如果因为某些原因没收到任何 delta（如 agent 直接返回完整结果），代码在执行完成后把整段结果补发一次，防止客户端空白。
 
 ## 六、错误处理策略
 
@@ -158,7 +158,7 @@ const sessionKey = getHeader(req, "X-OpenClaw-Session");
 const sessionKey = sessionKey ?? generateMainSessionKey(agentId);
 ```
 
-**注意：** 如果不传 `X-OpenClaw-Session`，每次调用都是独立的新会话，没有上下文记忆。
+注意： 如果不传 `X-OpenClaw-Session`，每次调用都是独立的新会话，没有上下文记忆。
 传入相同的 sessionKey 可以实现多轮对话。
 
 ## 九、与标准 OpenAI API 的差异
@@ -183,7 +183,7 @@ const sessionKey = sessionKey ?? generateMainSessionKey(agentId);
 
 ## 十一、开发避坑
 
-1. **model 字段不传给 LLM**：`body.model` 用于解析 agentId，实际使用的模型由 agent 配置决定，不是 OpenAI 原本的 model 语义。
-2. **tool_use 消息的处理**：当前实现将 tool_calls/tool_results 降级为文本格式（`normalizeToConversationEntry`），不走真正的 tool call 协议。
-3. **Content-Type 检查**：请求必须是 `application/json`，否则 body 解析失败返回 400。
-4. **流式连接超时**：SSE 连接长时间没有事件时，某些反向代理会主动断开——建议在 agent 配置中设置合理的 `timeoutMs`。
+1. model 字段不传给 LLM：`body.model` 用于解析 agentId，实际使用的模型由 agent 配置决定，不是 OpenAI 原本的 model 语义。
+2. tool_use 消息的处理：当前实现将 tool_calls/tool_results 降级为文本格式（`normalizeToConversationEntry`），不走真正的 tool call 协议。
+3. Content-Type 检查：请求必须是 `application/json`，否则 body 解析失败返回 400。
+4. 流式连接超时：SSE 连接长时间没有事件时，某些反向代理会主动断开::建议在 agent 配置中设置合理的 `timeoutMs`。

@@ -10,9 +10,9 @@ description: "OpenClaw 源码剖析：函数级剖析：send 与 agent 方法组
 
 ## 模块定位
 
-`send` 和 `agent` 是 gateway 最核心的两条对外方法：`send` 负责消息投递，`agent` 负责驱动智能体执行。两者都有幂等去重机制，但实现细节有差异。
+`send` 和 `agent` 是 gateway 的两条核心对外方法：`send` 负责消息投递，`agent` 负责驱动智能体执行。两者都有幂等去重机制，但实现细节有差异。
 
-## 一、inflightByContext —— 并发幂等屏障
+## 一、inflightByContext：并发幂等屏障
 
 ```ts
 // src/gateway/server-methods/send.ts  行 31-43
@@ -39,12 +39,12 @@ const getInflightMap = (context: GatewayRequestContext) => {
 };
 ```
 
-**设计思路：**
+设计思路：
 - 外层 `WeakMap` 以 `GatewayRequestContext` 为 key，连接断开时自动 GC
 - 内层 `Map<string, Promise>` 共享同一 idempotencyKey 的飞行中请求
 - 同 key 并发请求复用同一 Promise，只真正发送一次
 
-**内层 Map 的 key 格式（精确字符串）：**
+内层 Map 的 key 格式（精确字符串）：
 ```
 send:${idempotencyKey}   // send 方法（行 71）
 poll:${idempotencyKey}   // poll 方法（行 287）
@@ -196,7 +196,7 @@ void (async () => {
 })();
 ```
 
-**为什么要先接单：**
+为什么要先接单：
 - agent run 可能很长（模型推理 + 工具调用 + 子代理）
 - 不能让网关请求线程长期阻塞
 - accepted 中的 runId 可用于后续 `agent.wait` 轮询
@@ -232,7 +232,7 @@ export async function deliverOutboundPayloads(params: {
 }): Promise<OutboundDeliveryResult[]>
 ```
 
-**mirror 的作用：** 把发送内容回写到会话历史，保证"发出去的内容"在 session transcript 中可追踪。
+mirror 的作用： 把发送内容回写到会话历史，保证"发出去的内容"在 session transcript 中可追踪。
 
 ## 八、resolveAgentDeliveryPlan
 
@@ -273,7 +273,7 @@ export async function parseMessageWithAttachments(
 }>
 ```
 
-**为什么 agent 也走这个函数：** WebUI/WS 客户端可以统一传图，底层执行链不区分来源。
+为什么 agent 也走这个函数： WebUI/WS 客户端可以统一传图，底层执行链不区分来源。
 
 ## 十、自检清单
 
@@ -285,7 +285,7 @@ export async function parseMessageWithAttachments(
 
 ## 十一、开发避坑
 
-1. **`deliver: false` 不等于不运行**：`agent` 的 deliver 控制是否把结果发到通道，agent 本身仍然执行。
-2. **`inflightByContext` 不持久化**：进程重启后飞行中请求丢失；crash-recovery 靠 `context.dedupe` 持久化层。
-3. **`agent` 的 `inputProvenance.kind`**：枚举值来自 `INPUT_PROVENANCE_KIND_VALUES`，不可随意传字符串。
-4. **additionalProperties: false**：两个 schema 均为严格模式，多余字段导致验证失败（返回 400）。
+1. `deliver: false` 不等于不运行：`agent` 的 deliver 控制是否把结果发到通道，agent 本身仍然执行。
+2. `inflightByContext` 不持久化：进程重启后飞行中请求丢失；crash-recovery 靠 `context.dedupe` 持久化层。
+3. `agent` 的 `inputProvenance.kind`：枚举值来自 `INPUT_PROVENANCE_KIND_VALUES`，不可随意传字符串。
+4. additionalProperties: false：两个 schema 均为严格模式，多余字段导致验证失败（返回 400）。

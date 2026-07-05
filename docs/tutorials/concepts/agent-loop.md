@@ -1,12 +1,12 @@
 ---
 title: "智能体循环"
 sidebarTitle: "智能体循环"
-description: "OpenClaw 核心概念：智能体循环（Agent Loop）（OpenClaw）。智能体循环（Agent Loop）是智能体（Agent）的完整\"真实\"运行过程：接收输入 → 上下文（Contex…"
+description: "OpenClaw 概念：智能体循环（Agent Loop）。说明一条消息如何经过上下文组装、模型推理、工具执行、流式回复和持久化。"
 ---
 
 # 智能体循环（Agent Loop）（OpenClaw）
 
-智能体循环（Agent Loop）是智能体（Agent）的完整"真实"运行过程：接收输入 → 上下文（Context）组装 → 模型推理 → 工具执行 → 流式输出（Streaming）回复 → 持久化。它是将一条消息转化为操作和最终回复的权威路径，同时保持会话（Session）状态的一致性。
+智能体循环（Agent Loop）是一条消息从进入 OpenClaw 到生成回复的运行过程：接收输入、组装上下文、模型推理、工具执行、流式回复、持久化。它把一条消息转化为操作和最终回复，同时保持会话（Session）状态一致。
 
 在 OpenClaw 中，一次循环是每个会话（Session）的单次串行运行，当模型思考、调用工具和输出流式内容时，会发出生命周期和流事件。本文档解释了这个完整循环是如何端到端连接的。
 
@@ -26,7 +26,7 @@ description: "OpenClaw 核心概念：智能体循环（Agent Loop）（OpenClaw
    - 解析模型 + thinking/verbose 默认值
    - 加载技能快照
    - 调用 `runEmbeddedPiAgent`（pi-agent-core 运行时）
-   - 如果嵌入循环未发出生命周期 **end/error** 事件，则补充发出
+   - 如果嵌入循环未发出生命周期 end/error 事件，则补充发出
 3. `runEmbeddedPiAgent`：
    - 通过每会话（Session）+ 全局队列串行化运行
    - 解析模型 + 认证配置并构建 pi 会话（Session）
@@ -38,7 +38,7 @@ description: "OpenClaw 核心概念：智能体循环（Agent Loop）（OpenClaw
    - 助手增量 => `stream: "assistant"`
    - 生命周期事件 => `stream: "lifecycle"` (`phase: "start" | "end" | "error"`)
 5. `agent.wait` 使用 `waitForAgentJob`：
-   - 等待 `runId` 的 **lifecycle end/error** 事件
+   - 等待 `runId` 的 lifecycle end/error 事件
    - 返回 `{ status: ok|error|timeout, startedAt, endedAt, error? }`
 
 ---
@@ -73,13 +73,13 @@ description: "OpenClaw 核心概念：智能体循环（Agent Loop）（OpenClaw
 
 OpenClaw 有两套钩子系统：
 
-- **内部钩子**（网关钩子）：用于命令和生命周期事件的事件驱动脚本。
-- **插件钩子**：智能体/工具生命周期和网关管道内的扩展点。
+- 内部钩子（网关钩子）：用于命令和生命周期事件的事件驱动脚本。
+- 插件钩子：智能体/工具生命周期和网关管道内的扩展点。
 
 ### 内部钩子（网关钩子）
 
-- **`agent:bootstrap`**：在系统提示词最终确定之前构建引导文件时运行。用于添加/移除引导上下文文件。
-- **命令钩子**：`/new`、`/reset`、`/stop` 和其他命令事件（参见钩子文档）。
+- `agent:bootstrap`：在系统提示词最终确定之前构建引导文件时运行。用于添加/移除引导上下文文件。
+- 命令钩子：`/new`、`/reset`、`/stop` 和其他命令事件（参见钩子文档）。
 
 参见[钩子](/tutorials/automation/hooks)了解设置和示例。
 
@@ -87,14 +87,14 @@ OpenClaw 有两套钩子系统：
 
 这些在智能体循环或网关管道内运行：
 
-- **`before_agent_start`**：在运行开始前注入上下文或覆盖系统提示词。
-- **`agent_end`**：在完成后检查最终消息列表和运行元数据。
-- **`before_compaction` / `after_compaction`**：观察或注解压缩（Compaction）周期。
-- **`before_tool_call` / `after_tool_call`**：拦截工具参数/结果。
-- **`tool_result_persist`**：在工具结果写入会话记录之前同步转换它们。
-- **`message_received` / `message_sending` / `message_sent`**：入站 + 出站消息钩子。
-- **`session_start` / `session_end`**：会话生命周期边界。
-- **`gateway_start` / `gateway_stop`**：网关生命周期事件。
+- `before_agent_start`：在运行开始前注入上下文或覆盖系统提示词。
+- `agent_end`：在完成后检查最终消息列表和运行元数据。
+- `before_compaction` / `after_compaction`：观察或注解压缩（Compaction）周期。
+- `before_tool_call` / `after_tool_call`：拦截工具参数/结果。
+- `tool_result_persist`：在工具结果写入会话记录之前同步转换它们。
+- `message_received` / `message_sending` / `message_sent`：入站 + 出站消息钩子。
+- `session_start` / `session_end`：会话生命周期边界。
+- `gateway_start` / `gateway_stop`：网关生命周期事件。
 
 参见[插件 Hooks](/tutorials/plugins/hooks)了解钩子 API 和注册详情。
 
@@ -148,7 +148,7 @@ OpenClaw 有两套钩子系统：
 ## 聊天通道处理
 
 - 助手增量被缓冲为聊天 `delta` 消息。
-- 在 **lifecycle end/error** 时发出聊天 `final`。
+- 在 lifecycle end/error 时发出聊天 `final`。
 
 ---
 

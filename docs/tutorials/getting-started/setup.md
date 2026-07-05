@@ -26,7 +26,7 @@ openclaw dashboard
 
 安装完 OpenClaw 只是第一步。要让 AI 能接收你的消息，还需要把你的聊天软件（通道）连接上来。
 
-**推荐先接 Telegram，最简单：**
+推荐先接 Telegram，最简单：
 
 ```bash
 openclaw config set channels.telegram.enabled true
@@ -42,7 +42,7 @@ openclaw gateway restart
 
 → 详细步骤请看 [接入 Telegram 教程](../channels/telegram)
 
-**支持的其他聊天软件：**
+支持的其他聊天软件：
 
 | 软件 | 新手怎么开始 |
 |------|--------------|
@@ -60,7 +60,7 @@ openclaw gateway restart
 openclaw doctor
 ```
 
-这条命令会自动诊断所有问题，并给出修复建议。**遇到问题时，首先跑这条命令。**
+这条命令会自动诊断所有问题，并给出修复建议。遇到问题时，首先跑这条命令。
 
 更细致的状态检查：
 
@@ -118,7 +118,7 @@ openclaw configure --section model # 只修改 AI 模型
 openclaw configure --section model
 ```
 
-**常用模型对比：**
+常用模型对比：
 
 | 模型 | 适合场景 | 花费 |
 |------|----------|------|
@@ -132,7 +132,7 @@ openclaw configure --section model
 
 默认情况下，OpenClaw 只在你的本地电脑上运行，你出门后无法远程管理它。
 
-如果你需要从手机或其他设备远程访问，推荐使用 **Tailscale**（免费）：
+如果你需要从手机或其他设备远程访问，推荐使用 Tailscale（免费）：
 
 1. 在运行 OpenClaw 的电脑和你的手机上分别安装 Tailscale
 2. 登录同一个账号，两台设备就像在同一个局域网内
@@ -198,5 +198,5 @@ npm uninstall -g openclaw    # 再卸载程序
 openclaw onboard --reset
 ```
 
-这会重置所有配置，但**不会删除聊天记录**。
+这会重置所有配置，但不会删除聊天记录。
 :::

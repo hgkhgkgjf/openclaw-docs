@@ -1,12 +1,12 @@
 ---
 title: "会话"
 sidebarTitle: "会话"
-description: "OpenClaw 核心概念：会话（Sessions）。会话（Session） 是 OpenClaw 跟踪每段对话历史的方式。每当你通过聊天软件和 AI 说话，这段对话就保存在一个会话里。"
+description: "OpenClaw 使用会话保存每段对话历史，让同一段聊天能延续上下文。"
 ---
 
 # 会话（Sessions）
 
-**会话（Session）** 是 OpenClaw 跟踪每段对话历史的方式。每当你通过聊天软件和 AI 说话，这段对话就保存在一个会话里。
+会话（Session） 是 OpenClaw 跟踪每段对话历史的方式。每当你通过聊天软件和 AI 说话，这段对话就保存在一个会话里。
 
 ---
 
@@ -14,9 +14,9 @@ description: "OpenClaw 核心概念：会话（Sessions）。会话（Session）
 
 用生活来打比方：会话就像手机聊天 App 里的"单个聊天窗口"。
 
-- 你在 Telegram 里给 AI 发消息 → 一个会话
-- 你的朋友通过同一个 Bot 发消息 → 另一个独立会话
-- AI 记得你们在**同一个会话**里说过的话，但不同会话之间互不干扰
+- 你在 Telegram 里给 AI 发消息 : 一个会话
+- 你的朋友通过同一个 Bot 发消息 : 另一个独立会话
+- AI 记得你们在同一个会话里说过的话，但不同会话之间互不干扰
 
 每个会话有自己独立的"记忆"，就像你和不同朋友有不同的聊天记录。
 
@@ -34,13 +34,13 @@ description: "OpenClaw 核心概念：会话（Sessions）。会话（Session）
 
 ---
 
-## 会话的关键概念
+## 会话里的几个名字
 
-| 概念 | 说明 |
+| 名称 | 说明 |
 |------|------|
-| **会话 Key** | 唯一标识一段对话，格式如 `agent:main:telegram:dm:123456` |
-| **会话范围（Scope）** | 控制会话是私人的还是共享的 |
-| **会话压缩（Compaction）** | 对话太长时，自动压缩旧内容节省 Token |
+| 会话 Key | 一段对话的标识，格式如 `agent:main:telegram:dm:123456` |
+| 会话范围（Scope） | 决定会话是按个人、频道还是主会话保存 |
+| 会话压缩（Compaction） | 对话过长时，把旧内容压缩后继续保留上下文 |
 
 ---
 
@@ -56,6 +56,6 @@ description: "OpenClaw 核心概念：会话（Sessions）。会话（Session）
 
 ## 相关文档
 
-- [会话管理配置](/tutorials/concepts/session) — 详细的会话配置选项
-- [记忆功能](/tutorials/concepts/memory) — AI 如何记住重要信息
-- [会话压缩](/tutorials/concepts/compaction) — 长对话的自动压缩机制
+- [会话管理配置](/tutorials/concepts/session) : 详细的会话配置选项
+- [记忆功能](/tutorials/concepts/memory) : AI 如何记住重要信息
+- [会话压缩](/tutorials/concepts/compaction) : 长对话的自动压缩机制

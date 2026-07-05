@@ -6,7 +6,7 @@ description: "OpenClaw 模型接入：OpenCode Zen。OpenCode Zen 是由 OpenCod
 
 # OpenCode Zen
 
-OpenCode Zen 是由 OpenCode 团队为编程智能体（Agent）推荐的**精选模型列表**。
+OpenCode Zen 是由 OpenCode 团队为编程智能体（Agent）推荐的精选模型列表。
 它是一个可选的托管模型访问路径，使用 API 密钥和 `opencode` 提供商。
 Zen 目前处于 Beta 阶段。
 

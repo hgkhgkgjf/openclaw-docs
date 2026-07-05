@@ -36,25 +36,25 @@ export function applyGatewayLaneConcurrency(cfg: Config) {
 
 ## 步骤二：两个 resolve 函数的行为
 
-**`resolveAgentMaxConcurrent(cfg)`**
+`resolveAgentMaxConcurrent(cfg)`
 
 从配置里拉 `agents.maxConcurrentRuns`（或等效字段），
 兜底回 `1`（保证至少串行，不会并发爆炸）。
 
-**`resolveSubagentMaxConcurrent(cfg)`**
+`resolveSubagentMaxConcurrent(cfg)`
 
 从 `agents.subagentMaxConcurrentRuns` 拉值，
 独立于主 agent 的并发计数，使子智能体不会挤占主回合的 slot。
 
 ## 步骤三：调用时机
 
-**启动时（一次）：**
+启动时（一次）：
 ```ts
 // src/gateway/server-startup.ts（等效位置）
 applyGatewayLaneConcurrency(cfg);
 ```
 
-**热重载时（每次配置变更）：**
+热重载时（每次配置变更）：
 ```ts
 // src/gateway/server-reload-handlers.ts
 applyGatewayLaneConcurrency(newCfg);
@@ -75,15 +75,15 @@ export function setCommandLaneConcurrency(lane: string, n: number) {
 ```
 
 写完 `maxConcurrent` 后立刻 `drainLane`，
-让"提高并发"的配置变更**实时生效**，不用等下一条消息触发。
+让"提高并发"的配置变更实时生效，不用等下一条消息触发。
 
 ## 步骤五：为什么 session lane 不在这里配置
 
-session lane（如 `"session:user-abc"`）是**动态创建**的，
+session lane（如 `"session:user-abc"`）是动态创建的，
 粒度是每个会话，`maxConcurrent` 固定为 `1`（强制串行），
 不需要也不能通过配置文件调整。
 
-只有 `Cron / Main / Subagent` 这三条**全局命名 lane** 才通过 `applyGatewayLaneConcurrency` 配置。
+只有 `Cron / Main / Subagent` 这三条全局命名 lane 才通过 `applyGatewayLaneConcurrency` 配置。
 
 ## 自检清单
 

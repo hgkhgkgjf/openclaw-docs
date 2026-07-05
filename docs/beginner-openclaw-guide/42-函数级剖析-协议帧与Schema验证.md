@@ -37,12 +37,12 @@ export const GatewayFrameSchema = Type.Union(
 
 三种帧的 `type` 字面量值：
 ```
-RequestFrameSchema  → type: Type.Literal("req")    // 客户端请求
-ResponseFrameSchema → type: Type.Literal("res")    // 网关响应
-EventFrameSchema    → type: Type.Literal("event")  // 网关异步事件
+RequestFrameSchema  => type: Type.Literal("req")    // 客户端请求
+ResponseFrameSchema => type: Type.Literal("res")    // 网关响应
+EventFrameSchema    => type: Type.Literal("event")  // 网关异步事件
 ```
 
-**设计简洁性：** 只有 3 种顶层帧，不需要复杂的分发逻辑，客户端实现更简单稳定。
+设计上只保留 3 种顶层帧，不需要复杂的分发逻辑，客户端实现也更稳定。
 
 ## 三、ConnectParamsSchema（关键约束字段）
 
@@ -85,8 +85,8 @@ export const ConnectParamsSchema = Type.Object(
 );
 ```
 
-**必填字段（不含 Optional）：** `minProtocol`, `maxProtocol`, `client.id`, `client.version`, `client.platform`, `client.mode`
-**严格模式：** 全局 `additionalProperties: false`，未知字段直接拒绝，不做静默忽略。
+必填字段（不含 Optional）：`minProtocol`, `maxProtocol`, `client.id`, `client.version`, `client.platform`, `client.mode`
+严格模式：全局 `additionalProperties: false`，未知字段直接拒绝，不做静默忽略。
 
 ## 四、validateConnectParams / validateRequestFrame（AJV 编译校验器）
 
@@ -105,8 +105,8 @@ export const validateConnectParams = ajv.compile<ConnectParams>(ConnectParamsSch
 export const validateRequestFrame = ajv.compile<RequestFrame>(RequestFrameSchema);
 ```
 
-**技术栈：** `@sinclair/typebox`（定义 schema）+ `ajv`（编译为验证函数），不使用 zod。
-**`allErrors: true`：** 验证失败时返回所有错误，方便调试。
+技术栈：`@sinclair/typebox`（定义 schema）+ `ajv`（编译为验证函数），不使用 zod。
+`allErrors: true`：验证失败时返回所有错误，方便调试。
 
 ## 五、ErrorCodes（完整枚举）
 
@@ -130,24 +130,24 @@ export const ErrorCodes = {
 客户端发送 WS 消息
     │
     ▼
-JSON.parse（格式错误 → 关闭连接）
+JSON.parse（格式错误则关闭连接）
     │
     ▼
 validateRequestFrame（AJV 校验）
-    失败 → respond INVALID_REQUEST，不进入业务逻辑
+    失败：respond INVALID_REQUEST，不进入业务逻辑
     │
     ▼
 route to method handler（根据 method 字段）
     │
     ▼
 validateXxxParams（各方法自己的 schema 校验）
-    失败 → respond INVALID_REQUEST
+    失败：respond INVALID_REQUEST
     │
     ▼
-执行业务逻辑 → 返回 res 帧
+执行业务逻辑，返回 res 帧
 ```
 
-**"错误前置"设计：** 把格式错误拦截在协议层，不让"脏数据"进入业务层，业务代码可以假设入参已经合法。
+"错误前置"设计把格式错误拦截在协议层，不让"脏数据"进入业务层，业务代码可以假设入参已经合法。
 
 ## 七、ProtocolSchemas 注册表
 
@@ -176,12 +176,12 @@ export const ProtocolSchemas = {
 
 网关校验：
   if (PROTOCOL_VERSION < params.minProtocol || PROTOCOL_VERSION > params.maxProtocol)
-    → 拒绝，返回 UNAVAILABLE（版本不兼容）
+    拒绝，返回 UNAVAILABLE（版本不兼容）
   else
-    → 接受，握手完成
+    接受，握手完成
 ```
 
-**设计原则：** 显式版本协商，客户端和网关能做明确的兼容性声明，不靠"试错"。
+设计原则是显式版本协商，客户端和网关能做明确的兼容性声明，不靠"试错"。
 
 ## 九、ErrorCodes 使用模式
 
@@ -205,7 +205,7 @@ respond(false, undefined, errorShape(ErrorCodes.AGENT_TIMEOUT, "agent run timed 
 
 ## 十一、开发避坑
 
-1. **TypeBox + AJV 的组合**：TypeBox 生成标准 JSON Schema，AJV strict=false 才能正确处理 TypeBox 扩展字段，不能改为 strict=true。
-2. **discriminator 字段 type 必须是字面量**：`Type.Literal("req")` 不能改成 `Type.String()`，否则 AJV 无法按 discriminator 快速分发。
-3. **errorShape 的错误体**：前端应按 `error.code`（ErrorCodes 值）而不是 `error.message` 做逻辑判断，message 可能变化。
-4. **版本区间设计**：客户端建议 `minProtocol = maxProtocol = PROTOCOL_VERSION`（精确匹配），而不是宽泛区间（防止与未知未来版本产生歧义）。
+1. TypeBox + AJV 的组合：TypeBox 生成标准 JSON Schema，AJV strict=false 才能正确处理 TypeBox 扩展字段，不能改为 strict=true。
+2. discriminator 字段 type 必须是字面量：`Type.Literal("req")` 不能改成 `Type.String()`，否则 AJV 无法按 discriminator 快速分发。
+3. errorShape 的错误体：前端应按 `error.code`（ErrorCodes 值）而不是 `error.message` 做逻辑判断，message 可能变化。
+4. 版本区间设计：客户端建议 `minProtocol = maxProtocol = PROTOCOL_VERSION`（精确匹配），而不是宽泛区间（防止与未知未来版本产生歧义）。

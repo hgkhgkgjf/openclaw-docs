@@ -8,7 +8,7 @@ description: "OpenClaw 源码剖析：函数级剖析：server-runtime-config。
 ## 模块定位
 
 网关启动时的配置合并与安全约束校验器。
-这是**启动前最后一道防误配闸门**，把所有危险配置在启动阶段直接报错，阻止网关带风险上线。
+这是启动前最后一道防误配闸门，把所有危险配置在启动阶段直接报错，阻止网关带风险上线。
 
 ## 一、resolveGatewayRuntimeConfig（完整签名）
 
@@ -47,7 +47,7 @@ auth        = params.auth       ?? cfg.gateway?.auth       （叠加启动参数
 tailscale   = params.tailscale  ?? cfg.gateway?.tailscale
 ```
 
-**原则**：启动参数 override > 配置文件 > 默认值。
+原则：启动参数 override > 配置文件 > 默认值。
 
 ## 三、五条安全约束（源码精确错误消息）
 
@@ -127,8 +127,8 @@ if (authMode === "trusted-proxy") {
 | `bind=lan` + 无 token/password | ❌ | 非 loopback 必须认证 |
 | `authMode=trusted-proxy` + `bind=loopback` | ❌ | trusted-proxy 不能 loopback |
 | `authMode=trusted-proxy` + `trustedProxies=[]` | ❌ | 必须配置代理 IP 列表 |
-| `bind=loopback` + 无认证 | ✅ | 本机访问，loopback 豁免 |
-| `tailscaleMode=serve` + `authMode=none` + `allowTailscale=true` | ✅ | tailscale 白名单豁免 |
+| `bind=loopback` + 无认证 |  | 本机访问，loopback 豁免 |
+| `tailscaleMode=serve` + `authMode=none` + `allowTailscale=true` |  | tailscale 白名单豁免 |
 
 ## 五、GatewayRuntimeConfig 返回结构
 

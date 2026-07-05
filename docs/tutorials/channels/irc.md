@@ -44,15 +44,15 @@ openclaw gateway run
 
 IRC 频道有两个独立的"门控"：
 
-1. **频道访问**（`groupPolicy` + `groups`）：机器人是否接受来自频道的消息。
-2. **发送者访问**（`groupAllowFrom` / 按频道的 `groups["#channel"].allowFrom`）：谁可以在该频道中触发机器人。
+1. 频道访问（`groupPolicy` + `groups`）：机器人是否接受来自频道的消息。
+2. 发送者访问（`groupAllowFrom` / 按频道的 `groups["#channel"].allowFrom`）：谁可以在该频道中触发机器人。
 
 配置键：
 
 - DM 白名单（DM 发送者访问）：`channels.irc.allowFrom`
 - 群组发送者白名单（频道发送者访问）：`channels.irc.groupAllowFrom`
 - 按频道控制（频道 + 发送者 + 提及规则）：`channels.irc.groups["#channel"]`
-- `channels.irc.groupPolicy="open"` 允许未配置的频道（**默认仍需提及**）
+- `channels.irc.groupPolicy="open"` 允许未配置的频道（默认仍需提及）
 
 白名单条目可以使用昵称或 `nick!user@host` 格式。
 
@@ -62,7 +62,7 @@ IRC 频道有两个独立的"门控"：
 
 - `irc: drop group sender alice!ident@host (policy=allowlist)`
 
-...这意味着发送者在**群组/频道**消息中未被允许。通过以下方式修复：
+...这意味着发送者在群组/频道消息中未被允许。通过以下方式修复：
 
 - 设置 `channels.irc.groupAllowFrom`（对所有频道全局生效），或
 - 设置按频道的发送者白名单：`channels.irc.groups["#channel"].allowFrom`
@@ -84,11 +84,11 @@ IRC 频道有两个独立的"门控"：
 
 ## 回复触发（提及）
 
-即使频道被允许（通过 `groupPolicy` + `groups`）且发送者被允许，OpenClaw 在群组上下文中默认启用**提及门控**。
+即使频道被允许（通过 `groupPolicy` + `groups`）且发送者被允许，OpenClaw 在群组上下文中默认启用提及门控。
 
 这意味着你可能会看到 `drop channel … (missing-mention)` 的日志，除非消息包含与机器人匹配的提及模式。
 
-要让机器人在 IRC 频道中**无需提及即可回复**，请为该频道禁用提及门控：
+要让机器人在 IRC 频道中无需提及即可回复，请为该频道禁用提及门控：
 
 ```json5
 {
@@ -106,7 +106,7 @@ IRC 频道有两个独立的"门控"：
 }
 ```
 
-或者允许**所有** IRC 频道（无按频道白名单）且不需要提及即可回复：
+或者允许所有 IRC 频道（无按频道白名单）且不需要提及即可回复：
 
 ```json5
 {
@@ -230,6 +230,6 @@ IRC 频道有两个独立的"门控"：
 
 ## 故障排查
 
-- 如果机器人连接但从不在频道中回复，请验证 `channels.irc.groups` **以及**提及门控是否在丢弃消息（`missing-mention`）。如果你希望机器人不需要 ping 即可回复，请为该频道设置 `requireMention:false`。
+- 如果机器人连接但从不在频道中回复，请验证 `channels.irc.groups` 以及提及门控是否在丢弃消息（`missing-mention`）。如果你希望机器人不需要 ping 即可回复，请为该频道设置 `requireMention:false`。
 - 如果登录失败，验证昵称可用性和服务器密码。
 - 如果 TLS 在自定义网络上失败，验证主机/端口和证书设置。

@@ -30,7 +30,7 @@
 </section>
 <section class="oc-map-card">
 <h3>框架 4：回退与鲁棒性</h3>
-<p>解决模型失败、限流、认证问题，确保线上持续可用。</p>
+<p>解决模型失败、限流、认证问题，确保线上继续可用。</p>
 <div class="oc-chip-list">
 <a href="/beginner-openclaw-framework-focus/10-模型回退与鲁棒性原理">10 原理</a>
 </div>

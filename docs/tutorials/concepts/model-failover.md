@@ -1,15 +1,15 @@
 ---
 title: "模型故障转移"
 sidebarTitle: "模型故障转移"
-description: "OpenClaw 核心概念：模型故障转移（Model Failover）。OpenClaw 分两个阶段处理故障："
+description: "说明 OpenClaw 的模型故障转移：认证配置文件轮换、会话粘性、冷却、账单禁用和 fallback 模型。"
 ---
 
 # 模型故障转移（Model Failover）
 
-OpenClaw 分两个阶段处理故障：
+OpenClaw 遇到模型调用失败时，按两个层次处理：
 
-1. 当前提供商内的 **认证配置文件轮换**。
-2. **模型回退** 到 `agents.defaults.model.fallbacks` 中的下一个模型。
+1. 先在当前提供商内部轮换认证配置文件。
+2. 如果当前提供商没有可用配置文件，再回退到 `agents.defaults.model.fallbacks` 里的下一个模型。
 
 本文档解释运行时规则和支撑它们的数据。
 
@@ -17,10 +17,10 @@ OpenClaw 分两个阶段处理故障：
 
 ## 认证存储（密钥 + OAuth）
 
-OpenClaw 使用 **认证配置文件** 来管理 API 密钥和 OAuth Token。
+OpenClaw 使用认证配置文件管理 API Key 和 OAuth Token。
 
 - 密钥存储在 `~/.openclaw/agents/<agentId>/agent/auth-profiles.json`（旧版：`~/.openclaw/agent/auth-profiles.json`）。
-- 配置 `auth.profiles` / `auth.order` 是 **元数据 + 路由**（不含密钥）。
+- 配置 `auth.profiles` / `auth.order` 只保存元数据和路由，不保存密钥。
 - 旧版仅导入 OAuth 文件：`~/.openclaw/credentials/oauth.json`（首次使用时导入到 `auth-profiles.json`）。
 
 更多详情：[/concepts/oauth](/tutorials/concepts/oauth)
@@ -47,27 +47,27 @@ OAuth 登录创建不同的配置文件，以便多个账户可以共存。
 
 当提供商有多个配置文件时，OpenClaw 按以下方式选择顺序：
 
-1. **显式配置**：`auth.order[provider]`（如果设置了）。
-2. **已配置的配置文件**：按提供商过滤的 `auth.profiles`。
-3. **已存储的配置文件**：`auth-profiles.json` 中该提供商的条目。
+1. 显式配置：`auth.order[provider]`（如果设置了）。
+2. 已配置的配置文件：按提供商过滤的 `auth.profiles`。
+3. 已存储的配置文件：`auth-profiles.json` 中该提供商的条目。
 
 如果没有配置显式顺序，OpenClaw 使用轮询顺序：
 
-- **主键：** 配置文件类型（**OAuth 优先于 API 密钥**）。
-- **次键：** `usageStats.lastUsed`（最旧优先，在每种类型内）。
-- **冷却/禁用的配置文件** 移到末尾，按最早到期排序。
+- 主键：配置文件类型，OAuth 优先于 API Key。
+- 次键：`usageStats.lastUsed`，每种类型内最旧优先。
+- 冷却或禁用的配置文件移到末尾，按最早到期排序。
 
 ### 会话粘性（缓存友好）
 
-OpenClaw **将选定的认证配置文件固定到每个会话** 以保持提供商缓存温暖。它 **不会** 在每次请求时轮换。固定的配置文件会被重用，直到：
+OpenClaw 会把选定的认证配置文件固定到当前会话，尽量保持提供商缓存温热。它不会每次请求都轮换。固定配置会一直复用，直到：
 
 - 会话被重置（`/new` / `/reset`）
 - 压缩完成（压缩计数递增）
 - 配置文件处于冷却/禁用状态
 
-通过 `/model …@<profileId>` 手动选择会为该会话设置 **用户覆盖**，在新会话开始之前不会自动轮换。
+通过 `/model …@<profileId>` 手动选择时，会给该会话设置用户覆盖；新会话开始前不会自动轮换。
 
-自动固定的配置文件（由会话路由器选择）被视为 **偏好**：它们首先被尝试，但 OpenClaw 可能在速率限制/超时时轮换到另一个配置文件。用户固定的配置文件锁定到该配置文件；如果失败且配置了模型回退，OpenClaw 移到下一个模型而不是切换配置文件。
+自动固定的配置文件由会话路由器选择，属于偏好项：OpenClaw 会先尝试它，但遇到速率限制或超时时可以换到另一个配置文件。用户手动固定的配置文件更严格；如果失败并配置了模型回退，OpenClaw 会换下一个模型，而不是偷偷切换配置文件。
 
 ### 为什么 OAuth 可能"看起来丢失了"
 
@@ -107,7 +107,7 @@ OpenClaw **将选定的认证配置文件固定到每个会话** 以保持提供
 
 ## 账单禁用
 
-账单/额度失败（例如"insufficient credits"/"credit balance too low"）被视为可故障转移的，但它们通常不是暂时的。OpenClaw 不使用短冷却，而是将配置文件标记为 **禁用**（使用更长的退避）并轮换到下一个配置文件/提供商。
+账单或额度失败（例如 "insufficient credits"、"credit balance too low"）可以触发故障转移，但通常不是临时问题。OpenClaw 不会只做短冷却，而是把该配置文件标记为禁用，并使用更长退避，再切换到下一个配置文件或提供商。
 
 状态存储在 `auth-profiles.json` 中：
 
@@ -124,8 +124,8 @@ OpenClaw **将选定的认证配置文件固定到每个会话** 以保持提供
 
 默认值：
 
-- 账单退避从 **5 小时** 开始，每次账单失败翻倍，上限为 **24 小时**。
-- 退避计数器在配置文件 **24 小时** 未失败时重置（可配置）。
+- 账单退避从 5 小时开始，每次账单失败翻倍，上限为 24 小时。
+- 如果配置文件 24 小时内没有再次失败，退避计数器会重置。这个窗口可配置。
 
 ---
 

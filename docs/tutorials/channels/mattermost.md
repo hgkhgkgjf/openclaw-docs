@@ -38,8 +38,8 @@ OpenClaw 会自动提供本地安装路径。
 ## 快速设置
 
 1. 安装 Mattermost 插件。
-2. 创建 Mattermost 机器人账户并复制 **Bot Token**。
-3. 复制 Mattermost **基础 URL**（如 `https://chat.example.com`）。
+2. 创建 Mattermost 机器人账户并复制 Bot Token。
+3. 复制 Mattermost 基础 URL（如 `https://chat.example.com`）。
 4. 配置 OpenClaw，然后重启 Gateway，让配置生效。
 
 最小配置：
@@ -66,7 +66,7 @@ OpenClaw 会自动提供本地安装路径。
 - `MATTERMOST_BOT_TOKEN=...`
 - `MATTERMOST_URL=https://chat.example.com`
 
-环境变量仅适用于 **默认** 账户（`default`）。其他账户必须使用配置值。
+环境变量仅适用于 默认 账户（`default`）。其他账户必须使用配置值。
 
 ---
 

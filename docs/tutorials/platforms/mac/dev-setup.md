@@ -2,62 +2,62 @@
 title: "macOS dev setup"
 ---
 
-# macOS developer setup
+# macOS 开发环境
 
 ::: tip 先看人话
 这页是从 OpenClaw 官方最新文档同步来的专题参考。新手不要一口气背完，先看标题和第一段；真正要配置这个功能时，再按步骤慢慢做。
 :::
 
-Build and run the OpenClaw macOS application from source.
+这页说明如何从源码构建并运行 OpenClaw 的 macOS 应用。
 
-## Prerequisites
+## 前置条件
 
-Before building the app, ensure you have the following installed:
+构建应用之前，先确认本机已经安装：
 
-1. **Xcode 26.2+**: Required for Swift development.
-2. **Node.js 24 & pnpm**: Recommended for the gateway, CLI, and packaging scripts. Node 22 LTS, currently `22.19+`, remains supported for compatibility.
+1. Xcode 26.2+：用于 Swift 开发。
+2. Node.js 24 和 pnpm：用于 Gateway、CLI 和打包脚本。Node 22 LTS 仍可用于兼容场景，目前要求 `22.19+`。
 
-## 1. Install Dependencies
+## 1. 安装依赖
 
-Install the project-wide dependencies:
+安装项目依赖：
 
 ```bash
 pnpm install
 ```
 
-## 2. Build and Package the App
+## 2. 构建并打包应用
 
-To build the macOS app and package it into `dist/OpenClaw.app`, run:
+运行下面的命令，会把 macOS 应用打包到 `dist/OpenClaw.app`：
 
 ```bash
 ./scripts/package-mac-app.sh
 ```
 
-If you don't have an Apple Developer ID certificate, the script will automatically use **ad-hoc signing** (`-`).
+如果本机没有 Apple Developer ID 证书，脚本会自动使用 ad-hoc 签名（`-`）。
 
-For dev run modes, signing flags, and Team ID troubleshooting, see the macOS app README:
+开发运行模式、签名参数和 Team ID 排查请看 macOS app README：
 [https://github.com/openclaw/openclaw/blob/main/apps/macos/README.md](https://github.com/openclaw/openclaw/blob/main/apps/macos/README.md)
 
-> **Note**: Ad-hoc signed apps may trigger security prompts. If the app crashes immediately with "Abort trap 6", see the [Troubleshooting](#troubleshooting) section.
+> Note: ad-hoc 签名应用可能触发系统安全提示。如果应用启动后立刻报 "Abort trap 6"，看下面的 [Troubleshooting](#troubleshooting)。
 
-## 3. Install the CLI
+## 3. 安装 CLI
 
-The macOS app expects a global `openclaw` CLI install to manage background tasks.
+macOS 应用需要全局 `openclaw` CLI 来管理后台任务。
 
-**To install it (recommended):**
+推荐从应用里安装：
 
-1. Open the OpenClaw app.
-2. Go to the **General** settings tab.
-3. Click **"Install CLI"**.
+1. 打开 OpenClaw 应用。
+2. 进入 General 设置页。
+3. 点击 "Install CLI"。
 
-Alternatively, install it manually:
+也可以手动安装：
 
 ```bash
 npm install -g openclaw@<version>
 ```
 
 `pnpm add -g openclaw@<version>` and `bun add -g openclaw@<version>` also work.
-For the Gateway runtime, Node remains the recommended path.
+Gateway 运行时仍推荐使用 Node。
 
 ## Troubleshooting
 
@@ -65,12 +65,12 @@ For the Gateway runtime, Node remains the recommended path.
 
 The macOS app build expects the latest macOS SDK and Swift 6.2 toolchain.
 
-**System dependencies (required):**
+System dependencies (required):
 
-- **Latest macOS version available in Software Update** (required by Xcode 26.2 SDKs)
-- **Xcode 26.2** (Swift 6.2 toolchain)
+- Latest macOS version available in Software Update (required by Xcode 26.2 SDKs)
+- Xcode 26.2 (Swift 6.2 toolchain)
 
-**Checks:**
+Checks:
 
 ```bash
 xcodebuild -version
@@ -81,9 +81,9 @@ If versions don’t match, update macOS/Xcode and re-run the build.
 
 ### App crashes on permission grant
 
-If the app crashes when you try to allow **Speech Recognition** or **Microphone** access, it may be due to a corrupted TCC cache or signature mismatch.
+If the app crashes when you try to allow Speech Recognition or Microphone access, it may be due to a corrupted TCC cache or signature mismatch.
 
-**Fix:**
+Fix:
 
 1. Reset the TCC permissions:
 

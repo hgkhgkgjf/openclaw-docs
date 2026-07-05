@@ -6,7 +6,7 @@ description: "OpenClaw 模型接入：Claude Max API 代理。claude-max-api-pro
 
 # Claude Max API 代理
 
-**claude-max-api-proxy** 是一个社区工具，可以将你的 Claude Max/Pro 订阅暴露为 OpenAI 兼容的 API 端点。这允许你使用任何支持 OpenAI API 格式的工具来使用你的订阅。
+claude-max-api-proxy 是一个社区工具，可以将你的 Claude Max/Pro 订阅暴露为 OpenAI 兼容的 API 端点。这允许你使用任何支持 OpenAI API 格式的工具来使用你的订阅。
 
 ---
 
@@ -142,15 +142,15 @@ launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.claude-max-api.plist
 
 ## 链接
 
-- **npm:** [https://www.npmjs.com/package/claude-max-api-proxy](https://www.npmjs.com/package/claude-max-api-proxy)
-- **GitHub:** [https://github.com/atalovesyou/claude-max-api-proxy](https://github.com/atalovesyou/claude-max-api-proxy)
-- **问题反馈:** [https://github.com/atalovesyou/claude-max-api-proxy/issues](https://github.com/atalovesyou/claude-max-api-proxy/issues)
+- npm: [https://www.npmjs.com/package/claude-max-api-proxy](https://www.npmjs.com/package/claude-max-api-proxy)
+- GitHub: [https://github.com/atalovesyou/claude-max-api-proxy](https://github.com/atalovesyou/claude-max-api-proxy)
+- 问题反馈: [https://github.com/atalovesyou/claude-max-api-proxy/issues](https://github.com/atalovesyou/claude-max-api-proxy/issues)
 
 ---
 
 ## 注意事项
 
-- 这是一个**社区工具**，非 Anthropic 或 OpenClaw 官方支持
+- 这是一个社区工具，非 Anthropic 或 OpenClaw 官方支持
 - 需要一个有效的 Claude Max/Pro 订阅，且 Claude Code CLI 已完成认证
 - 代理在本地运行，不会向任何第三方服务器发送数据
 - 完全支持流式响应

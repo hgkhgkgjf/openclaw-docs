@@ -6,13 +6,13 @@ description: "OpenClaw 工具系统：LLM 任务工具（LLM Task）。LLM Task 
 
 # LLM 任务工具（LLM Task）
 
-LLM Task 是一个插件工具，允许当前 Agent 向另一个 LLM（大语言模型）发起子任务。与子智能体不同，LLM Task 是单次委托调用——主 Agent 将子任务连同提示词一起委托给另一个 LLM 处理，等待该 LLM 返回结果后再继续工作，整个过程不涉及多轮对话。这适合用轻量模型处理简单的辅助任务，节省成本。
+LLM Task 是一个插件工具，允许当前 Agent 向另一个 LLM（大语言模型）发起子任务。与子智能体不同，LLM Task 是单次委托调用::主 Agent 将子任务连同提示词一起委托给另一个 LLM 处理，等待该 LLM 返回结果后再继续工作，整个过程不涉及多轮对话。这适合用轻量模型处理简单的辅助任务，节省成本。
 
 ---
 
 ## 快速上手
 
-**第一步：通过插件系统启用 LLM Task**
+第一步：通过插件系统启用 LLM Task
 
 ```json5
 {
@@ -26,7 +26,7 @@ LLM Task 是一个插件工具，允许当前 Agent 向另一个 LLM（大语言
 }
 ```
 
-**第二步：Agent 会自动使用 LLM Task**
+第二步：Agent 会自动使用 LLM Task
 
 当主 Agent 判断某个子任务适合用更轻量的模型处理时，会自动调用 LLM Task 工具。你也可以在提示词中明确指定：
 
@@ -82,7 +82,7 @@ LLM Task 是一个插件工具，允许当前 Agent 向另一个 LLM（大语言
 
 ### 成本优化
 
-使用强大模型（如 claude-opus）作为主 Agent，用轻量模型（如 claude-haiku）处理简单的辅助任务：
+使用好用模型（如 claude-opus）作为主 Agent，用轻量模型（如 claude-haiku）处理简单的辅助任务：
 
 ```text
 主 Agent（claude-opus-4-5）
@@ -105,7 +105,7 @@ LLM Task 是一个插件工具，允许当前 Agent 向另一个 LLM（大语言
 
 步骤 1：主 Agent 调用 LLM Task
   → 模型：claude-haiku-4-5
-  → 提示：将以下长文本提取关键数据点
+  → 提示：将以下长文本提取主要数据点
   → 结果：结构化数据列表
 
 步骤 2：主 Agent 使用提取的数据

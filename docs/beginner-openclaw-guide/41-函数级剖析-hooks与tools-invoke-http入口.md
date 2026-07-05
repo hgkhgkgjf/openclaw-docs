@@ -30,7 +30,7 @@ export function createHooksRequestHandler(
 ): HooksRequestHandler {
 ```
 
-**HookDispatchers 类型：**
+HookDispatchers 类型：
 ```ts
 type HookDispatchers = {
   dispatchWakeHook: (value: {
@@ -78,16 +78,16 @@ export function extractHookToken(req: IncomingMessage): string | undefined {
 }
 ```
 
-**两个 header，按优先级：**
+两个 header，按优先级：
 1. 主要：`Authorization: Bearer <token>`
 2. 备用：`X-OpenClaw-Token`
 
-**明确禁止** query string `?token=` 方式（返回 400）。
+明确禁止 query string `?token=` 方式（返回 400）。
 
 ### 保护 2：限速
 
 ```
-认证失败计数 + 时间窗口 → 超出阈值 → 429 Too Many Requests
+认证失败计数 + 时间窗口 : 超出阈值 : 429 Too Many Requests
 ```
 
 ### 保护 3：Body 大小限制
@@ -98,7 +98,7 @@ export function extractHookToken(req: IncomingMessage): string | undefined {
 const DEFAULT_HOOKS_MAX_BODY_BYTES = 256 * 1024;  // 262,144 字节 = 256 KB
 ```
 
-默认限制 **256 KB**，可通过 `cfg.hooks.maxBodyBytes` 覆盖。
+默认限制 256 KB，可通过 `cfg.hooks.maxBodyBytes` 覆盖。
 
 ## 三、resolveHooksConfig
 
@@ -110,7 +110,7 @@ export function resolveHooksConfig(cfg: OpenClawConfig): HooksConfigResolved | n
 
 返回 `null` 表示 hooks 未启用（`cfg.hooks?.enabled !== true`）。
 
-**HooksConfigResolved 完整类型：**
+HooksConfigResolved 完整类型：
 ```ts
 export type HooksConfigResolved = {
   basePath: string;
@@ -137,12 +137,12 @@ export type HookSessionPolicyResolved = {
 ## 四、hooks 路由结构
 
 ```
-POST /hooks/wake          → dispatchWakeHook({ text, mode })
-POST /hooks/agent         → dispatchAgentHook({ message, ... })
-POST /hooks/{mappingName} → 按 mapping 规则转换外部 payload → 上述两个动作之一
+POST /hooks/wake          : dispatchWakeHook({ text, mode })
+POST /hooks/agent         : dispatchAgentHook({ message, ... })
+POST /hooks/{mappingName} : 按 mapping 规则转换外部 payload : 上述两个动作之一
 ```
 
-**mapping 的意义：** 外部系统（GitHub、Stripe 等）不需要了解 OpenClaw 内部参数，通过 mapping 规则将 webhook payload 转换为内部动作。
+mapping 的意义： 外部系统（GitHub、Stripe 等）不需要了解 OpenClaw 内部参数，通过 mapping 规则将 webhook payload 转换为内部动作。
 
 ## 五、DEFAULT_GATEWAY_HTTP_TOOL_DENY
 
@@ -157,7 +157,7 @@ export const DEFAULT_GATEWAY_HTTP_TOOL_DENY = [
 ] as const;
 ```
 
-**在 tools-invoke-http.ts 中的使用方式：**
+在 tools-invoke-http.ts 中的使用方式：
 ```ts
 import { DEFAULT_GATEWAY_HTTP_TOOL_DENY } from "../security/dangerous-tools.js";
 
@@ -188,10 +188,10 @@ HTTP 请求 /tools/invoke
    - DEFAULT_GATEWAY_HTTP_TOOL_DENY（gateway HTTP 专属拒绝列表）
     │
     ▼
-5. 执行目标工具 → 返回结果
+5. 执行目标工具 : 返回结果
 ```
 
-**策略分层原因：** 确保"HTTP 直调工具"不会绕过正常会话安全边界（相比 WS 连接，HTTP 调用更容易被外部攻击者利用）。
+策略分层原因： 确保"HTTP 直调工具"不会绕过正常会话安全边界（相比 WS 连接，HTTP 调用更容易被外部攻击者利用）。
 
 ## 七、统一 HTTP 错误码（http-common.ts）
 
@@ -217,9 +217,9 @@ HTTP 请求 /tools/invoke
 // 请求路径 = basePath + "/" + mappingName
 
 // 路由匹配规则：
-if (url.startsWith(hooksConfig.basePath + "/wake"))  → wake handler
-if (url.startsWith(hooksConfig.basePath + "/agent")) → agent handler
-else                                                  → mapping lookup
+if (url.startsWith(hooksConfig.basePath + "/wake"))  : wake handler
+if (url.startsWith(hooksConfig.basePath + "/agent")) : agent handler
+else                                                  : mapping lookup
 ```
 
 ## 九、自检清单
@@ -232,7 +232,7 @@ else                                                  → mapping lookup
 
 ## 十、开发避坑
 
-1. **hooks mapping 的 `ignore` 动作**：可以把特定 webhook 事件映射为 `ignore`（无操作），避免引发 agent 执行。
-2. **allowRequestSessionKey = false 时**：请求方带的 sessionKey 被忽略，强制使用 defaultSessionKey，防止 session 跨用户注入。
-3. **tools/invoke 不走 WS 连接**：没有 context.dedupe 去重，调用方需要自己保证幂等性。
-4. **sessions_spawn 被封**：无法通过 HTTP 触发子 agent 生成，防止 HTTP 接口成为 RCE 向量。
+1. hooks mapping 的 `ignore` 动作：可以把特定 webhook 事件映射为 `ignore`（无操作），避免引发 agent 执行。
+2. allowRequestSessionKey = false 时：请求方带的 sessionKey 被忽略，强制使用 defaultSessionKey，防止 session 跨用户注入。
+3. tools/invoke 不走 WS 连接：没有 context.dedupe 去重，调用方需要自己保证幂等性。
+4. sessions_spawn 被封：无法通过 HTTP 触发子 agent 生成，防止 HTTP 接口成为 RCE 向量。

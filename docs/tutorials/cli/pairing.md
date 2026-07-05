@@ -42,7 +42,7 @@ openclaw pairing approve telegram <code>
 openclaw pairing approve --channel telegram --account work <code>
 ```
 
-## 一个很重要的细节
+## 一个很需要留意的细节
 
 如果 OpenClaw 还没有设置命令 owner，第一次批准配对时，可能也会把这个人记录成命令 owner。owner 不是普通聊天权限，而是更高权限，能执行诊断、配置、审批等危险操作。
 

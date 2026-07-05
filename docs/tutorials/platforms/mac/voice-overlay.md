@@ -23,21 +23,21 @@ Audience: macOS app contributors. Goal: keep the voice overlay predictable when 
 
 ## Next steps
 
-1. **VoiceSessionCoordinator (actor)**
+1. VoiceSessionCoordinator (actor)
    - Owns exactly one `VoiceSession` at a time.
    - API (token-based): `beginWakeCapture`, `beginPushToTalk`, `updatePartial`, `endCapture`, `cancel`, `applyCooldown`.
    - Drops callbacks that carry stale tokens (prevents old recognizers from reopening the overlay).
-2. **VoiceSession (model)**
+2. VoiceSession (model)
    - Fields: `token`, `source` (wakeWord|pushToTalk), committed/volatile text, chime flags, timers (auto-send, idle), `overlayMode` (display|editing|sending), cooldown deadline.
-3. **Overlay binding**
+3. Overlay binding
    - `VoiceSessionPublisher` (`ObservableObject`) mirrors the active session into SwiftUI.
    - `VoiceWakeOverlayView` renders only via the publisher; it never mutates global singletons directly.
    - Overlay user actions (`sendNow`, `dismiss`, `edit`) call back into the coordinator with the session token.
-4. **Unified send path**
+4. Unified send path
    - On `endCapture`: if trimmed text is empty → dismiss; else `performSend(session:)` (plays send chime once, forwards, dismisses).
    - Push-to-talk: no delay; wake-word: optional delay for auto-send.
    - Apply a short cooldown to the wake runtime after push-to-talk finishes so wake-word doesn’t immediately retrigger.
-5. **Logging**
+5. Logging
    - Coordinator emits `.info` logs in subsystem `ai.openclaw`, categories `voicewake.overlay` and `voicewake.chime`.
    - Key events: `session_started`, `adopted_by_push_to_talk`, `partial`, `finalized`, `send`, `dismiss`, `cancel`, `cooldown`.
 

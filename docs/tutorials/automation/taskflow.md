@@ -69,6 +69,6 @@ Task Flow: weekly-report
 
 ## 和 ClawFlow 的关系
 
-旧名字 **ClawFlow** 已经改名为 **Task Flow**。
+旧名字 ClawFlow 已经改名为 Task Flow。
 如果你在旧文档或旧配置里看到 ClawFlow，可以先按 Task Flow 理解。
 

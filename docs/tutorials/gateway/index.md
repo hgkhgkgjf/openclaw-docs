@@ -3,11 +3,11 @@ title: "网关（Gateway）使用指南"
 sidebarTitle: "网关"
 ---
 
-# 网关（Gateway）——OpenClaw 的总服务台
+# 网关（Gateway）::OpenClaw 的总服务台
 
 如果只能记住一个概念，请记住 Gateway。
 
-**Gateway 是 OpenClaw 的常驻进程。它负责接收消息、管理通道、连接控制 UI、连接节点、调用 Agent，并把结果发回去。**
+Gateway 是 OpenClaw 的常驻进程。它负责接收消息、管理通道、连接控制 UI、连接节点、调用 Agent，并把结果发回去。
 
 ---
 
@@ -25,13 +25,13 @@ sidebarTitle: "网关"
 
 ## 新手只要先记 3 件事
 
-1. **Gateway 要开着。**
+1. Gateway 要开着。
    它停了，OpenClaw 就像没人接电话。
 
-2. **先用 `openclaw dashboard` 测试。**
+2. 先用 `openclaw dashboard` 测试。
    浏览器能聊通，再去接 Telegram、WhatsApp。
 
-3. **远程访问先别急。**
+3. 远程访问先别急。
    默认只让本机访问是为了安全。想让手机或外网访问时，先看 Tailscale、VPN 或认证配置。
 
 ---

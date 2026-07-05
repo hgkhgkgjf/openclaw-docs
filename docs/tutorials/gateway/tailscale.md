@@ -6,7 +6,7 @@ description: "OpenClaw Gateway：Tailscale（网关（Gateway）仪表盘）。O
 
 # Tailscale（网关（Gateway）仪表盘）
 
-OpenClaw 可以为网关（Gateway）仪表盘和 WebSocket 端口自动配置 Tailscale **Serve**（tailnet）或 **Funnel**（公共）。这使网关（Gateway）保持绑定到 loopback，同时 Tailscale 提供 HTTPS、路由，以及（对于 Serve）身份头。
+OpenClaw 可以为网关（Gateway）仪表盘和 WebSocket 端口自动配置 Tailscale Serve（tailnet）或 Funnel（公共）。这使网关（Gateway）保持绑定到 loopback，同时 Tailscale 提供 HTTPS、路由，以及（对于 Serve）身份头。
 
 ---
 
@@ -63,7 +63,7 @@ OpenClaw 可以为网关（Gateway）仪表盘和 WebSocket 端口自动配置 T
 - Control UI：`http://<tailscale-ip>:18789/`
 - WebSocket：`ws://<tailscale-ip>:18789`
 
-注意：此模式下 loopback（`http://127.0.0.1:18789`）将**不**工作。
+注意：此模式下 loopback（`http://127.0.0.1:18789`）将不工作。
 
 ### 公共互联网（Funnel + 共享密码）
 
@@ -97,13 +97,13 @@ openclaw gateway --tailscale funnel --auth password
 - 如果你希望 OpenClaw 在关闭时撤销 `tailscale serve` 或 `tailscale funnel` 配置，请设置 `gateway.tailscale.resetOnExit`。
 - `gateway.bind: "tailnet"` 是直接 Tailnet 绑定（无 HTTPS，无 Serve/Funnel）。
 - `gateway.bind: "auto"` 优先 loopback；如果你想仅 Tailnet，使用 `tailnet`。
-- Serve/Funnel 仅暴露**网关（Gateway）Control UI + WS**。节点通过相同的网关（Gateway）WS 端点连接，因此 Serve 可用于节点访问。
+- Serve/Funnel 仅暴露网关（Gateway）Control UI + WS。节点通过相同的网关（Gateway）WS 端点连接，因此 Serve 可用于节点访问。
 
 ---
 
 ## 浏览器控制（远程网关（Gateway） + 本地浏览器）
 
-如果你在一台机器上运行网关（Gateway）但想在另一台机器上驱动浏览器，在浏览器机器上运行一个**节点宿主**，并保持两者在同一个 tailnet 上。网关（Gateway）将代理浏览器操作到节点；无需单独的控制服务器或 Serve URL。
+如果你在一台机器上运行网关（Gateway）但想在另一台机器上驱动浏览器，在浏览器机器上运行一个节点宿主，并保持两者在同一个 tailnet 上。网关（Gateway）将代理浏览器操作到节点；无需单独的控制服务器或 Serve URL。
 
 避免对浏览器控制使用 Funnel；将节点配对视为 operator 访问。
 

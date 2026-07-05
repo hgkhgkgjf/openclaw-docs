@@ -29,7 +29,7 @@ OpenClaw 可以把 Telegram、WhatsApp、Discord、Slack、Signal、BlueBubbles/
 
 ## 前置条件
 
-- OpenClaw 已安装并完成入门引导 — 如果尚未完成，请参阅 [快速入门](/tutorials/getting-started/getting-started)
+- OpenClaw 已安装并完成入门引导 : 如果尚未完成，请参阅 [快速入门](/tutorials/getting-started/getting-started)
 - 一个聊天入口。新手建议先用 Telegram；如果选择 WhatsApp，最好准备第二个手机号（SIM/eSIM/预付费）。
 
 ---
@@ -178,7 +178,7 @@ OpenClaw 默认就是一个不错的助手设置，但你通常需要调整：
 - 如果 `HEARTBEAT.md` 存在但实际上为空（仅有空行和 Markdown 标题如 `# Heading`），OpenClaw 会跳过心跳运行以节省 API 调用。
 - 如果文件缺失，心跳仍会运行，由模型决定做什么。
 - 如果智能体回复 `HEARTBEAT_OK`（可选择带有短填充；参见 `agents.defaults.heartbeat.ackMaxChars`），OpenClaw 会抑制该次心跳的出站消息投递。
-- 心跳运行完整的智能体回合 — 更短的间隔会消耗更多 Token。
+- 心跳运行完整的智能体回合 : 更短的间隔会消耗更多 Token。
 
 ```json5
 {

@@ -1,79 +1,55 @@
 ---
-title: "OC Path plugin"
+title: "OC Path 插件"
+sidebarTitle: "OC Path"
+description: "OC Path 插件为 openclaw path CLI 提供 oc:// 工作区文件寻址能力，可精确读取和修改 Markdown、JSONC、JSONL、YAML 中的单个节点。"
 ---
 
-The bundled `oc-path` plugin adds the [`openclaw path`](/tutorials/cli/path) CLI for the
-`oc://` workspace-file addressing scheme. It ships in the OpenClaw repo under
-`extensions/oc-path/` but is opt-in — install/build leaves it dormant until you
-enable it.
+# OC Path 插件
 
-`oc://` addresses point at a single leaf (or a wildcard set of leaves) inside
-a workspace file. The plugin understands four kinds of files today:
+内置的 `oc-path` 插件提供 [`openclaw path`](/tutorials/cli/path) 命令，用来处理 `oc://` 形式的工作区文件地址。
 
-- **markdown** (`.md`, `.mdx`): frontmatter, sections, items, fields
-- **jsonc** (`.jsonc`, `.json5`, `.json`): comments and formatting preserved
-- **jsonl** (`.jsonl`, `.ndjson`): line-oriented records
-- **yaml** (`.yaml`, `.yml`, `.lobster`): map/sequence/scalar nodes through the
-  YAML document API
+插件代码在 OpenClaw 仓库的 `extensions/oc-path/` 下，但默认不会启用。只有执行 `openclaw plugins enable oc-path` 后，CLI 才会按需加载它。
 
-Self-hosters and editor extensions use the CLI to read or write a single leaf
-without scripting against the SDK directly; agents and hooks treat it as a
-deterministic substrate so byte-fidelity round-trips and the redaction
-sentinel guard apply uniformly across kinds.
+`oc://` 地址指向工作区文件里的一个具体叶子节点，也可以指向一组通配节点。当前支持这些文件类型：
 
-## Why enable it
+- Markdown（`.md`、`.mdx`）：frontmatter、章节、列表项、字段。
+- JSONC（`.jsonc`、`.json5`、`.json`）：保留注释和格式。
+- JSONL（`.jsonl`、`.ndjson`）：按行处理记录。
+- YAML（`.yaml`、`.yml`、`.lobster`）：通过 YAML 文档 API 处理 map、sequence、scalar 节点。
 
-Enable `oc-path` when you want scripts, hooks, or local agent tooling to point
-at a precise piece of workspace state without inventing a parser for each file
-shape. A single `oc://` address can name a markdown frontmatter key, a section
-item, a JSONC config leaf, a JSONL event field, or a YAML workflow step.
+自托管用户、编辑器扩展、脚本和本地 Agent 工具可以用它读写文件里的一个小位置，而不必为每种文件格式各写一套解析器。
 
-That matters for maintainer workflows where the change should be small,
-auditable, and repeatable: inspect one value, find matching records, dry-run a
-write, then apply only that leaf while leaving comments, line endings, and
-nearby formatting alone. Keeping this as an opt-in plugin gives power users the
-addressing substrate without putting parser dependencies or CLI surface into
-core for installs that never need it.
+## 什么时候启用
 
-Common reasons to enable it:
+当你希望脚本、hook 或本地 Agent 工具精确定位工作区状态时，可以启用 `oc-path`。例如：
 
-- **Local automation**: shell scripts can resolve or update one workspace value
-  with `openclaw path … --json` instead of carrying separate markdown, JSONC,
-  JSONL, and YAML parsing code.
-- **Agent-visible edits**: an agent can show a dry-run diff for one addressed
-  leaf before writing, which is easier to review than a free-form file rewrite.
-- **Editor integrations**: an editor can map `oc://AGENTS.md/tools/gh` to the
-  exact markdown node and line number without guessing from heading text.
-- **Diagnostics**: `emit` round-trips a file through the parser and emitter, so
-  you can check whether a file kind is byte-stable before relying on automated
-  edits.
+- 读取一个 JSONC 配置叶子。
+- 修改 Markdown frontmatter 的某个字段。
+- 查找 JSONL 会话日志里的某类事件。
+- 对 YAML 工作流里的一个步骤做 dry-run 修改。
 
-Concrete examples:
+它适合那些需要“小、可审查、可重复”的维护流程：先查看一个值，再查找匹配记录，先 dry-run，再只写回那个叶子节点。注释、换行和附近格式会尽量保持不变。
+
+示例：
 
 ```bash
-# Is the GitHub plugin enabled in this config?
+# 这个配置里 GitHub 插件是否启用？
 openclaw path resolve 'oc://config.jsonc/plugins/github/enabled' --json
 
-# Which tool-call names appear in this session log?
+# 这个会话日志里出现过哪些 tool_call 名称？
 openclaw path find 'oc://session.jsonl/[event=tool_call]/name' --json
 
-# What bytes would this tiny config edit write?
+# 这个小配置修改会写出哪些字节？
 openclaw path set 'oc://config.jsonc/plugins/github/enabled' 'true' --dry-run
 ```
 
-The plugin is intentionally not the owner of higher-level semantics. Memory
-plugins still own memory writes, config commands still own full config
-management, and LKG logic still owns restore/promotion. `oc-path` is the narrow
-addressing and byte-preserving file operation layer those higher-level tools
-can build around.
+`oc-path` 不负责更高层语义。记忆写入仍由 memory 插件处理，配置管理仍由 config 命令处理，LKG 恢复和提升仍由对应逻辑处理。`oc-path` 只提供窄范围、保字节的文件寻址和编辑底层能力。
 
-## Where it runs
+## 运行位置
 
-The plugin runs **in-process inside the `openclaw` CLI** on the host where you
-invoke the command. It does not need a running Gateway and does not open any
-network sockets — every verb is a pure transform over a file you point it at.
+插件在你执行 `openclaw` CLI 的主机上运行，不需要 Gateway 常驻，也不会打开网络端口。每个命令都是对指定文件的一次本地转换。
 
-The plugin metadata lives in `extensions/oc-path/openclaw.plugin.json`:
+插件元数据位于 `extensions/oc-path/openclaw.plugin.json`：
 
 ```json
 {
@@ -87,75 +63,62 @@ The plugin metadata lives in `extensions/oc-path/openclaw.plugin.json`:
 }
 ```
 
-`onStartup: false` keeps the plugin out of the Gateway hot path. `onCommands:
-["path"]` tells the CLI to load the plugin lazily the first time you run
-`openclaw path …`, so installs that never use the verb pay no cost.
+`onStartup: false` 表示它不进入 Gateway 启动热路径。`onCommands: ["path"]` 表示第一次运行 `openclaw path ...` 时，CLI 才会懒加载插件。
 
-## Enable
+## 启用和禁用
+
+启用：
 
 ```bash
 openclaw plugins enable oc-path
 ```
 
-Restart the Gateway (if you run one) so the manifest snapshot picks up the new
-state. Bare `openclaw path` invocations work immediately on the same host —
-the CLI loads the plugin on demand.
+如果你同时运行 Gateway，重启一次，让 manifest 快照读到新状态。同一台主机上的 `openclaw path` 命令会立即按需加载插件。
 
-Disable with:
+禁用：
 
 ```bash
 openclaw plugins disable oc-path
 ```
 
-## Dependencies
+## 依赖
 
-All parser dependencies are plugin-local — enabling `oc-path` does not pull
-new packages into the core runtime:
+解析依赖都放在插件内部，启用 `oc-path` 不会把这些包拉进核心运行时：
 
-| Dependency     | Purpose                                                                |
-| -------------- | ---------------------------------------------------------------------- |
-| `commander`    | Subcommand wiring for `resolve`, `find`, `set`, `validate`, `emit`.    |
-| `jsonc-parser` | JSONC parse + leaf edits with comments and trailing commas kept.       |
-| `markdown-it`  | Markdown tokenization for the section / item / field model.            |
-| `yaml`         | YAML `Document` parse / emit / edit with comments and flow style kept. |
+| 依赖 | 用途 |
+|------|------|
+| `commander` | 组织 `resolve`、`find`、`set`、`validate`、`emit` 子命令 |
+| `jsonc-parser` | 解析 JSONC，并在保留注释和尾逗号的前提下编辑叶子 |
+| `markdown-it` | 为章节、列表项、字段模型提供 Markdown token |
+| `yaml` | 解析、输出和编辑 YAML `Document`，尽量保留注释和 flow style |
 
-JSONL stays hand-rolled — line-oriented parsing is simpler than any
-dependency, and the per-line JSONC parse already goes through `jsonc-parser`.
+JSONL 不额外引入依赖。它按行处理，每一行的 JSONC 解析仍走 `jsonc-parser`。
 
-## What it provides
+## 提供的能力
 
-| Surface                        | Provided by                                             |
-| ------------------------------ | ------------------------------------------------------- |
-| `openclaw path` CLI            | `extensions/oc-path/cli-registration.ts`                |
-| `oc://` parser / formatter     | `extensions/oc-path/src/oc-path/oc-path.ts`             |
-| Per-kind parse / emit / edit   | `extensions/oc-path/src/oc-path/{md,jsonc,jsonl,yaml}`  |
-| Universal resolve / find / set | `extensions/oc-path/src/oc-path/{resolve,find,edit}.ts` |
-| Redaction-sentinel guard       | `extensions/oc-path/src/oc-path/sentinel.ts`            |
+| 能力 | 实现位置 |
+|------|----------|
+| `openclaw path` CLI | `extensions/oc-path/cli-registration.ts` |
+| `oc://` 解析和格式化 | `extensions/oc-path/src/oc-path/oc-path.ts` |
+| 各格式 parse / emit / edit | `extensions/oc-path/src/oc-path/{md,jsonc,jsonl,yaml}` |
+| 通用 resolve / find / set | `extensions/oc-path/src/oc-path/{resolve,find,edit}.ts` |
+| redaction sentinel 防护 | `extensions/oc-path/src/oc-path/sentinel.ts` |
 
-The CLI is the only public surface today. The substrate verbs are private to
-the plugin; consumers use the CLI (or build their own plugin against the SDK).
+当前公开入口只有 CLI。底层 substrate verb 仍是插件内部实现；其他消费者应通过 CLI 使用，或自己基于 SDK 写插件。
 
-## Relationship to other plugins
+## 与其他插件的关系
 
-- **`memory-*`**: memory writes go through the memory plugins, not `oc-path`.
-  `oc-path` is a generic file substrate; memory plugins layer their own
-  semantics on top.
-- **LKG**: `path` does not know about Last-Known-Good config restore. If a
-  file is LKG-tracked, the next `observe` call decides whether to promote or
-  recover; `set --batch` for atomic multi-set through the LKG promote/recover
-  lifecycle is planned alongside the LKG-recovery substrate.
+- `memory-*`：记忆写入走 memory 插件，不走 `oc-path`。`oc-path` 只是通用文件底层能力。
+- LKG：`path` 不理解 Last-Known-Good 配置恢复。被 LKG 跟踪的文件，仍由下一次 `observe` 决定提升或恢复。面向 LKG 生命周期的原子多项 `set --batch` 仍属于计划中的能力。
 
-## Safety
+## 安全
 
-`set` writes raw bytes through the substrate's emit path, which applies the
-redaction-sentinel guard automatically. A leaf carrying
-`__OPENCLAW_REDACTED__` (verbatim or as a substring) is refused at write time
-with `OC_EMIT_SENTINEL`. The CLI also scrubs the literal sentinel from any
-human or JSON output it prints, replacing it with `[REDACTED]` so terminal
-captures and pipelines never leak the marker.
+`set` 会通过 substrate 的 emit 路径写出原始字节，并自动应用 redaction sentinel 防护。
 
-## Related
+如果某个叶子包含 `__OPENCLAW_REDACTED__`，无论是完整值还是子串，写入都会被拒绝，错误码是 `OC_EMIT_SENTINEL`。CLI 输出给人或 JSON 管道时，也会把这个字面 sentinel 替换成 `[REDACTED]`，避免终端记录泄漏标记。
 
-- [`openclaw path` CLI reference](/tutorials/cli/path)
-- [Manage plugins](/tutorials/plugins/manage-plugins)
-- [Building plugins](/tutorials/plugins/building-plugins)
+## 相关链接
+
+- [`openclaw path` CLI 参考](/tutorials/cli/path)
+- [管理插件](/tutorials/plugins/manage-plugins)
+- [构建插件](/tutorials/plugins/building-plugins)

@@ -58,7 +58,7 @@ hero:
 <div class="oc-module-body">
 <span class="oc-module-num">02</span>
 <h3>AI 核心框架</h3>
-<p>深挖上下文管理、状态机、工具策略、模型回退、记忆系统、Hook 与插件注入机制。</p>
+<p>梳理上下文管理、状态机、工具策略、模型回退、记忆系统、Hook 与插件注入机制。</p>
 </div>
 <span class="oc-module-arrow">&rarr;</span>
 </a>
@@ -125,7 +125,7 @@ hero:
 <article class="oc-home-entry">
 <h3>Track C</h3>
 <p class="oc-home-entry-title">通道适配器框架</p>
-<p>重点学习通道接口合同、注册机制、账号生命周期、路由与发送解耦，是对接外部平台的关键。</p>
+<p>重点学习通道接口合同、注册机制、账号生命周期、路由与发送解耦，是对接外部平台的主要。</p>
 <a href="/beginner-openclaw-guide/53-函数级剖析-通道适配器框架实现">看函数级实战 &rarr;</a>
 </article>
 </section>
@@ -136,7 +136,7 @@ hero:
 <ol>
 <li>第一步：看「<a href="/tutorials/getting-started/grandma-guide">零基础照着做</a>」，把 OpenClaw 装好，并先用控制 UI 发出第一条消息。</li>
 <li>第二步：看「项目完整拆解主线」，建立全局工程脑图与模块边界概念。</li>
-<li>第三步：看「AI 重点框架专项」，吃透上下文、状态机与工具策略实现原理。</li>
+<li>第三步：看「AI 重点框架专项」，弄清楚上下文、状态机与工具策略实现原理。</li>
 <li>最后：看函数级剖析章节，按步骤复刻核心能力到你自己的项目中。</li>
 </ol>
 </section>

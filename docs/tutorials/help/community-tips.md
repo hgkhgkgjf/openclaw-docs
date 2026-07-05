@@ -6,7 +6,7 @@ description: "OpenClaw 帮助：社区实践技巧。本文汇整了社区用户
 
 # 社区实践技巧
 
-本文汇整了社区用户在实际使用 OpenClaw 过程中总结的常见配置技巧，涵盖 Skills 安装、MCP 集成、钉钉接入与多人格配置四个主题。每个部分侧重实操经验，给出可直接复用的步骤和配置。
+本文整理了社区用户常用的几类配置：Skills 安装、MCP 集成、钉钉接入和多智能体配置。每一节都以可复用步骤为主，不展开底层原理。
 
 技能系统和智能体运行时的完整原理分别见 [技能系统](../tools/skills) 和 [智能体运行时](../concepts/agent)，本文不再重复，只关注"怎么用起来"。
 
@@ -43,8 +43,8 @@ openclaw gateway restart
 ```
 
 ::: tip 放哪个目录？
-- 所有项目通用的技能 → `~/.openclaw/skills/`（全局）
-- 特定项目专用的技能 → `<workspace>/skills/`（工作区级，优先级更高）
+- 所有项目都要用的技能，放在 `~/.openclaw/skills/`（全局）
+- 只给某个项目用的技能，放在 `<workspace>/skills/`（工作区级，优先级更高）
 :::
 
 ::: warning 安全提醒
@@ -91,7 +91,7 @@ OpenClaw 通过社区插件支持钉钉（DingTalk）通道。
 
 | 插件仓库 | 状态 | 说明 |
 | -------- | ---- | ---- |
-| [adongguo/openclaw-dingtalk](https://github.com/adongguo/openclaw-dingtalk) | 稳定可用 | 接入流程顺畅，**推荐优先使用** |
+| [adongguo/openclaw-dingtalk](https://github.com/adongguo/openclaw-dingtalk) | 稳定可用 | 接入流程较完整，可先尝试 |
 | [soimy/openclaw-channel-dingtalk](https://github.com/soimy/openclaw-channel-dingtalk) | 可能存在兼容问题 | 备选方案 |
 
 ### 创建钉钉企业与机器人
@@ -100,34 +100,34 @@ OpenClaw 通过社区插件支持钉钉（DingTalk）通道。
 自行在钉钉创建一个企业即可，无需现有企业管理员审批。对话框支持跨企业通信，不影响日常使用。
 :::
 
-**第一步：创建钉钉企业内部应用**
+### 创建钉钉企业内部应用
 
 1. 打开[钉钉开放平台](https://open-dev.dingtalk.com/)，使用钉钉扫码登录
-2. 进入**应用开发** > **企业内部应用** > **创建应用**
+2. 进入应用开发 > 企业内部应用 > 创建应用
 3. 填写应用名称和描述，完成创建
 
-**第二步：获取凭证**
+### 获取凭证
 
-在应用的**凭证与基础信息**页面，记录以下参数：
+在应用的凭证与基础信息页面，记录以下参数：
 
-- **AppKey**（也称 Client ID）
-- **AppSecret**（也称 Client Secret）
+- AppKey（也称 Client ID）
+- AppSecret（也称 Client Secret）
 
-**第三步：配置机器人能力**
+### 配置机器人能力
 
-1. 在**应用功能** > **消息推送**中，启用机器人能力
+1. 在应用功能 > 消息推送中，启用机器人能力
 2. 配置消息接收地址（根据所选插件的文档填写回调 URL）
 
-**第四步：配置权限**
+### 配置权限
 
-在**权限管理**中，至少添加以下权限：
+在权限管理中，至少添加以下权限：
 
 - 企业内机器人发送消息
 - 读取通讯录基础信息
 
 ### 安装插件并配置
 
-以推荐的 `adongguo/openclaw-dingtalk` 为例：
+以 `adongguo/openclaw-dingtalk` 为例：
 
 ```bash
 # 克隆插件
@@ -169,9 +169,9 @@ openclaw logs --follow
 
 ---
 
-## 多人格（Multi-Agent）配置
+## 多智能体（Multi-Agent）配置
 
-OpenClaw 默认包含一个 `main` 智能体。如果你希望在不同场景下使用不同的"人格"——比如日常聊天用一个、代码助手用另一个、论坛发帖用第三个——可以创建多个智能体并分别配置。
+OpenClaw 默认包含一个 `main` 智能体。如果你希望日常聊天、代码助手、论坛发帖分别使用不同配置，可以创建多个智能体并分别绑定。
 
 ### 新增智能体并设置身份
 
@@ -196,7 +196,7 @@ openclaw agents set-identity --agent code --name "小赖"
 
 ### 为每个智能体绑定独立账户
 
-多人格场景下，**每个智能体应绑定独立的通道账户**，避免消息混乱。操作流程：
+多智能体场景下，建议每个智能体绑定独立的通道账户，避免消息混乱。操作流程：
 
 1. 先调通一个智能体（如 `main`），确认配置无误
 2. 在通道的 `accounts` 下新建一个账户条目（如 `code`），填入新机器人的凭证
@@ -206,7 +206,7 @@ openclaw agents set-identity --agent code --name "小赖"
 
 ```json5
 {
-  // 智能体定义——每个可指定独立的工作目录和模型
+  // 智能体定义：每个可指定独立的工作目录和模型
   agents: {
     list: [
       { id: "main" },
@@ -274,11 +274,11 @@ openclaw agents set-identity --agent code --name "小赖"
 
 配置完成后，不同的智能体各自独立运行：
 
-- **main**（默认人格）— 日常聊天、闲聊
-- **code**（代码助手）— 专注代码问题、技术讨论
-- **writer**（内容创作）— 论坛发帖、文案输出
+- `main`：日常聊天
+- `code`：代码问题和技术讨论
+- `writer`：论坛发帖和文案输出
 
-每个人格拥有独立的会话记录、独立的记忆（`AGENTS.md`）和独立的人设（`SOUL.md`），互不干扰。
+每个智能体拥有独立的会话记录、记忆（`AGENTS.md`）和身份设定（`SOUL.md`），互不干扰。
 
 ---
 

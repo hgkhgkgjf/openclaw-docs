@@ -11,9 +11,9 @@ Talk Mode 是连续语音对话。
 
 最新版 Talk 有三种运行形态：
 
-1. **原生节点 Talk**：macOS/iOS/Android 本地识别语音，把文字交给 Gateway 会话，再用 `talk.speak` 播放回复。
-2. **浏览器实时 Talk**：Control UI 里直接开实时语音。客户端用 `talk.client.create` 创建 OpenAI WebRTC 或 Google provider WebSocket 会话。
-3. **Gateway 管理的 Talk session**：客户端用 `talk.session.create` 创建 Gateway relay、transcription 或 managed-room 会话，再通过 `talk.session.appendAudio` 送音频。
+1. 原生节点 Talk：macOS/iOS/Android 本地识别语音，把文字交给 Gateway 会话，再用 `talk.speak` 播放回复。
+2. 浏览器实时 Talk：Control UI 里直接开实时语音。客户端用 `talk.client.create` 创建 OpenAI WebRTC 或 Google provider WebSocket 会话。
+3. Gateway 管理的 Talk session：客户端用 `talk.session.create` 创建 Gateway relay、transcription 或 managed-room 会话，再通过 `talk.session.appendAudio` 送音频。
 
 ::: tip 先看人话
 普通手机 Talk 像“按住说话或连续对讲”。

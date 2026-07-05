@@ -52,8 +52,8 @@ openclaw dashboard
 
 未链接的卡片可以直接启动工作：
 
-- **Run Codex / Run Claude**：启动 task-backed agent run，发送卡片 prompt，并把卡片标为 `running`。
-- **Open Codex / Open Claude**：创建一个关联的 Dashboard session，但不发送卡片 prompt，也不移动卡片，适合人工接手。
+- Run Codex / Run Claude：启动 task-backed agent run，发送卡片 prompt，并把卡片标为 `running`。
+- Open Codex / Open Claude：创建一个关联的 Dashboard session，但不发送卡片 prompt，也不移动卡片，适合人工接手。
 
 Dashboard 会从 Gateway task ledger 刷新任务状态，并用 task id、run id 或 session key 反查卡片。任务完成、失败、超时或取消后，卡片生命周期会自动进入 review 或 blocked 等状态。
 

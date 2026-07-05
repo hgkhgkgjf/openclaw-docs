@@ -8,7 +8,7 @@ description: "OpenClaw 通道接入：Zalo ClawBot。通过外部插件接入，
 
 `Zalo ClawBot` 是一条和 `Zalo Personal` 不同的路线。
 
-它不是去自动化你的个人 Zalo 客户端，而是通过外部插件接入一个**更偏官方化的 Bot 路径**，登录方式是 **Zalo Mini App 二维码**。
+它不是去自动化你的个人 Zalo 客户端，而是通过外部插件接入一个更偏官方化的 Bot 路径，登录方式是 Zalo Mini App 二维码。
 
 ## 它和 Zalo Personal 的区别
 
@@ -23,7 +23,7 @@ description: "OpenClaw 通道接入：Zalo ClawBot。通过外部插件接入，
 openclaw onboard
 ```
 
-在通道菜单里选择 **Zalo ClawBot**。
+在通道菜单里选择 Zalo ClawBot。
 
 ## 手动安装
 

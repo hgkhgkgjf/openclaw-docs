@@ -6,13 +6,13 @@ description: "OpenClaw 自动化：自动化故障排查（Troubleshooting）。
 
 # 自动化故障排查（Troubleshooting）
 
-Cron 不执行、Heartbeat 停了、Webhook 报 401……遇到自动化问题别慌，这里汇总了最常见的问题和对应的解决方法。按照"手动触发 → 检查日志 → 验证配置"的步骤逐一排查，大多数问题 5 分钟内可以定位。
+Cron 不执行、Heartbeat 停了、Webhook 报 401……遇到自动化问题别慌，这里汇总了最常见的问题和对应的解决方法。按"手动触发、检查日志、验证配置"的顺序排查，大多数问题 5 分钟内可以定位。
 
 ---
 
 ## 通用调试步骤
 
-**第一步：手动触发，排除调度问题**
+第一步：手动触发，排除调度问题
 
 ```bash
 # 手动触发 Cron 任务
@@ -27,7 +27,7 @@ openclaw channels poll --channel <channel-name>
 
 如果手动触发成功，说明配置本身没问题，是调度层的问题（时区、Gateway 未运行等）。
 
-**第二步：查看日志**
+第二步：查看日志
 
 ```bash
 # 查看最近的自动化相关日志
@@ -43,7 +43,7 @@ openclaw logs --follow
 openclaw logs --agent <agent-name> --limit 50
 ```
 
-**第三步：验证配置语法**
+第三步：验证配置语法
 
 ```bash
 # 检查配置文件是否有语法错误
@@ -80,7 +80,7 @@ openclaw config show
 
 ::: details 排查步骤
 
-**检查 1：Gateway 是否在运行**
+检查 1：Gateway 是否在运行
 
 ```bash
 openclaw gateway status
@@ -91,7 +91,7 @@ openclaw gateway status
 openclaw onboard --install-daemon
 ```
 
-**检查 2：查看 Cron 任务列表和下次执行时间**
+检查 2：查看 Cron 任务列表和下次执行时间
 
 ```bash
 openclaw cron list
@@ -99,14 +99,14 @@ openclaw cron list
 
 输出中的 `NEXT RUN` 列显示下次执行时间。如果时间不对，检查时区配置。
 
-**检查 3：验证 cron 表达式**
+检查 3：验证 cron 表达式
 
 ```bash
 # 本地验证（需要安装 node-cron 或类似工具）
 # 推荐直接用在线工具：https://crontab.guru
 ```
 
-**检查 4：检查 Agent 是否存在**
+检查 4：检查 Agent 是否存在
 
 ```bash
 openclaw agents list
@@ -121,9 +121,9 @@ openclaw agents list
 
 ::: details 原因和解决方法
 
-**原因：** 系统中运行了多个 OpenClaw Gateway 实例，每个实例都在独立调度 Cron，导致同一任务被执行多次。
+原因： 系统中运行了多个 OpenClaw Gateway 实例，每个实例都在独立调度 Cron，导致同一任务被执行多次。
 
-**诊断：**
+诊断：
 
 ```bash
 # 查看所有运行中的 Gateway 进程
@@ -132,7 +132,7 @@ ps aux | grep "openclaw gateway"
 openclaw gateway status
 ```
 
-**解决：** 停止多余的 Gateway 实例，确保只有一个在运行：
+解决： 停止多余的 Gateway 实例，确保只有一个在运行：
 
 ```bash
 # 停止当前受管 Gateway
@@ -187,25 +187,25 @@ openclaw config show | grep timezone
 
 ::: details 排查步骤
 
-**检查 1：Agent 是否仍在运行**
+检查 1：Agent 是否仍在运行
 
 ```bash
 openclaw agents status <agent-name>
 ```
 
-**检查 2：查看 Heartbeat 日志**
+检查 2：查看 Heartbeat 日志
 
 ```bash
 openclaw logs --filter heartbeat --agent <agent-name>
 ```
 
-**检查 3：重启 Agent**
+检查 3：重启 Agent
 
 ```bash
 openclaw agents restart <agent-name>
 ```
 
-**检查 4：验证 Heartbeat 配置**
+检查 4：验证 Heartbeat 配置
 
 ```bash
 openclaw config show | grep -A 5 heartbeat

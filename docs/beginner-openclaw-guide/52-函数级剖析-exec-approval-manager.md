@@ -40,7 +40,7 @@ export type ExecApprovalRecord = {
 };
 ```
 
-**全局默认值（`src/infra/exec-approvals.ts`）：**
+全局默认值（`src/infra/exec-approvals.ts`）：
 
 ```ts
 export const DEFAULT_EXEC_APPROVAL_TIMEOUT_MS = 120_000;  // 120 秒
@@ -65,7 +65,7 @@ create(request, timeoutMs, id?): ExecApprovalRecord {
 }
 ```
 
-只生成记录，**不写入 pending map**。注册是 `register()` 的职责，两步分离保证"先注册再回 accepted"的时序约束。
+只生成记录，不写入 pending map。注册是 `register()` 的职责，两步分离保证"先注册再回 accepted"的时序约束。
 
 ### register(record, timeoutMs)
 
@@ -81,7 +81,7 @@ register(record, timeoutMs): Promise<ExecApprovalDecision | null> {
 }
 ```
 
-**必须先调 `register()` 再发 "accepted" 响应**（源码注释：`"This ensures the approval ID is valid immediately after the 'accepted' response."`）。
+必须先调 `register()` 再发 "accepted" 响应（源码注释：`"This ensures the approval ID is valid immediately after the 'accepted' response."`）。
 
 ### resolve(recordId, decision, resolvedBy?)
 

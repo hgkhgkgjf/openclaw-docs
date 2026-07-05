@@ -21,11 +21,11 @@ description: "OpenClaw 通道接入：Signal（signal-cli）。状态：外部 C
 
 ## 快速设置（新手）
 
-1. 为机器人使用一个 **独立的 Signal 号码**（推荐）。
+1. 为机器人使用一个 独立的 Signal 号码（推荐）。
 2. 安装 `signal-cli`（使用 JVM 构建时需要 Java）。
 3. 选择一种设置路径：
-   - **路径 A（QR 链接）：** `signal-cli link -n "OpenClaw"` 然后用 Signal 扫描。
-   - **路径 B（短信注册）：** 使用验证码 + 短信验证注册一个专用号码。
+   - 路径 A（QR 链接）： `signal-cli link -n "OpenClaw"` 然后用 Signal 扫描。
+   - 路径 B（短信注册）： 使用验证码 + 短信验证注册一个专用号码。
 4. 配置 OpenClaw 并重启网关。
 5. 发送第一条私信并批准配对（`openclaw pairing approve signal <CODE>`）。
 
@@ -80,9 +80,9 @@ description: "OpenClaw 通道接入：Signal（signal-cli）。状态：外部 C
 
 ## 号码模型（重要）
 
-- 网关连接到一个 **Signal 设备**（`signal-cli` 账户）。
-- 如果你在 **个人 Signal 账户** 上运行机器人，它会忽略你自己的消息（循环保护）。
-- 要实现"我给机器人发消息，它回复我"，使用一个 **独立的机器人号码**。
+- 网关连接到一个 Signal 设备（`signal-cli` 账户）。
+- 如果你在 个人 Signal 账户 上运行机器人，它会忽略你自己的消息（循环保护）。
+- 要实现"我给机器人发消息，它回复我"，使用一个 独立的机器人号码。
 
 ---
 
@@ -235,8 +235,8 @@ openclaw channels status --probe
 
 ## 输入状态 + 已读回执
 
-- **输入指示器**：OpenClaw 通过 `signal-cli sendTyping` 发送输入信号，并在回复运行时刷新它们。
-- **已读回执**：当 `channels.signal.sendReadReceipts` 为 true 时，OpenClaw 为允许的私信转发已读回执。
+- 输入指示器：OpenClaw 通过 `signal-cli sendTyping` 发送输入信号，并在回复运行时刷新它们。
+- 已读回执：当 `channels.signal.sendReadReceipts` 为 true 时，OpenClaw 为允许的私信转发已读回执。
 - Signal-cli 不支持群组的已读回执。
 
 ---
@@ -251,9 +251,9 @@ openclaw channels status --probe
 示例：
 
 ```text
-message action=react channel=signal target=uuid:123e4567-e89b-12d3-a456-426614174000 messageId=1737630212345 emoji=🔥
-message action=react channel=signal target=+15551234567 messageId=1737630212345 emoji=🔥 remove=true
-message action=react channel=signal target=signal:group:<groupId> targetAuthor=uuid:<sender-uuid> messageId=1737630212345 emoji=✅
+message action=react channel=signal target=uuid:123e4567-e89b-12d3-a456-426614174000 messageId=1737630212345 emoji=<emoji>
+message action=react channel=signal target=+15551234567 messageId=1737630212345 emoji=<emoji> remove=true
+message action=react channel=signal target=signal:group:<groupId> targetAuthor=uuid:<sender-uuid> messageId=1737630212345 emoji=<emoji>
 ```
 
 配置：

@@ -26,8 +26,8 @@ OpenClaw App SDK 是给“外部程序”用的。
 
 一句话：
 
-- 写外部脚本、仪表盘、CI：用 **App SDK**
-- 写 OpenClaw 插件：用 **Plugin SDK**
+- 写外部脚本、仪表盘、CI：用 App SDK
+- 写 OpenClaw 插件：用 Plugin SDK
 
 ---
 
@@ -100,7 +100,7 @@ console.log(gateway.status);
 1. `oc.environments.list()` 可以用来“看看现在有哪些地方能跑任务”。
 2. `oc.environments.status(id)` 可以用来“看看某个地方现在能不能用”。
 
-目前它是**只读能力**。也就是说，SDK 可以列出和查询环境，但还不能通过 SDK 创建或删除环境。
+目前它是只读能力。也就是说，SDK 可以列出和查询环境，但还不能通过 SDK 创建或删除环境。
 
 ---
 

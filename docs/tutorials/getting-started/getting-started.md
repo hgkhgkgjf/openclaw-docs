@@ -8,7 +8,7 @@ description: "OpenClaw 快速入门：用最少步骤安装 OpenClaw、完成 on
 
 这篇先不讲复杂原理。你只要记住一句话：
 
-**OpenClaw 是一个运行在你自己电脑上的 AI 助手。它有一个常驻的 Gateway 网关，负责接收消息、调用 AI、再把回复送回去。**
+OpenClaw 是一个运行在你自己电脑上的 AI 助手。它有一个常驻的 Gateway 网关，负责接收消息、调用 AI、再把回复送回去。
 
 第一次使用，按下面 5 步走就够了。
 
@@ -25,7 +25,7 @@ description: "OpenClaw 快速入门：用最少步骤安装 OpenClaw、完成 on
    macOS、Linux、Windows 都可以。Windows 可以直接用，但完整体验更推荐 WSL2。
 
 2. Node.js
-   推荐 **Node 24**。如果你已经是 **Node 22.19+**，也可以继续用。
+   推荐 Node 24。如果你已经是 Node 22.19+，也可以继续用。
 
 3. 一个 AI 模型账号或 API key
    新手可以先用你已经有账号的提供商。OpenClaw 支持 OpenAI、Anthropic、Google、Ollama、本地或兼容 OpenAI API 的服务。

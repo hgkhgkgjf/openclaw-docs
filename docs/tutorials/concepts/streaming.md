@@ -1,17 +1,17 @@
 ---
 title: "流式输出与分块"
 sidebarTitle: "流式输出与分块"
-description: "OpenClaw 核心概念：流式输出（Streaming）+ 分块。OpenClaw 有两个独立的\"流式输出\"层："
+description: "解释 OpenClaw 的块流式输出、Telegram 草稿流、分块算法、合并策略和相关配置项。"
 ---
 
 # 流式输出（Streaming）+ 分块
 
-OpenClaw 有两个独立的"流式输出"层：
+OpenClaw 里有两种容易混淆的“流式输出”：
 
-- **块流式输出（通道）：** 在助手写作时发出已完成的 **块**。这些是普通的通道消息（不是 Token 增量）。
-- **类 Token 流式输出（仅 Telegram）：** 在生成期间用部分文本更新 **草稿气泡**；最终消息在结束时发送。
+- 块流式输出：助手生成内容时，按较大的文本块发送普通通道消息。它不是 Token 级增量。
+- Telegram 草稿流：只在 Telegram 上可用。生成期间更新草稿气泡，结束后再发送最终消息。
 
-目前 **没有** 真正的 Token 流式输出到外部通道消息。Telegram 草稿流是唯一的部分流界面。
+目前外部通道消息没有真正的 Token 级流式输出。Telegram 草稿流是唯一的部分流界面。
 
 ---
 
@@ -35,7 +35,7 @@ Model output
 - `chunker`：`EmbeddedBlockChunker` 应用最小/最大边界 + 断点偏好。
 - `channel send`：实际的出站消息（块回复）。
 
-**控制项：**
+相关配置：
 
 - `agents.defaults.blockStreamingDefault`：`"on"`/`"off"`（默认 off）。
 - 通道覆盖：`*.blockStreaming`（及每账户变体）强制每通道 `"on"`/`"off"`。
@@ -46,7 +46,7 @@ Model output
 - 通道分块模式：`*.chunkMode`（`length` 默认，`newline` 在长度分块之前按空行（段落边界）拆分）。
 - Discord 软上限：`channels.discord.maxLinesPerMessage`（默认 17）拆分高回复以避免 UI 裁剪。
 
-**边界语义：**
+边界语义：
 
 - `text_end`：分块器发出后立即流式传输块；在每个 `text_end` 时刷新。
 - `message_end`：等到助手消息完成，然后刷新缓冲输出。
@@ -59,10 +59,10 @@ Model output
 
 块分块由 `EmbeddedBlockChunker` 实现：
 
-- **低边界：** 直到缓冲区 >= `minChars` 才发出（除非强制）。
-- **高边界：** 优先在 `maxChars` 之前拆分；如果强制，在 `maxChars` 处拆分。
-- **断点偏好：** `paragraph` → `newline` → `sentence` → `whitespace` → 硬断。
-- **代码围栏：** 永远不在围栏内拆分；当在 `maxChars` 处强制时，关闭 + 重新打开围栏以保持 Markdown 有效。
+- 低边界：缓冲区达到 `minChars` 后才发出，强制刷新除外。
+- 高边界：优先在 `maxChars` 之前找断点；找不到时按 `maxChars` 硬切。
+- 断点偏好：`paragraph` → `newline` → `sentence` → `whitespace` → 硬断。
+- 代码围栏：不会在围栏内部拆分。必须按 `maxChars` 硬切时，会关闭再重新打开围栏，保证 Markdown 仍然有效。
 
 `maxChars` 被限制在通道 `textChunkLimit`，因此你不能超过每通道上限。
 
@@ -70,9 +70,9 @@ Model output
 
 ## 合并（合并流式块）
 
-当启用块流式输出时，OpenClaw 可以在发送之前 **合并连续的块**。这减少了"单行刷屏"同时仍提供渐进输出。
+启用块流式输出后，OpenClaw 可以在发送前合并连续文本块。这样既能让用户尽早看到内容，也不会一行一行刷屏。
 
-- 合并等待 **空闲间隙**（`idleMs`）后才刷新。
+- 合并等待 空闲间隙（`idleMs`）后才刷新。
 - 缓冲区受 `maxChars` 限制，超出时刷新。
 - `minChars` 防止微小片段发送，直到累积足够文本（最终刷新总是发送剩余文本）。
 - 连接符从 `blockStreamingChunk.breakPreference` 派生（`paragraph` → `\n\n`，`newline` → `\n`，`sentence` → 空格）。
@@ -83,11 +83,11 @@ Model output
 
 ## 块间仿人节奏
 
-当启用块流式输出时，你可以在块回复之间添加 **随机暂停**（在第一个块之后）。这使多气泡响应感觉更自然。
+启用块流式输出后，可以在第一个块之后给后续块加随机暂停。这样多气泡回复不会显得像机器连续刷出来。
 
 - 配置：`agents.defaults.humanDelay`（通过 `agents.list[].humanDelay` 每智能体覆盖）。
 - 模式：`off`（默认）、`natural`（800–2500ms）、`custom`（`minMs`/`maxMs`）。
-- 仅适用于 **块回复**，不适用于最终回复或工具摘要。
+- 只适用于块回复，不影响最终回复或工具摘要。
 
 ---
 
@@ -95,11 +95,11 @@ Model output
 
 这映射到：
 
-- **流式分块：** `blockStreamingDefault: "on"` + `blockStreamingBreak: "text_end"`（边写边发出）。非 Telegram 通道还需要 `*.blockStreaming: true`。
-- **结束时全部流出：** `blockStreamingBreak: "message_end"`（刷新一次，如果很长可能多个块）。
-- **无块流式输出：** `blockStreamingDefault: "off"`（仅最终回复）。
+- 流式分块：`blockStreamingDefault: "on"` 加 `blockStreamingBreak: "text_end"`，生成过程中逐块发送。非 Telegram 通道还需要 `*.blockStreaming: true`。
+- 结束时全部流出：`blockStreamingBreak: "message_end"`，完成后统一刷新；内容很长时仍可能拆成多个块。
+- 无块流式输出：`blockStreamingDefault: "off"`，只发送最终回复。
 
-**通道说明：** 对于非 Telegram 通道，块流式输出 **关闭除非** `*.blockStreaming` 被显式设置为 `true`。Telegram 可以流式草稿（`channels.telegram.streamMode`）而无需块回复。
+通道说明：非 Telegram 通道默认不开块流式输出，除非显式设置 `*.blockStreaming: true`。Telegram 可以通过 `channels.telegram.streamMode` 使用草稿流，不需要打开块回复。
 
 配置位置提醒：`blockStreaming*` 默认值位于 `agents.defaults` 下，不是根配置。
 
@@ -109,7 +109,7 @@ Model output
 
 Telegram 是唯一支持草稿流的通道：
 
-- 在 **带主题的私聊** 中使用 Bot API `sendMessageDraft`。
+- 在 带主题的私聊 中使用 Bot API `sendMessageDraft`。
 - `channels.telegram.streamMode: "partial" | "block" | "off"`。
   - `partial`：用最新流文本更新草稿。
   - `block`：以分块块更新草稿（相同的分块器规则）。

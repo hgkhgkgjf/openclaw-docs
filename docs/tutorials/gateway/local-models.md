@@ -1,12 +1,12 @@
 ---
 title: "本地模型"
 sidebarTitle: "本地模型"
-description: "OpenClaw Gateway：本地模型。本地运行是可行的，但 OpenClaw 期望大上下文 + 强大的提示注入防御。小型显卡会截断上下文并泄露安全性。目标要高：≥2 台满配 Mac Studi…"
+description: "OpenClaw Gateway：本地模型。本地运行是可行的，但需要大上下文和可靠的提示注入防护。小型显卡容易截断上下文并降低安全边界。"
 ---
 
 # 本地模型
 
-本地运行是可行的，但 OpenClaw 期望大上下文 + 强大的提示注入防御。小型显卡会截断上下文并泄露安全性。目标要高：**≥2 台满配 Mac Studio 或等效 GPU 设备（约 $30k+）**。单块 **24 GB** GPU 仅适用于较轻量的提示且延迟更高。使用你能运行的**最大/全尺寸模型变体**；激进量化或"小型"检查点会增加提示注入风险（参阅[安全](/tutorials/gateway/security)）。
+本地运行是可行的，但 OpenClaw 需要大上下文和可靠的提示注入防护。小型显卡容易截断上下文，也会降低安全边界。目标要高：≥2 台满配 Mac Studio 或等效 GPU 设备（约 $30k+）。单块 24 GB GPU 仅适用于较轻量的提示且延迟更高。尽量使用你能运行的最大/全尺寸模型变体；激进量化或"小型"检查点会增加提示注入风险（参阅[安全](/tutorials/gateway/security)）。
 
 ---
 
@@ -49,10 +49,10 @@ description: "OpenClaw Gateway：本地模型。本地运行是可行的，但 O
 }
 ```
 
-**设置检查清单**
+设置检查清单
 
 - 安装 LM Studio：[https://lmstudio.ai](https://lmstudio.ai)
-- 在 LM Studio 中，下载**可用的最大 MiniMax M2.1 版本**（避免"小型"/重度量化变体），启动服务器，确认 `http://127.0.0.1:1234/v1/models` 列出了它。
+- 在 LM Studio 中，下载可用的最大 MiniMax M2.1 版本（避免"小型"/重度量化变体），启动服务器，确认 `http://127.0.0.1:1234/v1/models` 列出了它。
 - 保持模型加载；冷加载会增加启动延迟。
 - 如果你的 LM Studio 版本不同，调整 `contextWindow`/`maxTokens`。
 - 对于 WhatsApp，使用 Responses API 以确保仅发送最终文本。

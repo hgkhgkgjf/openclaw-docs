@@ -52,7 +52,7 @@ openclaw config patch --file ./sms.patch.json5 --dry-run
 openclaw config patch --file ./sms.patch.json5
 ```
 
-然后在 Twilio 控制台打开 **Phone Numbers > Manage > Active numbers**，找到这个号码的 **Messaging** 设置，把 **A message comes in** 配成：
+然后在 Twilio 控制台打开 Phone Numbers > Manage > Active numbers，找到这个号码的 Messaging 设置，把 A message comes in 配成：
 
 ```text
 https://gateway.example.com/webhooks/sms

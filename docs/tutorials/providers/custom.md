@@ -35,12 +35,12 @@ Custom Provider
 
 引导会依次要求你填写：
 
-1. **Base URL**：第三方 API 的基础地址
-2. **API Key**：如果不需要认证，可留空或按服务要求填写占位值
-3. **Model ID**：你要调用的模型 ID
-4. **Endpoint compatibility**：选择 `OpenAI-compatible`、`Anthropic-compatible`，或 `Unknown (detect automatically)`
-5. **Endpoint ID**：OpenClaw 内部使用的 provider id，默认会根据域名自动生成
-6. **Model alias（可选）**：给模型取一个更短的别名
+1. Base URL：第三方 API 的基础地址
+2. API Key：如果不需要认证，可留空或按服务要求填写占位值
+3. Model ID：你要调用的模型 ID
+4. Endpoint compatibility：选择 `OpenAI-compatible`、`Anthropic-compatible`，或 `Unknown (detect automatically)`
+5. Endpoint ID：OpenClaw 内部使用的 provider id，默认会根据域名自动生成
+6. Model alias（可选）：给模型取一个更短的别名
 
 引导会自动做两件事：
 
@@ -126,7 +126,7 @@ openclaw onboard \
 
 注意：
 
-- `modelId` 一般应填写 **deployment name**，而不是裸模型名
+- `modelId` 一般应填写 deployment name，而不是裸模型名
 - Azure 使用的是 `api-key` 请求头，不是标准 `Authorization: Bearer`
 - OpenClaw 的引导流程会自动把 Azure URL 转换到正确的 deployment 路径
 
@@ -469,7 +469,7 @@ openclaw models set my-provider/my-model-id
 重点检查：
 
 - `baseUrl` 是否是 Azure 资源地址
-- `modelId` 是否填写成了 **deployment name**
+- `modelId` 是否填写成了 deployment name
 - API Key 是否有效
 
 Azure 的路由方式和普通 OpenAI 兼容端点不同，deployment 名称写错时最容易报错。

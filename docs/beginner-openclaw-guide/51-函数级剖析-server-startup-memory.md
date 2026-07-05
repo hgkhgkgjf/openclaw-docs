@@ -1,9 +1,9 @@
 ---
-description: "OpenClaw 源码剖析：函数级剖析：server-startup-memory。网关启动时的 qmd 记忆后端预热器。 是可选侧车（sidecar），失败不影响主服务启动。"
+description: "OpenClaw 源码剖析：server-startup-memory 负责在网关启动时预热 qmd 记忆后端，失败只记录 warn，不阻塞主服务。"
 ---
 # 51 函数级剖析：server-startup-memory
 
-核心文件：`src/gateway/server-startup-memory.ts`
+源码位置：`src/gateway/server-startup-memory.ts`
 
 ## 模块定位
 
@@ -47,23 +47,23 @@ export async function startGatewayMemoryBackend(params: {
 ## 二、调用方式（server-startup.ts 精确模式）
 
 ```ts
-// src/gateway/server-startup.ts — startGatewaySidecars 内
+// src/gateway/server-startup.ts : startGatewaySidecars 内
 
 void startGatewayMemoryBackend({ cfg: params.cfg, log: params.log }).catch((err) => {
   params.log.warn(`qmd memory startup initialization failed: ${String(err)}`);
 });
 ```
 
-三个关键点：
-1. **`void`** — fire-and-forget，不 await，不阻塞主流程
-2. **`.catch(warn)`** — 捕获异常转为 warn，不让异常冒泡
-3. **函数本身也内部 catch** — 双重保护，即使内部代码抛出也不崩服务
+这里有三个点要留意：
+1. `void` : fire-and-forget，不 await，不阻塞主流程
+2. `.catch(warn)` : 捕获异常转为 warn，不让异常冒泡
+3. 函数本身也内部 catch : 双重保护，即使内部代码抛出也不崩服务
 
-## 三、为什么必须按 agentId 初始化
+## 三、为什么要按 agentId 初始化
 
-记忆后端是**按 agent 维度**配置的：
+记忆后端是按 agent 维度配置的：
 - 不同 agent 可以有不同的 qmd 路径和 collection
-- 必须先确定 `defaultAgentId` 才能解析出正确的 qmd 配置
+- 需要先确定 `defaultAgentId`，才能解析出正确的 qmd 配置
 - 启动阶段选择 `resolveDefaultAgentId(cfg)` 作为预热目标
 
 如果有多个 agent（`agents.list`），`resolveDefaultAgentId` 选择 `default=true` 的那个，

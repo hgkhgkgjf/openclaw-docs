@@ -52,7 +52,7 @@ Docking 不会：
 
 必须配置 `session.identityLinks`，而且源发送者和目标通道身份在同一组。
 
-这能证明：Telegram 上的你和 Discord 上的你，是同一个被授权的人。
+这能验证：Telegram 上的你和 Discord 上的你，是同一个被授权的人。
 
 ---
 

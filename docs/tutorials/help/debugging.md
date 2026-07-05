@@ -45,7 +45,7 @@ openclaw gateway restart
 openclaw logs --follow
 ```
 
-这会在终端中持续打印日志，适合快速排查消息路由、通道连接和模型报错。
+这会在终端中跟随打印日志，适合快速排查消息路由、通道连接和模型报错。
 
 ---
 
@@ -99,7 +99,7 @@ openclaw logs --filter gateway
 # 查看最近 100 条日志
 openclaw logs --tail 100
 
-# 持续监听新日志（类似 tail -f）
+# 继续监听新日志（类似 tail -f）
 openclaw logs --follow
 ```
 
@@ -137,7 +137,7 @@ openclaw logs --follow
 - 用户输入内容
 - 模型返回的敏感信息
 
-**生产环境请勿开启调试模式。** 调试完成后，务必将 `debug.enabled` 改回 `false` 并重启 Gateway。
+生产环境请勿开启调试模式。 调试完成后，务必将 `debug.enabled` 改回 `false` 并重启 Gateway。
 :::
 
 ---
@@ -149,8 +149,8 @@ openclaw logs --follow
 
 最省心的方式：
 
-1. 打开 VS Code 左侧的 **Run and Debug** 面板。
-2. 选择 **Rebuild and Debug Gateway**。
+1. 打开 VS Code 左侧的 Run and Debug 面板。
+2. 选择 Rebuild and Debug Gateway。
 3. 点击开始调试。
 
 这个配置会自动删除 `dist`，重新构建，并打开 source map。
@@ -181,7 +181,7 @@ pnpm clean:dist
 pnpm build
 ```
 
-然后在 VS Code 里选择 **Debug Gateway** 再启动。
+然后在 VS Code 里选择 Debug Gateway 再启动。
 
 调试时你可以：
 
@@ -203,8 +203,8 @@ alias openclaw-build="node $(pwd)/openclaw.mjs"
 ```
 
 ::: tip 两个调试配置怎么选
-刚改完源码、想自动重新构建，选 **Rebuild and Debug Gateway**。
-已经构建好了、只是想反复启动调试，选 **Debug Gateway**。
+刚改完源码、想自动重新构建，选 Rebuild and Debug Gateway。
+已经构建好了、只是想反复启动调试，选 Debug Gateway。
 :::
 
 ---

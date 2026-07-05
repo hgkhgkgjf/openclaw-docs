@@ -1,24 +1,24 @@
 ---
 title: "循环检测"
 sidebarTitle: "循环检测"
-description: "OpenClaw 工具系统：循环检测（Loop Detection）。防止 Agent 陷入无效的重复工具调用循环，提升稳定性和可靠性。"
+description: "OpenClaw 工具系统：循环检测（Loop Detection）。防止 Agent 陷入无效的重复工具调用循环。"
 ---
 
 # 循环检测
 
 ## 为什么 Agent 会"卡住"？
 
-有时候，Agent 会陷入一种无效的重复行为——它反复调用同一个工具、传入同样的参数，却没有任何实质性进展。这种情况通常发生在：
+有时候，Agent 会陷入一种无效的重复行为：它反复调用同一个工具、传入同样的参数，却没有任何实质性进展。这种情况通常发生在：
 
 - Agent 等待某个条件成立，但条件始终没有满足
 - Agent 误判了上一步的执行结果，认为需要重试
 - 两个工具之间相互触发，形成"乒乓"式死循环
 
-对于初学者来说，这类问题很难排查——Agent 看起来"在运行"，但实际上什么都没做。任务永远不会结束，资源也在白白消耗。
+对于初学者来说，这类问题很难排查：Agent 看起来"在运行"，但实际上什么都没做。任务永远不会结束，资源也在白白消耗。
 
-**循环检测**（`tools.loopDetection`）就是为了解决这个问题而设计的安全机制。它会监控 Agent 最近的工具调用历史，一旦发现无进展的重复模式，就会介入并停止 Agent，避免无意义的循环继续下去。
+循环检测（`tools.loopDetection`）就是为了解决这个问题而设计的安全机制。它会监控 Agent 最近的工具调用历史，一旦发现无进展的重复模式，就会介入并停止 Agent，避免无意义的循环继续下去。
 
-最新版里还有一个配套保护：**压缩后循环保护**（post-compaction guard）。
+最新版里还有一个配套保护：压缩后循环保护（post-compaction guard）。
 当上下文太长触发压缩并重试后，如果 Agent 立刻又用同一个工具、同样参数、同样结果反复打转，OpenClaw 会用 `compaction_loop_persisted` 中止这次运行，避免无限烧 token。
 
 ## 启用循环检测
@@ -69,7 +69,7 @@ description: "OpenClaw 工具系统：循环检测（Loop Detection）。防止 
 | 检测器 | 说明 |
 |---|---|
 | `genericRepeat` | 检测同一工具以完全相同的参数被反复调用，且没有产生新的进展 |
-| `knownPollNoProgress` | 检测已知的轮询模式（例如持续查询某个状态），但状态始终没有变化 |
+| `knownPollNoProgress` | 检测已知的轮询模式（例如反复查询某个状态），但状态始终没有变化 |
 | `pingPong` | 检测 Agent 在两个工具或两种状态之间来回切换，陷入无限反复 |
 
 三种检测器默认全部开启。如果某个检测器与你的业务场景冲突，可以将其设为 `false` 单独关闭。
@@ -83,7 +83,7 @@ description: "OpenClaw 工具系统：循环检测（Loop Detection）。防止 
 | `warningThreshold` | `10` | 当检测到循环迹象时，向 Agent 发送警告，提示它调整策略 |
 | `criticalThreshold` | `20` | 强制 Agent 停止当前行为并上报结果 |
 | `unknownToolThreshold` | `10` | 同一个不存在或不可用工具被反复调用多少次后拦截 |
-| `globalCircuitBreakerThreshold` | `30` | 无论 Agent 状态如何，直接硬停止——终极保护 |
+| `globalCircuitBreakerThreshold` | `30` | 无论 Agent 状态如何，直接硬停止，用作最后保护 |
 | `historySize` | `30` | 分析最近多少次工具调用记录来判断是否存在循环 |
 | `postCompactionGuard.windowSize` | `3` | 压缩重试后观察多少次工具调用；同样调用重复到窗口大小就中止 |
 
@@ -91,9 +91,9 @@ description: "OpenClaw 工具系统：循环检测（Loop Detection）。防止 
 
 ## 触发后会发生什么？
 
-- **警告阶段**：Agent 收到提示，知道自己可能陷入了循环，可以尝试换一种方式继续任务
-- **强制停止阶段**：Agent 被要求中止当前路径，将已有的结果上报给用户
-- **熔断阶段**：系统直接终止 Agent 运行，防止资源被无限占用
+- 警告阶段：Agent 收到提示，知道自己可能陷入了循环，可以尝试换一种方式继续任务
+- 强制停止阶段：Agent 被要求中止当前路径，将已有的结果上报给用户
+- 熔断阶段：系统直接终止 Agent 运行，防止资源被无限占用
 
 对于用户来说，最终会看到一条说明 Agent 因循环被终止的消息，而不是让任务永远挂起。
 

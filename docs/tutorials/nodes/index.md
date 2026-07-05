@@ -37,7 +37,7 @@ Gateway 调用已配对的手机 Node
 
 具体能力取决于平台和版本，常见能力包括：
 
-- Canvas 可视化展示。
+- Canvas 可视化显示。
 - [相机](/tutorials/nodes/camera)、截图、屏幕录制。
 - [音频](/tutorials/nodes/audio)、[语音唤醒](/tutorials/nodes/voicewake)、朗读。
 - [Talk Mode](/tutorials/nodes/talk)：实时语音、push-to-talk、只转写模式。

@@ -104,9 +104,9 @@ cat ~/.openclaw/openclaw.json
 
 下面这份清单比较长。新手不用逐条背，只要知道 doctor 会覆盖三类问题：
 
-- **装没装好**：命令、服务、端口、UI 资源。
-- **配置对不对**：旧配置迁移、权限、认证、模型。
-- **运行健不健康**：Gateway、通道、沙箱、日志和状态目录。
+- 安装状态：命令、服务、端口、UI 资源。
+- 配置状态：旧配置迁移、权限、认证、模型。
+- 运行状态：Gateway、通道、沙箱、日志和状态目录。
 
 - 可选的 git 安装预检更新（仅交互模式）。
 - UI 协议新鲜度检查（当协议架构更新时重建控制界面）。
@@ -166,24 +166,24 @@ Doctor 会：
 
 当前迁移：
 
-- `routing.allowFrom` → `channels.whatsapp.allowFrom`
-- `routing.groupChat.requireMention` → `channels.whatsapp/telegram/imessage.groups."*".requireMention`
-- `routing.groupChat.historyLimit` → `messages.groupChat.historyLimit`
-- `routing.groupChat.mentionPatterns` → `messages.groupChat.mentionPatterns`
-- `routing.queue` → `messages.queue`
-- `routing.bindings` → 顶层 `bindings`
-- `routing.agents`/`routing.defaultAgentId` → `agents.list` + `agents.list[].default`
+- `routing.allowFrom`：`channels.whatsapp.allowFrom`
+- `routing.groupChat.requireMention`：`channels.whatsapp/telegram/imessage.groups."*".requireMention`
+- `routing.groupChat.historyLimit`：`messages.groupChat.historyLimit`
+- `routing.groupChat.mentionPatterns`：`messages.groupChat.mentionPatterns`
+- `routing.queue`：`messages.queue`
+- `routing.bindings`：顶层 `bindings`
+- `routing.agents`/`routing.defaultAgentId`：`agents.list` + `agents.list[].default`
 - 旧版 `talk.voiceId`/`talk.voiceAliases`/`talk.modelId`/`talk.outputFormat`/`talk.apiKey`
-  → `talk.provider` + `talk.providers.<provider>`
+  改为 `talk.provider` + `talk.providers.<provider>`
 - 旧版顶层 realtime Talk 选择器（`talk.mode`/`talk.transport`/`talk.brain`/`talk.model`/`talk.voice`）
-  → `talk.realtime`
-- `routing.agentToAgent` → `tools.agentToAgent`
-- `routing.transcribeAudio` → `tools.media.audio.models`
-- `bindings[].match.accountID` → `bindings[].match.accountId`
-- `identity` → `agents.list[].identity`
-- `agent.*` → `agents.defaults` + `tools.*`（tools/elevated/exec/sandbox/subagents）
+  改为 `talk.realtime`
+- `routing.agentToAgent`：`tools.agentToAgent`
+- `routing.transcribeAudio`：`tools.media.audio.models`
+- `bindings[].match.accountID`：`bindings[].match.accountId`
+- `identity`：`agents.list[].identity`
+- `agent.*`：`agents.defaults` + `tools.*`（tools/elevated/exec/sandbox/subagents）
 - `agent.model`/`allowedModels`/`modelAliases`/`modelFallbacks`/`imageModelFallbacks`
-  → `agents.defaults.models` + `agents.defaults.model.primary/fallbacks` + `agents.defaults.imageModel.primary/fallbacks`
+  改为 `agents.defaults.models` + `agents.defaults.model.primary/fallbacks` + `agents.defaults.imageModel.primary/fallbacks`
 
 ### 2b) OpenCode Zen 提供商（Provider）覆盖
 
@@ -278,22 +278,22 @@ Doctor 可以将旧的磁盘布局迁移到当前结构：
 
 Doctor 检查：
 
-- **状态目录缺失**：警告灾难性的状态丢失，提示重新创建
+- 状态目录缺失：警告灾难性的状态丢失，提示重新创建
   目录，并提醒它无法恢复丢失的数据。
-- **状态目录权限**：验证可写性；提供修复权限的选项
+- 状态目录权限：验证可写性；提供修复权限的选项
   （当检测到所有者/组不匹配时发出 `chown` 提示）。
-- **会话（Session）目录缺失**：`sessions/` 和会话（Session）存储目录
+- 会话（Session）目录缺失：`sessions/` 和会话（Session）存储目录
   是持久化历史和避免 `ENOENT` 崩溃所必需的。
-- **转录不匹配**：当最近的会话（Session）条目缺少
+- 转录不匹配：当最近的会话（Session）条目缺少
   转录文件时发出警告。
-- **主会话（Session）"1 行 JSONL"**：当主转录只有一
+- 主会话（Session）"1 行 JSONL"：当主转录只有一
   行时标记（历史没有累积）。
-- **多个状态目录**：当多个 `~/.openclaw` 文件夹存在于
+- 多个状态目录：当多个 `~/.openclaw` 文件夹存在于
   不同的 home 目录或当 `OPENCLAW_STATE_DIR` 指向其他位置时发出警告（历史可能
   在安装之间分裂）。
-- **远程模式提醒**：如果 `gateway.mode=remote`，doctor 提醒你在
+- 远程模式提醒：如果 `gateway.mode=remote`，doctor 提醒你在
   远程主机上运行它（状态在那里）。
-- **配置文件权限**：当 `~/.openclaw/openclaw.json`
+- 配置文件权限：当 `~/.openclaw/openclaw.json`
   对组/其他用户可读时发出警告，并提供收紧到 `600` 的选项。
 
 ### 5) 模型认证健康（OAuth 过期）

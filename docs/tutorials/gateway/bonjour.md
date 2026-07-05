@@ -1,35 +1,31 @@
 ---
 title: "Bonjour 发现"
 sidebarTitle: "Bonjour 发现"
-description: "OpenClaw Gateway：Bonjour / mDNS 发现。OpenClaw 使用 Bonjour（mDNS / DNS-SD）作为仅限局域网的便捷方式来发现 活跃的网关（Gateway）…"
+description: "说明 OpenClaw 如何用 Bonjour/mDNS 和广域 DNS-SD 发现局域网或 tailnet 中的 Gateway，以及安全限制和调试方法。"
 ---
 
 # Bonjour / mDNS 发现
 
-OpenClaw 使用 Bonjour（mDNS / DNS-SD）作为**仅限局域网的便捷方式**来发现
-活跃的网关（Gateway）（WebSocket 端点）。这是尽力而为的机制，**不能**替代 SSH 或
-基于 Tailnet 的连接。
+OpenClaw 可以用 Bonjour（mDNS / DNS-SD）在局域网内发现活跃 Gateway 的 WebSocket 端点。这是一个尽力而为的发现机制，不能替代 SSH 或 tailnet 连接。
 
 ---
 
 ## 广域 Bonjour（单播 DNS-SD）通过 Tailscale
 
-如果节点和网关（Gateway）在不同网络上，组播 mDNS 无法跨越
-边界。你可以通过 Tailscale 切换到**单播 DNS-SD**
-（"广域 Bonjour"）来保持相同的发现用户体验。
+如果节点和 Gateway 不在同一个网络里，组播 mDNS 跨不过网络边界。可以通过 Tailscale 改用单播 DNS-SD，也就是“广域 Bonjour”，保留类似的发现体验。
 
 高层步骤：
 
 1. 在网关（Gateway）主机上运行 DNS 服务器（通过 Tailnet 可达）。
 2. 在专用区域下发布 `_openclaw-gw._tcp` 的 DNS-SD 记录
    （示例：`openclaw.internal.`）。
-3. 配置 Tailscale **分割 DNS**，使你选择的域名通过该
+3. 配置 Tailscale 分割 DNS，使你选择的域名通过该
    DNS 服务器为客户端（包括 iOS）解析。
 
 OpenClaw 支持任何发现域名；`openclaw.internal.` 只是一个示例。
 iOS/Android 节点会同时浏览 `local.` 和你配置的广域域名。
 
-### 网关（Gateway）配置（推荐）
+### Gateway 配置
 
 ```json5
 {
@@ -38,7 +34,7 @@ iOS/Android 节点会同时浏览 `local.` 和你配置的广域域名。
 }
 ```
 
-### 一次性 DNS 服务器设置（网关（Gateway）主机）
+### 一次性 DNS 服务器设置
 
 ```bash
 openclaw dns setup --apply
@@ -46,8 +42,8 @@ openclaw dns setup --apply
 
 这会安装 CoreDNS 并将其配置为：
 
-- 仅在网关（Gateway）的 Tailscale 接口上监听 53 端口
-- 从 `~/.openclaw/dns/<domain>.db` 提供你选择的域名（示例：`openclaw.internal.`）
+- 只在 Gateway 的 Tailscale 接口上监听 53 端口。
+- 从 `~/.openclaw/dns/<domain>.db` 提供你选择的域名，例如 `openclaw.internal.`。
 
 从 Tailnet 连接的机器上验证：
 
@@ -66,27 +62,26 @@ dig @<TAILNET_IPV4> -p 53 _openclaw-gw._tcp.openclaw.internal PTR +short
 一旦客户端接受 tailnet DNS，iOS 节点就可以在你的发现域名中浏览
 `_openclaw-gw._tcp`，无需组播。
 
-### 网关（Gateway）监听器安全（推荐）
+### Gateway 监听安全
 
-网关（Gateway）WS 端口（默认 `18789`）默认绑定到 loopback。对于局域网/tailnet
-访问，需要显式绑定并保持认证启用。
+Gateway WebSocket 端口默认是 `18789`，默认只绑定 loopback。要从局域网或 tailnet 访问，需要显式绑定，并保持认证开启。
 
 对于仅 tailnet 的设置：
 
 - 在 `~/.openclaw/openclaw.json` 中设置 `gateway.bind: "tailnet"`。
-- 重启网关（Gateway）（或重启 macOS 菜单栏应用）。
+- 重启 Gateway，或重启 macOS 菜单栏应用。
 
 ---
 
 ## 广播内容
 
-仅网关（Gateway）广播 `_openclaw-gw._tcp`。
+只有 Gateway 会广播 `_openclaw-gw._tcp`。
 
 ---
 
 ## 服务类型
 
-- `_openclaw-gw._tcp` — 网关（Gateway）传输信标（由 macOS/iOS/Android 节点使用）。
+- `_openclaw-gw._tcp`：Gateway 传输信标，供 macOS、iOS、Android 节点使用。
 
 ---
 
@@ -108,10 +103,10 @@ dig @<TAILNET_IPV4> -p 53 _openclaw-gw._tcp.openclaw.internal PTR +short
 
 安全说明：
 
-- Bonjour/mDNS TXT 记录是**未经认证的**。客户端不应将 TXT 视为权威路由。
+- Bonjour/mDNS TXT 记录没有认证。客户端不应把 TXT 当成权威路由。
 - 客户端应使用解析的服务端点（SRV + A/AAAA）进行路由。将 `lanHost`、`tailnetDns`、`gatewayPort` 和 `gatewayTlsSha256` 仅作为提示。
 - TLS 固定不得允许广播的 `gatewayTlsSha256` 覆盖之前存储的固定值。
-- iOS/Android 节点应将基于发现的直连视为**仅限 TLS**，并在信任首次指纹前要求用户显式确认。
+- iOS/Android 节点应将基于发现的直连视为仅限 TLS，并在信任首次指纹前要求用户显式确认。
 
 ---
 
@@ -153,8 +148,8 @@ iOS 节点使用 `NWBrowser` 来发现 `_openclaw-gw._tcp`。
 
 要捕获日志：
 
-- 设置 → Gateway → Advanced → **Discovery Debug Logs**
-- 设置 → Gateway → Advanced → **Discovery Logs** → 复现 → **Copy**
+- 设置 → Gateway → Advanced → Discovery Debug Logs
+- 设置 → Gateway → Advanced → Discovery Logs → 复现 → Copy
 
 日志包含浏览器状态转换和结果集变更。
 
@@ -162,12 +157,10 @@ iOS 节点使用 `NWBrowser` 来发现 `_openclaw-gw._tcp`。
 
 ## 常见故障模式
 
-- **Bonjour 不跨网络**：使用 Tailnet 或 SSH。
-- **组播被阻止**：某些 Wi-Fi 网络禁用了 mDNS。
-- **休眠/接口变动**：macOS 可能临时丢失 mDNS 结果；请重试。
-- **浏览正常但解析失败**：保持机器名简单（避免表情符号或
-  标点），然后重启网关（Gateway）。服务实例名称来源于
-  主机名，因此过于复杂的名称可能会混淆某些解析器。
+- Bonjour 不跨网络：使用 tailnet 或 SSH。
+- 组播被阻止：某些 Wi-Fi 网络会禁用 mDNS。
+- 休眠或接口变动：macOS 可能临时丢失 mDNS 结果，重试即可。
+- 浏览正常但解析失败：保持机器名简单，避免表情符号或标点，然后重启 Gateway。服务实例名称来自主机名，太复杂可能让部分解析器出问题。
 
 ---
 

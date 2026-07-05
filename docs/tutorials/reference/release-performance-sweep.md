@@ -14,16 +14,16 @@ to the public blog post.
 
 Two audits are combined here:
 
-- **Release performance sweep:** GitHub Releases from `v2026.5.27` back through
+- Release performance sweep: GitHub Releases from `v2026.5.27` back through
   stable `v2026.4.23`, using the `OpenClaw Performance` workflow,
   `profile=smoke`, `repeat=1`, mock-provider lane.
-- **Earlier April context:** published `clawgrit-reports` mock-provider
+- Earlier April context: published `clawgrit-reports` mock-provider
   baselines from `v2026.4.1` through `v2026.5.2`, used only to avoid treating
   the broken late-April releases as the public performance baseline.
-- **Install footprint sweep:** fresh `npm install --ignore-scripts` installs
+- Install footprint sweep: fresh `npm install --ignore-scripts` installs
   into temporary packages, with `du -sk node_modules` for size and a
   `node_modules` walk for package-instance counts.
-- **npm package size sweep:** `npm pack openclaw@<version> --dry-run --json`
+- npm package size sweep: `npm pack openclaw@<version> --dry-run --json`
   for published releases, recording compressed tarball size, unpacked size, and
   file count.
 
@@ -36,27 +36,27 @@ trend evidence and regression-hunting signal, not as release-gate statistics.
 
 ## Snapshot
 
-Performance coverage: **76 requested releases**, **73 artifact-backed points**,
-and **3 unavailable CI runs**. Latest stable measured point: `v2026.5.27`.
+Performance coverage: 76 requested releases, 73 artifact-backed points,
+and 3 unavailable CI runs. Latest stable measured point: `v2026.5.27`.
 ::: info Stable agent turn
-  **2.9x faster cold turn**
+  2.9x faster cold turn
 
       - `v2026.4.14`: 9.8s
       - `v2026.5.27`: 3.4s
 :::
 ::: info Published package
-  **17.8MB tarball**
+  17.8MB tarball
 
       Latest stable package, down from the 43.3MB March package-size peak.
 :::
 ::: info Latest stable install
-  **786.9MB fresh install**
+  786.9MB fresh install
 
       `v2026.5.27` still contains the nested OpenClaw dependency tree. The
       next-release state on `main` is 407.4MB.
 :::
 ::: info Dependency graph
-  **371 installed packages**
+  371 installed packages
 
       Latest stable release. Current `main` is down to 314 after the follow-up
       dependency cleanup.
@@ -65,24 +65,24 @@ and **3 unavailable CI runs**. Latest stable measured point: `v2026.5.27`.
 
 ## Install Footprint Timeline
 ::: info Monthly high
-  **645 dependencies**
+  645 dependencies
 
       `2026.2.26` was the monthly dependency-count high in this sample.
 :::
 ::: info Shrinkwrap introduced
-  **1,020.6MB install**
+  1,020.6MB install
 
       `2026.5.22` added root shrinkwrap and exposed a package-shape problem:
       911.8MB landed under nested `openclaw/node_modules`.
 :::
 ::: info Latest stable
-  **786.9MB install**
+  786.9MB install
 
       `2026.5.27` reduced the peak but still installed a 675.9MB nested
       OpenClaw tree.
 :::
 ::: info Next-release state
-  **407.4MB install**
+  407.4MB install
 
       Current `main` keeps shrinkwrap, removes the nested tree, and installs
       314 packages.
@@ -101,8 +101,8 @@ OpenClaw dependency tree during install.
 The cleanup between `v2026.5.27` and current `main` removed the duplicate
 default-install graph instead of removing the capabilities themselves.
 ::: info Root default graph
-  Root shrinkwrap package paths fell from **372** to **331**. Unique package
-      names fell from **357** to **318**.
+  Root shrinkwrap package paths fell from 372 to 331. Unique package
+      names fell from 357 to 318.
 :::
 ::: info Direct root dependencies
   `@earendil-works/pi-agent-core`, `@earendil-works/pi-ai`,
@@ -293,7 +293,7 @@ Published tarball inspection verifies the boundary:
 | `2026.5.27` | yes               | yes                        | nested dependency tree still present  |
 | `main`      | n/a               | yes                        | nested dependency tree removed        |
 
-The important distinction: **shrinkwrap itself is not the problem**. Current
+The important distinction: shrinkwrap itself is not the problem. Current
 `main` still ships root shrinkwrap. The problem was the package shape that made
 npm materialize a large nested OpenClaw dependency tree and all 12
 `@napi-rs/canvas` platform packages.

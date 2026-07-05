@@ -52,8 +52,8 @@ description: "OpenClaw 工具系统：技能配置参考（Skills Config Referen
 
 ### `enabled`
 
-**类型**：`boolean`
-**默认值**：`true`
+类型：`boolean`
+默认值：`true`
 
 控制技能是否生效。设为 `false` 可以临时禁用技能而不删除配置：
 
@@ -71,8 +71,8 @@ description: "OpenClaw 工具系统：技能配置参考（Skills Config Referen
 
 ### `path`
 
-**类型**：`string`
-**默认值**：自动从标准目录查找
+类型：`string`
+默认值：自动从标准目录查找
 
 指定技能文件的自定义路径。默认情况下，OpenClaw 按以下顺序查找：
 
@@ -95,8 +95,8 @@ description: "OpenClaw 工具系统：技能配置参考（Skills Config Referen
 
 ### `priority`
 
-**类型**：`number`
-**默认值**：`100`
+类型：`number`
+默认值：`100`
 
 当多个技能的指令存在顺序要求时，`priority` 决定它们注入提示词的顺序。数字越小，越早注入（优先级越高）：
 
@@ -120,8 +120,8 @@ description: "OpenClaw 工具系统：技能配置参考（Skills Config Referen
 
 ### `agents`
 
-**类型**：`string[]`
-**默认值**：`[]`（空数组表示应用到所有 Agent）
+类型：`string[]`
+默认值：`[]`（空数组表示应用到所有 Agent）
 
 指定此技能应用于哪些 Agent。如果留空，所有 Agent 都会加载此技能：
 
@@ -142,8 +142,8 @@ description: "OpenClaw 工具系统：技能配置参考（Skills Config Referen
 
 ### `env`
 
-**类型**：`Record<string, string>`
-**默认值**：`{}`
+类型：`Record<string, string>`
+默认值：`{}`
 
 技能专属的环境变量，注入到技能运行的上下文中。支持从系统环境变量中引用值：
 
@@ -196,7 +196,7 @@ description: "OpenClaw 工具系统：技能配置参考（Skills Config Referen
 
 ## 多技能配置示例
 
-以下是一个实际项目的完整技能配置，展示各字段的综合使用：
+下面是一份完整技能配置，用来说明这些字段如何组合使用：
 
 ```json5
 {

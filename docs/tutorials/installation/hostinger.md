@@ -8,8 +8,8 @@ description: "OpenClaw 安装部署：Hostinger 1-Click 或 VPS 方式运行 Ope
 
 Hostinger 提供两种路线：
 
-- **1-Click OpenClaw**：平台帮你准备基础设施，最快。
-- **VPS 方式**：你自己管理服务器和 Docker，更可控。
+- 1-Click OpenClaw：平台帮你准备基础设施，最快。
+- VPS 方式：你自己管理服务器和 Docker，更可控。
 
 ---
 

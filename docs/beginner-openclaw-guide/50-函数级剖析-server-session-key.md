@@ -77,9 +77,9 @@ export function registerAgentRunContext(runId: string, context: AgentRunContext)
 
 `resolveSessionKeyForRun` 被以下场景调用：
 
-1. **事件转发**：WS 推送 `exec.approval.requested` 等事件时，需要知道向哪个 session 广播
-2. **日志/监控**：按 runId 找到 sessionKey 后打上标签
-3. **流式事件归属**：将 agent 流式输出关联到对应 session
+1. 事件转发：WS 推送 `exec.approval.requested` 等事件时，需要知道向哪个 session 广播
+2. 日志/监控：按 runId 找到 sessionKey 后打上标签
+3. 流式事件归属：将 agent 流式输出关联到对应 session
 
 ## 五、loadSessionStore 的缓存机制（config/sessions/store.ts）
 

@@ -1,32 +1,32 @@
 ---
 title: "表情回应"
 sidebarTitle: "表情回应"
-description: "OpenClaw 工具系统：表情回应（Reactions）。表情回应（Reactions）是 OpenClaw 跨通道的消息反馈机制，让 Agent 能够通过 👍、❤️、✅ 等表情符号快速表达对消…"
+description: "OpenClaw 表情回应工具说明：跨通道发送收到、完成、失败等轻量状态，减少不必要的文字回复。"
 ---
 
 # 表情回应（Reactions）
 
-表情回应（Reactions）是 OpenClaw 跨通道的消息反馈机制，让 Agent 能够通过 👍、❤️、✅ 等表情符号快速表达对消息的响应——无需发送完整的文字回复。
+表情回应让 Agent 可以给一条消息加 reaction，而不是再发一整句文字。它适合表达“收到”“完成”“失败”这类轻量状态。
 
 ---
 
 ## 为什么需要表情回应？
 
-在自动化场景中，Agent 常常需要处理大量消息。对于"已收到"、"正在处理"、"完成"等简单状态，用表情回应代替文字回复，可以大幅减少通道的消息噪音，同时让用户一眼看出任务状态。
+自动化跑起来以后，Agent 经常会处理一串消息。如果每个步骤都回复一句“收到”“处理中”“已完成”，聊天窗口很快会被刷屏。reaction 的价值就是把这些状态压到原消息上。
 
 ::: info 常见使用场景
-- 👍 确认收到消息，正在处理
-- ✅ 任务已完成
-- ❌ 任务失败或拒绝执行
-- ⏳ 任务正在等待中
-- ❤️ 用户反馈、情感交互
+- 确认收到消息，正在处理
+- 标记任务已完成
+- 标记任务失败或拒绝执行
+- 表示任务正在等待外部条件
+- 对用户反馈做轻量回应
 :::
 
 ---
 
 ## 跨通道语义统一
 
-不同聊天平台对表情回应的实现方式不同，OpenClaw 在内部统一了其语义：
+各个平台的 reaction API 不一样。OpenClaw 在内部把它们收成同一套语义，Agent 不需要分别记 Telegram、Discord 或 Slack 的细节。
 
 | 平台 | 实现方式 | OpenClaw 统一语义 |
 |------|----------|-------------------|
@@ -35,41 +35,40 @@ description: "OpenClaw 工具系统：表情回应（Reactions）。表情回应
 | Slack | 表情回应（Emoji Reaction） | Reactions API |
 | Web Chat | 内置表情面板 | Reactions API |
 
-无论用户在哪个平台交互，Agent 都通过相同的接口发送表情回应，平台差异由 OpenClaw 内部处理。
+用户在哪个平台说话都一样：Agent 调同一个接口，具体平台差异由 OpenClaw 适配层处理。
 
 ---
 
 ## Agent 如何使用表情回应
 
-Agent 通过内置工具发送表情回应：
+Agent 可以通过内置工具发送 reaction。下面这个例子会让 Agent 在开始处理时先标记“收到”，完成后再标记“完成”：
 
 ```bash
-# Agent 在任务开始时发送"收到"回应
-openclaw run "处理用户请求时，先发送 👍 表示收到，完成后发送 ✅"
+openclaw run "处理用户请求时，先发送 :thumbs_up: 表示收到，完成后发送 :white_check_mark:"
 ```
 
 ::: details 工具调用示例（开发者参考）
 
-Agent 内部使用 `send_reaction` 工具：
+内部工具名是 `send_reaction`：
 
 ```json5
 {
   tool: "send_reaction",
   params: {
     messageId: "msg_12345",
-    emoji: "👍"
+    emoji: ":thumbs_up:"
   }
 }
 ```
 
-移除表情回应：
+需要撤掉 reaction 时，用 `remove_reaction`：
 
 ```json5
 {
   tool: "remove_reaction",
   params: {
     messageId: "msg_12345",
-    emoji: "👍"
+    emoji: ":thumbs_up:"
   }
 }
 ```
@@ -79,7 +78,7 @@ Agent 内部使用 `send_reaction` 工具：
 
 ## 配置
 
-在配置文件中启用或禁用表情回应功能：
+可以在配置文件里启用 reaction，并按语义指定默认表情：
 
 ```json5
 {
@@ -87,12 +86,12 @@ Agent 内部使用 `send_reaction` 工具：
     reactions: {
       enabled: true,
 
-      // 自定义语义映射
+      // 按语义映射表情
       semantics: {
-        "received": "👍",
-        "completed": "✅",
-        "failed": "❌",
-        "thinking": "🤔"
+        "received": ":thumbs_up:",
+        "completed": ":white_check_mark:",
+        "failed": ":x:",
+        "thinking": ":thinking:"
       }
     }
   }
@@ -100,7 +99,7 @@ Agent 内部使用 `send_reaction` 工具：
 ```
 
 ::: tip 按通道单独配置
-如果某个通道不支持表情回应，可以单独禁用：
+如果某个通道不支持 reaction，或你不想在这个通道里使用它，可以单独关闭：
 
 ```json5
 {
@@ -118,9 +117,9 @@ Agent 内部使用 `send_reaction` 工具：
 ## 注意事项
 
 ::: warning 平台限制
-- Telegram 对表情回应有严格限制：只能使用 Telegram 内置的"精选表情"，不支持任意 Unicode 表情
-- 某些旧版本的 Discord 机器人权限可能不包含"添加表情回应"，需要在机器人权限设置中单独开启
-- 部分自定义通道（如 Webhook）可能不支持表情回应，会静默忽略该操作
+- Telegram 只能使用它允许的 reaction，不能随便发任意 Unicode 表情。
+- Discord 机器人需要有添加 reaction 的权限，旧配置里可能没有勾上。
+- Webhook 这类自定义通道可能不支持 reaction。OpenClaw 通常会忽略这次操作，而不是强行报错。
 :::
 
 ---

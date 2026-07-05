@@ -6,7 +6,7 @@ description: "OpenClaw 模型接入：OpenCode Go。OpenCode Go 是 OpenCode 的
 
 # OpenCode Go
 
-OpenCode Go 是 [OpenCode](/tutorials/providers/opencode) 体系中的 **Go 模型目录**。它与 OpenCode Zen 共用同一个 `OPENCODE_API_KEY`，但在 OpenClaw 运行时会保留独立的 provider id `opencode-go`。
+OpenCode Go 是 [OpenCode](/tutorials/providers/opencode) 体系中的 Go 模型目录。它与 OpenCode Zen 共用同一个 `OPENCODE_API_KEY`，但在 OpenClaw 运行时会保留独立的 provider id `opencode-go`。
 
 ---
 
@@ -46,7 +46,7 @@ openclaw onboard --opencode-go-api-key "$OPENCODE_API_KEY"
 - `opencode/claude-opus-4-6` 这类运行时引用属于 OpenCode Zen
 - `opencode-go/kimi-k2.5` 这类运行时引用属于 OpenCode Go
 
-也就是说，**共享同一个 Key，不共享同一个运行时 id**。
+也就是说，共享同一个 Key，不共享同一个运行时 id。
 
 ---
 

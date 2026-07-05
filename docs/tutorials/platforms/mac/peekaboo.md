@@ -2,29 +2,29 @@
 title: "Peekaboo bridge"
 ---
 
-OpenClaw can host **PeekabooBridge** as a local, permission‑aware UI automation
+OpenClaw can host PeekabooBridge as a local, permission‑aware UI automation
 broker. This lets the `peekaboo` CLI drive UI automation while reusing the
 macOS app’s TCC permissions.
 
 ## What this is (and is not)
 
-- **Host**: OpenClaw.app can act as a PeekabooBridge host.
-- **Client**: use the `peekaboo` CLI (no separate `openclaw ui ...` surface).
-- **UI**: visual overlays stay in Peekaboo.app; OpenClaw is a thin broker host.
+- Host: OpenClaw.app can act as a PeekabooBridge host.
+- Client: use the `peekaboo` CLI (no separate `openclaw ui ...` surface).
+- UI: visual overlays stay in Peekaboo.app; OpenClaw is a thin broker host.
 
 ## Relationship to Computer Use
 
 OpenClaw has three desktop-control paths, and they intentionally stay separate:
 
-- **PeekabooBridge host**: OpenClaw.app can host the local PeekabooBridge socket.
+- PeekabooBridge host: OpenClaw.app can host the local PeekabooBridge socket.
   The `peekaboo` CLI remains the client and uses OpenClaw.app's macOS
   permissions for Peekaboo automation primitives such as screenshots, clicks,
   menus, dialogs, Dock actions, and window management.
-- **Codex Computer Use**: the bundled `codex` plugin prepares Codex app-server,
+- Codex Computer Use: the bundled `codex` plugin prepares Codex app-server,
   verifies that Codex's `computer-use` MCP server is available, and then lets
   Codex own native desktop-control tool calls during Codex-mode turns. OpenClaw
   does not proxy those actions through PeekabooBridge.
-- **Direct `cua-driver` MCP**: OpenClaw can register TryCua's upstream
+- Direct `cua-driver` MCP: OpenClaw can register TryCua's upstream
   `cua-driver mcp` server as a normal MCP server. That gives agents the CUA
   driver's own schemas and pid/window/element-index workflow without routing
   through the Codex marketplace or the PeekabooBridge socket.
@@ -39,7 +39,7 @@ MCP server.
 
 In the macOS app:
 
-- Settings → **Enable Peekaboo Bridge**
+- Settings : Enable Peekaboo Bridge
 
 When enabled, OpenClaw starts a local UNIX socket server. If disabled, the host
 is stopped and `peekaboo` will fall back to other available hosts.
@@ -61,7 +61,7 @@ export PEEKABOO_BRIDGE_SOCKET=/path/to/bridge.sock
 
 ## Security & permissions
 
-- The bridge validates **caller code signatures**; an allowlist of TeamIDs is
+- The bridge validates caller code signatures; an allowlist of TeamIDs is
   enforced (Peekaboo host TeamID + OpenClaw app TeamID).
 - Requests time out after ~10 seconds.
 - If required permissions are missing, the bridge returns a clear error message
@@ -76,7 +76,7 @@ If you need longer retention, re‑capture from the client.
 
 - If `peekaboo` reports “bridge client is not authorized”, ensure the client is
   properly signed or run the host with `PEEKABOO_ALLOW_UNSIGNED_SOCKET_CLIENTS=1`
-  in **debug** mode only.
+  in debug mode only.
 - If no hosts are found, open one of the host apps (Peekaboo.app or OpenClaw.app)
   and confirm permissions are granted.
 

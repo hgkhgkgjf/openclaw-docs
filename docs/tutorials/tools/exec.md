@@ -1,18 +1,18 @@
 ---
 title: "执行工具"
 sidebarTitle: "执行工具"
-description: "OpenClaw 工具系统：执行工具（Exec Tool）。执行工具（Exec Tool）允许 Agent 在你的系统上运行 shell 命令——执行脚本、调用 CLI 工具、管理文件，甚至驱动整个…"
+description: "OpenClaw 工具系统：执行工具（Exec Tool）。执行工具（Exec Tool）允许 Agent 在你的系统上运行 shell 命令::执行脚本、调用 CLI 工具、管理文件，甚至驱动整个…"
 ---
 
 # 执行工具（Exec Tool）
 
-执行工具（Exec Tool）允许 Agent 在你的系统上运行 shell 命令——执行脚本、调用 CLI 工具、管理文件，甚至驱动整个开发工作流。你可以精确控制哪些命令允许自动执行，哪些需要你手动审批。
+执行工具（Exec Tool）允许 Agent 在你的系统上运行 shell 命令::执行脚本、调用 CLI 工具、管理文件，甚至驱动整个开发工作流。你可以精确控制哪些命令允许自动执行，哪些需要你手动审批。
 
 ---
 
 ## 快速上手
 
-**第一步：在配置中启用 exec 工具**
+第一步：在配置中启用 exec 工具
 
 ```json5
 {
@@ -24,7 +24,7 @@ description: "OpenClaw 工具系统：执行工具（Exec Tool）。执行工具
 }
 ```
 
-**第二步：配置允许的命令（推荐）**
+第二步：配置允许的命令（推荐）
 
 通过白名单限制 Agent 可以运行的命令：
 
@@ -39,7 +39,7 @@ description: "OpenClaw 工具系统：执行工具（Exec Tool）。执行工具
 }
 ```
 
-**第三步：尝试让 Agent 执行命令**
+第三步：尝试让 Agent 执行命令
 
 ```text
 帮我查看当前目录有哪些文件，并用 git 提交所有更改

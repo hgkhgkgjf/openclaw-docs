@@ -6,9 +6,9 @@ description: "OpenClaw 模型接入：Cohere。支持兼容 OpenAI 的 Compatibi
 
 # Cohere
 
-Cohere 在 OpenClaw 里走的是 **OpenAI 兼容接口** 路线，因此接入方式对很多人来说比较熟悉。
+Cohere 在 OpenClaw 里走的是 OpenAI 兼容接口 路线，因此接入方式对很多人来说比较熟悉。
 
-最重要的三个点：
+最需要留意的三个点：
 
 - Provider id 是 `cohere`
 - 环境变量是 `COHERE_API_KEY`

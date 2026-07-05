@@ -1,18 +1,18 @@
 ---
 title: "更新"
 sidebarTitle: "更新"
-description: "OpenClaw 安装部署：更新。OpenClaw 迭代很快（尚未到 \"1.0\"）。将更新视为基础设施发布：更新 → 运行检查 → 重启（或使用 ，它会重启） → 验证。"
+description: "OpenClaw 安装部署：更新。OpenClaw 迭代很快，更新时应按基础设施发布处理：更新、检查、重启、验证。"
 ---
 
 # 更新
 
-OpenClaw 迭代很快（尚未到 "1.0"）。将更新视为基础设施发布：更新 → 运行检查 → 重启（或使用 `openclaw update`，它会重启） → 验证。
+OpenClaw 迭代很快（尚未到 "1.0"）。建议把更新当成基础设施发布处理：先更新，再运行检查，然后重启（或使用会自动重启的 `openclaw update`），最后验证。
 
 ---
 
 ## 推荐：重新运行网站安装脚本（原地升级）
 
-**首选**更新路径是重新运行网站的安装脚本。它会检测现有安装、原地升级，
+首选更新路径是重新运行网站的安装脚本。它会检测现有安装、原地升级，
 并在需要时运行 `openclaw doctor`。
 
 ```bash
@@ -22,15 +22,15 @@ curl -fsSL https://openclaw.ai/install.sh | bash
 注意事项：
 
 - 如果你不想再次运行引导向导，添加 `--no-onboard`。
-- 对于**源码安装**，使用：
+- 对于源码安装，使用：
 
   ```bash
   curl -fsSL https://openclaw.ai/install.sh | bash -s -- --install-method git --no-onboard
   ```
 
-  安装脚本会**仅在**仓库是干净状态时执行 `git pull --rebase`。
+  安装脚本会仅在仓库是干净状态时执行 `git pull --rebase`。
 
-- 对于**全局安装**，脚本底层使用 `npm install -g openclaw@latest`。
+- 对于全局安装，脚本底层使用 `npm install -g openclaw@latest`。
 - 官网安装脚本会在安装 OpenClaw 包时清理 npm 新鲜度过滤（例如 `min-release-age`）。
   如果你手动运行 npm，仍然会遵守你自己电脑上的 npm 策略。
 - 历史说明：如果你的旧环境里仍有 `clawdbot` 命令，它只是兼容性垫片；新文档和新命令统一使用 `openclaw`。
@@ -39,8 +39,8 @@ curl -fsSL https://openclaw.ai/install.sh | bash
 
 ## 更新之前
 
-- 了解你的安装方式：**全局**（npm/pnpm）vs **从源码**（git clone）。
-- 了解你的网关运行方式：**前台终端** vs **受管服务**（launchd/systemd）。
+- 了解你的安装方式：全局（npm/pnpm）vs 从源码（git clone）。
+- 了解你的网关运行方式：前台终端 vs 受管服务（launchd/systemd）。
 - 快照你的自定义配置：
   - 配置：`~/.openclaw/openclaw.json`
   - 凭据：`~/.openclaw/credentials/`
@@ -60,7 +60,7 @@ npm i -g openclaw@latest
 pnpm add -g openclaw@latest
 ```
 
-我们**不推荐**使用 Bun 作为网关运行时（WhatsApp/Telegram 存在 bug）。
+我们不推荐使用 Bun 作为网关运行时（WhatsApp/Telegram 存在 bug）。
 
 切换更新通道（git + npm 安装方式）：
 
@@ -95,7 +95,7 @@ openclaw health
 
 ## 更新（`openclaw update`）
 
-对于**源码安装**（git checkout），推荐：
+对于源码安装（git checkout），推荐：
 
 ```bash
 openclaw update
@@ -109,7 +109,7 @@ openclaw update
 - 安装依赖、构建、构建控制面板，并运行 `openclaw doctor`。
 - 默认重启网关（使用 `--no-restart` 跳过）。
 
-如果你通过 **npm/pnpm** 安装（无 git 元数据），`openclaw update` 会尝试通过你的包管理器更新。如果无法检测安装方式，请使用"更新（全局安装）"。
+如果你通过 npm/pnpm 安装（无 git 元数据），`openclaw update` 会尝试通过你的包管理器更新。如果无法检测安装方式，请使用"更新（全局安装）"。
 
 ::: info Nix 用户不要直接改安装目录
 如果环境里设置了 `OPENCLAW_NIX_MODE=1`，说明这个 OpenClaw 是由 Nix 管理的。
@@ -144,7 +144,7 @@ openclaw update --dry-run
 
 ## 更新（控制面板 / RPC）
 
-控制面板有**更新并重启**功能（RPC：`update.run`）。它现在分两种情况：
+控制面板有更新并重启功能（RPC：`update.run`）。它现在分两种情况：
 
 1. 源码 checkout：运行与 `openclaw update` 相同的源码更新流程。
 2. npm/pnpm 全局安装：Gateway 先启动一个独立 helper，然后自己退出。
@@ -192,7 +192,7 @@ openclaw health
 
 - 当你运行打包的 `openclaw` 二进制文件（[`openclaw.mjs`](https://github.com/openclaw/openclaw/blob/main/openclaw.mjs)）或使用 Node 运行 `dist/` 时，`pnpm build` 很重要。
 - 如果你从仓库 checkout 运行且没有全局安装，使用 `pnpm openclaw ...` 执行 CLI 命令。
-- 如果你直接从 TypeScript 运行（`pnpm openclaw ...`），通常不需要重新构建，但**配置迁移仍然适用** → 运行 doctor。
+- 如果你直接从 TypeScript 运行（`pnpm openclaw ...`），通常不需要重新构建，但配置迁移仍然适用，需要运行 doctor。
 - 在全局安装和 git 安装之间切换很容易：安装另一种方式，然后运行 `openclaw doctor`，网关服务入口点就会被重写为当前安装。
 - dev 通道需要临时安装 pnpm 时，新版 updater 会优先用 corepack；如果还不行，再临时安装 `pnpm@11`。
 
@@ -200,7 +200,7 @@ openclaw health
 
 ## 更新后插件也要对齐
 
-新版 `openclaw update` 不只更新主程序，还会在重启前做一次 **post-core convergence**。
+新版 `openclaw update` 不只更新主程序，还会在重启前做一次 post-core convergence。
 ```text
 主程序更新好了，也要确认启用中的插件文件还在、package.json 能读、入口文件存在。
 确认通过以后，才允许 Gateway 带着这套插件重启。
@@ -231,7 +231,7 @@ openclaw plugins doctor
 
 Doctor 是"安全更新"命令。它刻意保持无聊：修复 + 迁移 + 警告。
 
-注意：如果你使用**源码安装**（git checkout），`openclaw doctor` 会先建议运行 `openclaw update`。
+注意：如果你使用源码安装（git checkout），`openclaw doctor` 会先建议运行 `openclaw update`。
 
 它通常做的事情：
 

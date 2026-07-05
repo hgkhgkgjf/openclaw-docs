@@ -168,16 +168,16 @@ for the Codex-specific behavior and fallback rules.
 
 ## Troubleshooting
 
-**The tool says plugin approvals are unavailable.** No approval UI or configured
+The tool says plugin approvals are unavailable. No approval UI or configured
 approval route accepted the request. Connect an approval-capable client, use a
 channel that supports same-chat `/approve`, or configure `approvals.plugin`.
 
-**`allow-always` appears but the next call prompts again.** The generic plugin
+`allow-always` appears but the next call prompts again. The generic plugin
 approval flow does not automatically persist trust for arbitrary hooks. Persist
 plugin-owned trust in your plugin after `onResolution("allow-always")`, or
 offer only `allow-once` and `deny`.
 
-**`/approve` rejects the decision.** The request restricted
+`/approve` rejects the decision. The request restricted
 `allowedDecisions`. Use one of the decisions printed in the prompt.
 
 **A Slack, Discord, Telegram, or Matrix prompt routes differently from exec

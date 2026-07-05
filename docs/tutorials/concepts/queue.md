@@ -20,8 +20,8 @@ description: "OpenClaw 核心概念：命令队列（Command Queue）（2026-01-
 ## 工作原理
 
 - 一个通道感知的 FIFO 队列以可配置的并发上限排空每个通道（未配置的通道默认为 1；main 默认为 4，subagent 为 8）。
-- `runEmbeddedPiAgent` 按 **会话键**（通道 `session:<key>`）入队，以保证每个会话仅有一个活跃运行。
-- 每个会话运行然后排入 **全局通道**（默认 `main`），以便整体并行度受 `agents.defaults.maxConcurrent` 限制。
+- `runEmbeddedPiAgent` 按 会话键（通道 `session:<key>`）入队，以保证每个会话仅有一个活跃运行。
+- 每个会话运行然后排入 全局通道（默认 `main`），以便整体并行度受 `agents.defaults.maxConcurrent` 限制。
 - 当启用详细日志时，排队的运行如果等待超过约 2 秒才开始，会发出简短通知。
 - 输入指示器（Typing indicator）在入队时立即触发（当通道支持时），因此在等待轮到时用户体验保持不变。
 
@@ -33,8 +33,8 @@ description: "OpenClaw 核心概念：命令队列（Command Queue）（2026-01-
 
 - `steer`：立即注入当前运行（在下一个工具边界后取消待处理的工具调用）。如果未在流式输出中，回退到 followup。
 - `followup`：在当前运行结束后排入下一个智能体轮次。
-- `collect`：将所有排队的消息合并为 **单次** 后续轮次（默认）。如果消息目标不同的通道/线程，则单独排空以保持路由。
-- `steer-backlog`（又名 `steer+backlog`）：立即导向 **并** 保留消息用于后续轮次。
+- `collect`：将所有排队的消息合并为 单次 后续轮次（默认）。如果消息目标不同的通道/线程，则单独排空以保持路由。
+- `steer-backlog`（又名 `steer+backlog`）：立即导向 并 保留消息用于后续轮次。
 - `interrupt`（旧版）：中止该会话的活跃运行，然后运行最新消息。
 - `queue`（旧版别名）：等同于 `steer`。
 

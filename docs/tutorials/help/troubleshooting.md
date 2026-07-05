@@ -26,7 +26,7 @@ description: "OpenClaw 帮助：故障排查（Troubleshooting）。大多数问
 
 ## 场景 1：Agent 不回复
 
-**步骤：**
+步骤：
 
 1. 检查 API Key 是否有效：
    ```bash
@@ -56,7 +56,7 @@ description: "OpenClaw 帮助：故障排查（Troubleshooting）。大多数问
 
 ## 场景 2：仪表板无法连接
 
-**步骤：**
+步骤：
 
 1. 确认 Gateway 正在运行：
    ```bash
@@ -90,7 +90,7 @@ description: "OpenClaw 帮助：故障排查（Troubleshooting）。大多数问
 
 ## 场景 3：Gateway 启动失败
 
-**步骤：**
+步骤：
 
 1. 验证配置文件语法是否正确：
    ```bash
@@ -120,7 +120,7 @@ description: "OpenClaw 帮助：故障排查（Troubleshooting）。大多数问
 
 ## 场景 4：通道连接问题
 
-**步骤：**
+步骤：
 
 1. 查看通道当前状态：
    ```bash
@@ -141,7 +141,7 @@ description: "OpenClaw 帮助：故障排查（Troubleshooting）。大多数问
 
 ## 场景 5：Cron / Heartbeat 不触发
 
-**步骤：**
+步骤：
 
 1. 检查系统时区设置是否与预期一致：
    ```bash
@@ -165,9 +165,9 @@ description: "OpenClaw 帮助：故障排查（Troubleshooting）。大多数问
 
 ## 场景 6：Node 工具问题
 
-**步骤：**
+步骤：
 
-1. 检查 Node.js 版本，OpenClaw 推荐 **v24**，最低支持 **v22.19**：
+1. 检查 Node.js 版本，OpenClaw 推荐 v24，最低支持 v22.19：
    ```bash
    node --version
    ```
@@ -191,7 +191,7 @@ description: "OpenClaw 帮助：故障排查（Troubleshooting）。大多数问
 
 ## 场景 7：Browser 工具问题
 
-**步骤：**
+步骤：
 
 1. 确认系统中已安装 Chrome 或 Chromium：
    ```bash

@@ -180,20 +180,20 @@ Provider-owned tools such as remote Python sandboxes remain separate tools. See
 
 ## Terms
 
-**Code mode** is the OpenClaw runtime mode that hides normal model tools and
+Code mode is the OpenClaw runtime mode that hides normal model tools and
 exposes only `exec` and `wait`.
 
-**Guest runtime** is the QuickJS-WASI JavaScript VM that evaluates model code.
+Guest runtime is the QuickJS-WASI JavaScript VM that evaluates model code.
 
-**Host bridge** is the narrow JSON-compatible callback surface from guest code
+Host bridge is the narrow JSON-compatible callback surface from guest code
 back into OpenClaw.
 
-**Catalog** is the run-scoped list of effective tools after normal tool policy,
+Catalog is the run-scoped list of effective tools after normal tool policy,
 plugin, MCP, and client-tool resolution.
 
-**Nested tool call** is a tool call made from guest code through the host bridge.
+Nested tool call is a tool call made from guest code through the host bridge.
 
-**Snapshot** is serialized QuickJS-WASI VM state saved so `wait` can continue a
+Snapshot is serialized QuickJS-WASI VM state saved so `wait` can continue a
 suspended code-mode run.
 
 ## Configuration

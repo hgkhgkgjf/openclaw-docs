@@ -1,12 +1,12 @@
 ---
 title: "Nix"
 sidebarTitle: "Nix"
-description: "OpenClaw 安装部署：Nix 安装。使用 Nix 运行 OpenClaw 的推荐方式是通过 nix-openclaw — 一个开箱即用的 Home Manager 模块。"
+description: "OpenClaw 安装部署：Nix 安装。使用 Nix 运行 OpenClaw 的推荐方式是通过 nix-openclaw : 一个开箱即用的 Home Manager 模块。"
 ---
 
 # Nix 安装
 
-使用 Nix 运行 OpenClaw 的推荐方式是通过 **[nix-openclaw](https://github.com/openclaw/nix-openclaw)** — 一个开箱即用的 Home Manager 模块。
+使用 Nix 运行 OpenClaw 的推荐方式是通过 [nix-openclaw](https://github.com/openclaw/nix-openclaw) : 一个开箱即用的 Home Manager 模块。
 
 ## 快速开始
 
@@ -27,13 +27,13 @@ What I need you to do:
 Reference the nix-openclaw README for module options.
 ```
 
-> **完整指南：[github.com/openclaw/nix-openclaw](https://github.com/openclaw/nix-openclaw)**
+> 完整指南：[github.com/openclaw/nix-openclaw](https://github.com/openclaw/nix-openclaw)
 >
 > nix-openclaw 仓库是 Nix 安装的权威来源。本页面仅为快速概览。
 
 ## 你将获得
 
-- 网关（Gateway）+ macOS 应用 + 工具（whisper、spotify、cameras）— 全部版本固定
+- 网关（Gateway）+ macOS 应用 + 工具（whisper、spotify、cameras）: 全部版本固定
 - 可在重启后存活的 Launchd 服务
 - 带声明式配置的插件系统
 - 即时回滚：`home-manager switch --rollback`
@@ -44,7 +44,7 @@ Reference the nix-openclaw README for module options.
 
 当设置了 `OPENCLAW_NIX_MODE=1` 时（nix-openclaw 会自动设置）：
 
-OpenClaw 支持 **Nix 模式**，使配置具有确定性并禁用自动安装流程。
+OpenClaw 支持 Nix 模式，使配置具有确定性并禁用自动安装流程。
 通过导出以下变量启用：
 
 ```bash
@@ -90,6 +90,6 @@ apps/macos/Sources/OpenClaw/Resources/Info.plist
 
 ## 相关链接
 
-- [nix-openclaw](https://github.com/openclaw/nix-openclaw) — 完整设置指南
-- [向导](/tutorials/getting-started/wizard) — 非 Nix CLI 设置
-- [Docker](/tutorials/installation/docker) — 容器化设置
+- [nix-openclaw](https://github.com/openclaw/nix-openclaw) : 完整设置指南
+- [向导](/tutorials/getting-started/wizard) : 非 Nix CLI 设置
+- [Docker](/tutorials/installation/docker) : 容器化设置

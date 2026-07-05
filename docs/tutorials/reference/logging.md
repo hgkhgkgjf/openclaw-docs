@@ -10,10 +10,10 @@ title: "Logging"
 
 OpenClaw has two main log surfaces:
 
-- **File logs** (JSON lines) written by the Gateway.
-- **Console output** shown in terminals and the Gateway Debug UI.
+- File logs (JSON lines) written by the Gateway.
+- Console output shown in terminals and the Gateway Debug UI.
 
-The Control UI **Logs** tab tails the gateway file log. This page explains where
+The Control UI Logs tab tails the gateway file log. This page explains where
 logs live, how to read them, and how to configure log levels and formats.
 
 ## Where logs live
@@ -57,8 +57,8 @@ Useful current options:
 
 Output modes:
 
-- **TTY sessions**: pretty, colorized, structured log lines.
-- **Non-TTY sessions**: plain text.
+- TTY sessions: pretty, colorized, structured log lines.
+- Non-TTY sessions: plain text.
 - `--json`: line-delimited JSON (one log event per line).
 - `--plain`: force plain text in TTY sessions.
 - `--no-color`: disable ANSI colors.
@@ -89,7 +89,7 @@ openclaw doctor
 
 ### Control UI (web)
 
-The Control UI's **Logs** tab tails the same file using `logs.tail`.
+The Control UI's Logs tab tails the same file using `logs.tail`.
 See [Control UI](/tutorials/web/control-ui) for how to open it.
 
 ### Channel-only logs
@@ -126,7 +126,7 @@ transcript text, audio payloads, turn ids, call ids, and provider item ids.
 
 ### Console output
 
-Console logs are **TTY-aware** and formatted for readability:
+Console logs are TTY-aware and formatted for readability:
 
 - Subsystem prefixes (e.g. `gateway/channels/whatsapp`)
 - Level coloring (info/warn/error)
@@ -170,10 +170,10 @@ All logging configuration lives under `logging` in `~/.openclaw/openclaw.json`.
 
 ### Log levels
 
-- `logging.level`: **file logs** (JSONL) level.
-- `logging.consoleLevel`: **console** verbosity level.
+- `logging.level`: file logs (JSONL) level.
+- `logging.consoleLevel`: console verbosity level.
 
-You can override both via the **`OPENCLAW_LOG_LEVEL`** environment variable (e.g. `OPENCLAW_LOG_LEVEL=debug`). The env var takes precedence over the config file, so you can raise verbosity for a single run without editing `openclaw.json`. You can also pass the global CLI option **`--log-level <level>`** (for example, `openclaw --log-level debug gateway run`), which overrides the environment variable for that command.
+You can override both via the `OPENCLAW_LOG_LEVEL` environment variable (e.g. `OPENCLAW_LOG_LEVEL=debug`). The env var takes precedence over the config file, so you can raise verbosity for a single run without editing `openclaw.json`. You can also pass the global CLI option `--log-level <level>` (for example, `openclaw --log-level debug gateway run`), which overrides the environment variable for that command.
 
 `--verbose` only affects console output and WS log verbosity; it does not change
 file log levels.
@@ -279,18 +279,18 @@ can still add project-specific patterns on those surfaces.
 ## Diagnostics and OpenTelemetry
 
 Diagnostics are structured, machine-readable events for model runs and
-message-flow telemetry (webhooks, queueing, session state). They do **not**
-replace logs — they feed metrics, traces, and exporters. Events are emitted
+message-flow telemetry (webhooks, queueing, session state). They do not
+replace logs : they feed metrics, traces, and exporters. Events are emitted
 in-process whether or not you export them.
 
 Two adjacent surfaces:
 
-- **OpenTelemetry export** — send metrics, traces, and logs over OTLP/HTTP to
+- OpenTelemetry export : send metrics, traces, and logs over OTLP/HTTP to
   any OpenTelemetry-compatible collector or backend (Grafana, Datadog,
   Honeycomb, New Relic, Tempo, etc.). Full configuration, signal catalog,
   metric/span names, env vars, and privacy model live on a dedicated page:
   [OpenTelemetry export](/tutorials/gateway/opentelemetry).
-- **Diagnostics flags** — targeted debug-log flags that route extra logs to
+- Diagnostics flags : targeted debug-log flags that route extra logs to
   `logging.file` without raising `logging.level`. Flags are case-insensitive
   and support wildcards (`telegram.*`, `*`). Configure under `diagnostics.flags`
   or via the `OPENCLAW_DIAGNOSTICS=...` env override. Full guide:
@@ -308,14 +308,14 @@ For OTLP export to a collector, see [OpenTelemetry export](/tutorials/gateway/op
 
 ## Troubleshooting tips
 
-- **Gateway not reachable?** Run `openclaw doctor` first.
-- **Logs empty?** Check that the Gateway is running and writing to the file path
+- Gateway not reachable? Run `openclaw doctor` first.
+- Logs empty? Check that the Gateway is running and writing to the file path
   in `logging.file`.
-- **Need more detail?** Set `logging.level` to `debug` or `trace` and retry.
+- Need more detail? Set `logging.level` to `debug` or `trace` and retry.
 
 ## Related
 
-- [OpenTelemetry export](/tutorials/gateway/opentelemetry) — OTLP/HTTP export, metric/span catalog, privacy model
-- [Diagnostics flags](/tutorials/diagnostics/flags) — targeted debug-log flags
-- [Gateway logging internals](/tutorials/gateway/logging) — WS log styles, subsystem prefixes, and console capture
-- [Configuration reference](/tutorials/gateway/configuration-reference#diagnostics) — full `diagnostics.*` field reference
+- [OpenTelemetry export](/tutorials/gateway/opentelemetry) : OTLP/HTTP export, metric/span catalog, privacy model
+- [Diagnostics flags](/tutorials/diagnostics/flags) : targeted debug-log flags
+- [Gateway logging internals](/tutorials/gateway/logging) : WS log styles, subsystem prefixes, and console capture
+- [Configuration reference](/tutorials/gateway/configuration-reference#diagnostics) : full `diagnostics.*` field reference

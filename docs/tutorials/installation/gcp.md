@@ -64,7 +64,7 @@ Ubuntu 也可以；相应地调整软件包即可。
 
 ## 1) 安装 gcloud CLI（或使用 Console）
 
-**方式 A：gcloud CLI**（推荐用于自动化）
+方式 A：gcloud CLI（推荐用于自动化）
 
 从 [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install) 安装
 
@@ -75,7 +75,7 @@ gcloud init
 gcloud auth login
 ```
 
-**方式 B：Cloud Console**
+方式 B：Cloud Console
 
 所有步骤都可以通过 [https://console.cloud.google.com](https://console.cloud.google.com) 的 Web 界面完成
 
@@ -83,7 +83,7 @@ gcloud auth login
 
 ## 2) 创建 GCP 项目
 
-**CLI：**
+CLI：
 
 ```bash
 gcloud projects create my-openclaw-project --name="OpenClaw Gateway"
@@ -98,7 +98,7 @@ gcloud config set project my-openclaw-project
 gcloud services enable compute.googleapis.com
 ```
 
-**Console：**
+Console：
 
 1. 进入 IAM & Admin > Create Project
 2. 命名并创建
@@ -109,14 +109,14 @@ gcloud services enable compute.googleapis.com
 
 ## 3) 创建虚拟机
 
-**机器类型：**
+机器类型：
 
 | 类型     | 配置                     | 费用               | 说明               |
 | -------- | ------------------------ | ------------------ | ------------------ |
 | e2-small | 2 vCPU，2GB RAM          | 约 $12/月          | 推荐               |
 | e2-micro | 2 vCPU（共享），1GB RAM  | 有免费套餐资格      | 高负载时可能 OOM   |
 
-**CLI：**
+CLI：
 
 ```bash
 gcloud compute instances create openclaw-gateway \
@@ -127,7 +127,7 @@ gcloud compute instances create openclaw-gateway \
   --image-project=debian-cloud
 ```
 
-**Console：**
+Console：
 
 1. 进入 Compute Engine > VM instances > Create instance
 2. 名称：`openclaw-gateway`
@@ -140,13 +140,13 @@ gcloud compute instances create openclaw-gateway \
 
 ## 4) SSH 进入虚拟机
 
-**CLI：**
+CLI：
 
 ```bash
 gcloud compute ssh openclaw-gateway --zone=us-central1-a
 ```
 
-**Console：**
+Console：
 
 在 Compute Engine 面板中点击虚拟机旁边的 "SSH" 按钮。
 
@@ -230,7 +230,7 @@ XDG_CONFIG_HOME=/home/node/.openclaw
 openssl rand -hex 32
 ```
 
-**不要提交此文件。**
+不要提交此文件。
 
 ---
 
@@ -277,14 +277,14 @@ services:
 
 ---
 
-## 10) 将所需二进制文件烘焙到镜像中（关键）
+## 10) 将所需二进制文件烘焙到镜像中（主要）
 
 在运行中的容器内安装二进制文件是一个陷阱。
 运行时安装的任何内容都会在重启后丢失。
 
 所有技能所需的外部二进制文件必须在镜像构建时安装。
 
-以下示例仅展示三个常用二进制文件：
+以下示例仅显示三个常用二进制文件：
 
 - `gog` 用于 Gmail 访问
 - `goplaces` 用于 Google Places
@@ -299,7 +299,7 @@ services:
 2. 重建镜像
 3. 重启容器
 
-**示例 Dockerfile**
+示例 Dockerfile
 
 ```dockerfile
 FROM node:22-bookworm
@@ -430,11 +430,11 @@ docker compose up -d
 
 ## 故障排除
 
-**SSH 连接被拒绝**
+SSH 连接被拒绝
 
 虚拟机创建后 SSH 密钥传播可能需要 1-2 分钟。请等待后重试。
 
-**OS Login 问题**
+OS Login 问题
 
 检查你的 OS Login 配置：
 
@@ -444,7 +444,7 @@ gcloud compute os-login describe-profile
 
 确保你的账户具有所需的 IAM 权限（Compute OS Login 或 Compute OS Admin Login）。
 
-**内存不足（OOM）**
+内存不足（OOM）
 
 如果使用 e2-micro 并遇到 OOM，升级到 e2-small 或 e2-medium：
 

@@ -63,7 +63,7 @@ openclaw plugins doctor
 如果你最近看到文档或终端里出现 `marketplace entries`，可以这样理解：
 
 - `openclaw plugins marketplace entries`
-  看的是**当前配置好的 OpenClaw marketplace feed** 里有哪些条目
+  看的是当前配置好的 OpenClaw marketplace feed 里有哪些条目
 - `openclaw plugins marketplace list <source>`
   看的是你手动指定的某个 marketplace 文件、仓库或 URL
 - `openclaw plugins marketplace refresh`
@@ -83,7 +83,7 @@ openclaw plugins marketplace refresh --json
 
 ## `update` 和 `dry-run` 的一个细节
 
-如果某个 npm 插件当初是**精确版本 pin** 装进去的，那么：
+如果某个 npm 插件当初是精确版本 pin 装进去的，那么：
 
 - `openclaw plugins update <id>` 会继续沿用这个已记录的安装规格
 - `openclaw plugins update <id> --dry-run` 不会偷偷替你跳到 `latest`

@@ -16,7 +16,7 @@
 </section>
 <section class="oc-map-card">
 <h3>阶段二：AI 执行主链</h3>
-<p>重点吃透 run/attempt/subscribe、工具策略、回退与记忆。</p>
+<p>重点弄清楚 run/attempt/subscribe、工具策略、回退与记忆。</p>
 <div class="oc-chip-list">
 <a href="/beginner-openclaw-guide/12-智能体框架总览">12 智能体框架总览</a>
 <a href="/beginner-openclaw-guide/13-runEmbeddedPiAgent运行链路">13 runEmbeddedPiAgent</a>

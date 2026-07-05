@@ -46,8 +46,8 @@ type QueueEntry = {
 };
 ```
 
-超时告警触发条件：`if (waitedMs >= entry.warnAfterMs)` → 调 `onWait` + `diag.warn`。
-**不是异常，不取消，只是告警**，让上层感知排队过久。
+超时告警触发条件：`if (waitedMs >= entry.warnAfterMs)`，随后调用 `onWait` 和 `diag.warn`。
+不是异常，不取消，只是告警，让上层感知排队过久。
 
 ## 二、双层排队模型（run.ts）
 
@@ -97,10 +97,10 @@ export function resolveGlobalLane(lane?: string) {
 
 `drainLane(state)`：
 
-1. `if (state.draining) return` — 防重入。
+1. `if (state.draining) return`，防重入。
 2. `while active < maxConcurrent && queue.length > 0` 循环拉起任务。
-3. 任务成功：`completeTask(state, id)` → resolve + `pump()`。
-4. 任务失败：`completeTask(state, id)` → reject + `pump()`（失败也 pump，不饿死后续）。
+3. 任务成功：`completeTask(state, id)`，resolve 后继续 `pump()`。
+4. 任务失败：`completeTask(state, id)`，reject 后也继续 `pump()`，避免后续任务饿死。
 
 ### 3) Probe Lane 特殊静默
 
@@ -111,15 +111,15 @@ function isProbeLane(lane: string): boolean {
 }
 ```
 
-probe lane 的任务失败时**不打错误日志**。
+probe lane 的任务失败时不打错误日志。
 探针任务是试错用的，错误是预期行为，记录会产生误导性噪音。
 
 ### 4) 清理/恢复
 
-**`clearCommandLane(lane)`**：只取消 queue 里未开始的任务，抛 `CommandLaneClearedError`；
+`clearCommandLane(lane)`：只取消 queue 里未开始的任务，抛 `CommandLaneClearedError`；
 不影响已 active 的任务。
 
-**`resetAllLanes()`**：
+`resetAllLanes()`：
 
 ```ts
 // 源码注释（精确）：
@@ -128,13 +128,13 @@ probe lane 的任务失败时**不打错误日志**。
 ```
 
 执行步骤：
-1. `state.generation++` — 让旧回调回写时发现 generation 不匹配，直接忽略。
-2. `state.activeTaskIds.clear()` — 强制归零（旧 finally 可能永远不跑了）。
-3. 保留 `queue`，重新 `drainLane` — 积压任务继续执行。
+1. `state.generation++`，让旧回调回写时发现 generation 不匹配并直接忽略。
+2. `state.activeTaskIds.clear()`，强制归零（旧 finally 可能永远不跑了）。
+3. 保留 `queue`，重新 `drainLane`，让积压任务继续执行。
 
-这是"热重启后不僵死"的关键，generation 机制防止旧 finally 污染新状态。
+这是"热重启后不僵死"的要点，generation 机制防止旧 finally 污染新状态。
 
-**`waitForActiveTasks(timeoutMs)`**：
+`waitForActiveTasks(timeoutMs)`：
 
 ```ts
 const POLL_INTERVAL_MS = 50;  // 轮询间隔（源码常量）
@@ -142,7 +142,7 @@ const POLL_INTERVAL_MS = 50;  // 轮询间隔（源码常量）
 ```
 
 进入时快照 `activeAtStart`（当前所有 active 任务），每 50ms 检查这批 ID 是否都已完成。
-**只等调用时已经 active 的任务**，不等后来新进来的任务。
+只等调用时已经 active 的任务，不等后来新进来的任务。
 
 ## 四、并发配置入口
 
@@ -156,7 +156,7 @@ export function applyGatewayLaneConcurrency(cfg: Config) {
 ```
 
 `setCommandLaneConcurrency` 写完 `maxConcurrent` 后立刻 `drainLane`，
-"提高并发"的变更**实时生效**，不等下条消息触发。
+"提高并发"的变更实时生效，不等下条消息触发。
 
 热重载时再次调用同一函数，保持运行时与配置一致。
 
@@ -258,4 +258,4 @@ function resetAllLanes() {
 3. `clearActiveRun` 不校验 handle，误删新任务（高并发下必现）。
 4. 忘了失败分支继续 pump，队列卡死。
 5. probe lane 错误日志轰炸（应判断 isProbeLane 静默）。
-6. `waitForActiveTasks` 等待所有队列任务而不是快照时已 active 的 —— 导致永远等不完。
+6. `waitForActiveTasks` 等待所有队列任务，而不是快照时已 active 的任务，导致永远等不完。

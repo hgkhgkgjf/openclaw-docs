@@ -11,7 +11,7 @@ sidebarTitle: "Channel UI 计划"
 
 - Agent 输出语义化 `presentation`。
 - 通道插件声明自己支持什么。
-- Gateway 自动降级不支持的展示能力。
+- Gateway 自动降级不支持的显示能力。
 - 不让核心代码依赖 Discord、Slack、Telegram 的原生 UI 结构。
 
 继续阅读：[消息呈现](/tutorials/plugins/message-presentation)。

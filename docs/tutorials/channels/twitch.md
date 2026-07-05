@@ -44,9 +44,9 @@ openclaw plugins install ./extensions/twitch
 
 1. 为机器人创建一个专用 Twitch 账户（或使用现有账户）。
 2. 生成凭据：[Twitch Token Generator](https://twitchtokengenerator.com/)
-   - 选择 **Bot Token**
+   - 选择 Bot Token
    - 验证已选择 `chat:read` 和 `chat:write` scope
-   - 复制 **Client ID** 和 **Access Token**
+   - 复制 Client ID 和 Access Token
 3. 查找你的 Twitch 用户 ID：[https://www.streamweasels.com/tools/convert-twitch-username-to-user-id/](https://www.streamweasels.com/tools/convert-twitch-username-to-user-id/)
 4. 配置 Token：
    - 环境变量：`OPENCLAW_TWITCH_ACCESS_TOKEN=...`（仅默认账户）
@@ -54,7 +54,7 @@ openclaw plugins install ./extensions/twitch
    - 如果两者都设置，配置优先（环境变量回退仅适用于默认账户）。
 5. 重启 Gateway，让 Twitch 配置生效。
 
-**重要：** 添加访问控制（`allowFrom` 或 `allowedRoles`）以防止未授权用户触发机器人。`requireMention` 默认为 `true`。
+添加访问控制（`allowFrom` 或 `allowedRoles`）以防止未授权用户触发机器人。`requireMention` 默认为 `true`。
 
 推荐新手先用 `allowFrom`，只允许你自己的 Twitch 用户 ID 触发机器人。
 等你确认能正常工作，再考虑开放给管理员、VIP 或订阅者。
@@ -70,7 +70,7 @@ openclaw plugins install ./extensions/twitch
       accessToken: "oauth:abc123...", // OAuth Access Token（或使用 OPENCLAW_TWITCH_ACCESS_TOKEN 环境变量）
       clientId: "xyz789...", // Token Generator 中的 Client ID
       channel: "vevisk", // 要加入的 Twitch 频道聊天（必填）
-      allowFrom: ["123456789"], // （推荐）仅限你的 Twitch 用户 ID - 从 https://www.streamweasels.com/tools/convert-twitch-username-to-user-id/ 获取
+      allowFrom: ["123456789"], // 限制为你的 Twitch 用户 ID；可用 streamweasels 工具查询
     },
   },
 }
@@ -93,21 +93,21 @@ openclaw plugins install ./extensions/twitch
 
 使用 [Twitch Token Generator](https://twitchtokengenerator.com/)：
 
-- 选择 **Bot Token**
+- 选择 Bot Token
 - 验证已选择 `chat:read` 和 `chat:write` scope
-- 复制 **Client ID** 和 **Access Token**
+- 复制 Client ID 和 Access Token
 
 无需手动注册应用。Token 在几小时后过期。
 
 ### 配置机器人
 
-**环境变量（仅默认账户）：**
+环境变量（仅默认账户）：
 
 ```bash
 OPENCLAW_TWITCH_ACCESS_TOKEN=oauth:abc123...
 ```
 
-**或配置：**
+或配置：
 
 ```json5
 {
@@ -139,9 +139,9 @@ OPENCLAW_TWITCH_ACCESS_TOKEN=oauth:abc123...
 
 推荐使用 `allowFrom` 作为硬白名单。如果你想要基于角色的访问，请改用 `allowedRoles`。
 
-**可用角色：** `"moderator"`、`"owner"`、`"vip"`、`"subscriber"`、`"all"`。
+可用角色： `"moderator"`、`"owner"`、`"vip"`、`"subscriber"`、`"all"`。
 
-**为什么用用户 ID？** 用户名可以更改，允许冒充。用户 ID 是永久的。
+为什么用用户 ID？ 用户名可以更改，允许冒充。用户 ID 是永久的。
 
 查找你的 Twitch 用户 ID：[https://www.streamweasels.com/tools/convert-twitch-username-to-user-id/](https://www.streamweasels.com/tools/convert-twitch-username-to-user-id/)（将你的 Twitch 用户名转换为 ID）
 
@@ -149,7 +149,7 @@ OPENCLAW_TWITCH_ACCESS_TOKEN=oauth:abc123...
 
 ## Token 刷新（可选）
 
-来自 [Twitch Token Generator](https://twitchtokengenerator.com/) 的 Token 无法自动刷新 - 过期后重新生成。
+来自 [Twitch Token Generator](https://twitchtokengenerator.com/) 的 Token 无法自动刷新，过期后需要重新生成。
 
 如需自动 Token 刷新，在 [Twitch Developer Console](https://dev.twitch.tv/console) 创建你自己的 Twitch 应用程序并添加到配置：
 
@@ -197,7 +197,7 @@ OPENCLAW_TWITCH_ACCESS_TOKEN=oauth:abc123...
 }
 ```
 
-**注意：** 每个账户需要自己的 Token（每个频道一个 Token）。
+注意： 每个账户需要自己的 Token（每个频道一个 Token）。
 
 ---
 
@@ -219,7 +219,7 @@ OPENCLAW_TWITCH_ACCESS_TOKEN=oauth:abc123...
 }
 ```
 
-### 按用户 ID 的白名单（最安全）
+### 按用户 ID 设置白名单
 
 ```json5
 {
@@ -290,16 +290,16 @@ openclaw channels status --probe
 
 ### 机器人不响应消息
 
-**检查访问控制：** 确保你的用户 ID 在 `allowFrom` 中，或临时移除 `allowFrom` 并设置 `allowedRoles: ["all"]` 以进行测试。
+检查访问控制：确保你的用户 ID 在 `allowFrom` 中，或临时移除 `allowFrom` 并设置 `allowedRoles: ["all"]` 进行测试。
 
-**检查机器人是否在频道中：** 机器人必须加入 `channel` 中指定的频道。
+检查机器人是否在频道中： 机器人必须加入 `channel` 中指定的频道。
 
-**检查是否需要提及：** 默认 `requireMention: true`。
+检查是否需要提及： 默认 `requireMention: true`。
 这表示你通常要在聊天里明确叫它，它才会回复。测试时可以先发一条包含机器人名字的消息。
 
 ### Token 问题
 
-**"Failed to connect" 或认证错误：**
+"Failed to connect" 或认证错误：
 
 - 验证 `accessToken` 是 OAuth access token 值（通常以 `oauth:` 前缀开头）
 - 检查 Token 是否有 `chat:read` 和 `chat:write` scope
@@ -307,7 +307,7 @@ openclaw channels status --probe
 
 ### Token 刷新不工作
 
-**检查日志中的刷新事件：**
+检查日志中的刷新事件：
 
 ```text
 Using env token source for mybot
@@ -323,29 +323,29 @@ Access token refreshed for user 123456 (expires in 14400s)
 
 ## 配置
 
-**账户配置：**
+### 账户配置
 
-- `username` - 机器人用户名
-- `accessToken` - 带有 `chat:read` 和 `chat:write` 的 OAuth access token
-- `clientId` - Twitch Client ID（来自 Token Generator 或你的应用）
-- `channel` - 要加入的频道（必填）
-- `enabled` - 启用此账户（默认：`true`）
-- `clientSecret` - 可选：用于自动 Token 刷新
-- `refreshToken` - 可选：用于自动 Token 刷新
-- `expiresIn` - Token 过期时间（秒）
-- `obtainmentTimestamp` - Token 获取时间戳
-- `allowFrom` - 用户 ID 白名单
-- `allowedRoles` - 基于角色的访问控制（`"moderator" | "owner" | "vip" | "subscriber" | "all"`）
-- `requireMention` - 需要 @提及（默认：`true`）
+- `username`：机器人用户名
+- `accessToken`：带有 `chat:read` 和 `chat:write` 的 OAuth access token
+- `clientId`：Twitch Client ID（来自 Token Generator 或你的应用）
+- `channel`：要加入的频道（必填）
+- `enabled`：启用此账户（默认：`true`）
+- `clientSecret`：可选，用于自动 Token 刷新
+- `refreshToken`：可选，用于自动 Token 刷新
+- `expiresIn`：Token 过期时间（秒）
+- `obtainmentTimestamp`：Token 获取时间戳
+- `allowFrom`：用户 ID 白名单
+- `allowedRoles`：基于角色的访问控制（`"moderator" | "owner" | "vip" | "subscriber" | "all"`）
+- `requireMention`：需要 @提及（默认：`true`）
 
-**提供商选项：**
+### 提供商选项
 
-- `channels.twitch.enabled` - 启用/禁用通道启动
-- `channels.twitch.username` - 机器人用户名（简化的单账户配置）
-- `channels.twitch.accessToken` - OAuth access token（简化的单账户配置）
-- `channels.twitch.clientId` - Twitch Client ID（简化的单账户配置）
-- `channels.twitch.channel` - 要加入的频道（简化的单账户配置）
-- `channels.twitch.accounts.<accountName>` - 多账户配置（以上所有账户字段）
+- `channels.twitch.enabled`：启用/禁用通道启动
+- `channels.twitch.username`：机器人用户名（简化的单账户配置）
+- `channels.twitch.accessToken`：OAuth access token（简化的单账户配置）
+- `channels.twitch.clientId`：Twitch Client ID（简化的单账户配置）
+- `channels.twitch.channel`：要加入的频道（简化的单账户配置）
+- `channels.twitch.accounts.<accountName>`：多账户配置（以上所有账户字段）
 
 完整示例：
 
@@ -388,7 +388,7 @@ Access token refreshed for user 123456 (expires in 14400s)
 
 智能体可以使用 `twitch` 操作：
 
-- `send` - 向频道发送消息
+- `send`：向频道发送消息
 
 示例：
 
@@ -406,17 +406,17 @@ Access token refreshed for user 123456 (expires in 14400s)
 
 ## 安全和运维
 
-- **将 Token 视为密码** - 永远不要将 Token 提交到 git
-- **使用自动 Token 刷新** 用于长期运行的机器人
-- **使用用户 ID 白名单** 而非用户名进行访问控制
-- **监控日志** 查看 Token 刷新事件和连接状态
-- **最小化 Token scope** - 仅请求 `chat:read` 和 `chat:write`
-- **如果卡住**：确认没有其他进程拥有该会话后重启网关
+- 将 Token 视为密码，不要提交到 git。
+- 长期运行的机器人建议配置自动 Token 刷新。
+- 访问控制使用用户 ID 白名单，不使用用户名。
+- 通过日志观察 Token 刷新事件和连接状态。
+- Token scope 只请求 `chat:read` 和 `chat:write`。
+- 如果卡住：确认没有其他进程拥有该会话后重启网关
 
 ---
 
 ## 限制
 
-- 每条消息 **500 个字符**（在单词边界自动分块）
+- 每条消息 500 个字符（在单词边界自动分块）
 - 发送前去除 Markdown
 - 无速率限制（使用 Twitch 内置速率限制）

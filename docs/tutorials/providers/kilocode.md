@@ -6,7 +6,7 @@ description: "OpenClaw 模型接入：Kilo Gateway。Kilo Gateway 提供统一 A
 
 # Kilo Gateway
 
-Kilo Gateway 是一个 **统一 API 网关**。你可以使用一个 API Key，通过同一个兼容 OpenAI 的入口访问多家模型服务。在 OpenClaw 中，模型引用统一使用 `kilocode/` 前缀。
+Kilo Gateway 是一个 统一 API 网关。你可以使用一个 API Key，通过同一个兼容 OpenAI 的入口访问多家模型服务。在 OpenClaw 中，模型引用统一使用 `kilocode/` 前缀。
 
 ---
 
@@ -50,7 +50,7 @@ export KILOCODE_API_KEY="<your-kilocode-api-key>"
 
 ## 默认模型
 
-默认模型是 `kilocode/kilo/auto`。这是一个**智能路由模型**，会根据任务类型自动选择底层模型：
+默认模型是 `kilocode/kilo/auto`。这是一个智能路由模型，会根据任务类型自动选择底层模型：
 
 - 规划、调试、编排类任务通常会路由到 Claude Opus
 - 代码编写、代码探索类任务通常会路由到 Claude Sonnet
@@ -59,7 +59,7 @@ export KILOCODE_API_KEY="<your-kilocode-api-key>"
 
 ## 可用模型
 
-OpenClaw 会在启动时从 Kilo Gateway **动态发现**当前账号可用的模型列表。
+OpenClaw 会在启动时从 Kilo Gateway 动态发现当前账号可用的模型列表。
 
 查看方式：
 

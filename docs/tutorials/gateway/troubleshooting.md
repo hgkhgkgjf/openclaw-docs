@@ -96,7 +96,7 @@ openclaw gateway status --json
 
 ## 网关（Gateway）服务未运行
 
-当服务已安装但进程无法持续运行时使用。
+当服务已安装但进程无法继续运行时使用。
 
 ```bash
 openclaw gateway status

@@ -12,20 +12,20 @@ description: "OpenClaw 自动化：轮询通道（Channel Polling）。并不是
 
 ## 快速上手
 
-**第一步：确认通道已配置**
+第一步：确认通道已配置
 
 ```bash
 openclaw channels list
 ```
 
-**第二步：手动触发一次轮询**
+第二步：手动触发一次轮询
 
 ```bash
 # 对 WhatsApp 通道执行一次轮询
 openclaw channels poll --channel whatsapp
 ```
 
-**第三步：查看轮询结果**
+第三步：查看轮询结果
 
 ```bash
 openclaw logs --filter poll --limit 20

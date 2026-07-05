@@ -79,7 +79,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
       })) return;
     }
 
-    // 全部不命中 → 404
+    // 全部不命中 : 404
     res.statusCode = 404;
     res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.end("Not Found");
@@ -91,18 +91,18 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse) {
 }
 ```
 
-**路由优先级总结：**
+路由优先级总结：
 
 | 顺序 | 路由 | 自带鉴权 |
 |------|------|---------|
 | 1 | hooks | 由 hooks 系统自行处理 |
-| 2 | tools-invoke | ✅ 传入 `auth + rateLimiter` |
+| 2 | tools-invoke |  传入 `auth + rateLimiter` |
 | 3 | Slack | 由扩展处理 |
-| 4 | `/v1/responses` | ✅ 传入 `auth + rateLimiter` |
-| 5 | `/v1/chat/completions` | ✅ 传入 `auth + rateLimiter` |
-| 6 | Canvas | ✅ `authorizeCanvasRequest` 前置检查 |
+| 4 | `/v1/responses` |  传入 `auth + rateLimiter` |
+| 5 | `/v1/chat/completions` |  传入 `auth + rateLimiter` |
+| 6 | Canvas |  `authorizeCanvasRequest` 前置检查 |
 | 7 | Control UI | 无鉴权（头像/静态资源） |
-| - | 404 | — |
+| - | 404 | : |
 
 ## 二、authorizeCanvasRequest（三层授权）
 
@@ -118,7 +118,7 @@ async function authorizeCanvasRequest(params: {
 }): Promise<GatewayAuthResult> {
   const { req, auth, trustedProxies, clients, rateLimiter } = params;
 
-  // Layer 1：本地直连 → 直接通过
+  // Layer 1：本地直连 : 直接通过
   if (isLocalDirectRequest(req, trustedProxies)) {
     return { ok: true };
   }
@@ -142,10 +142,10 @@ async function authorizeCanvasRequest(params: {
 }
 ```
 
-**三层逻辑：**
-1. **本地直连**：loopback 客户端 + 本地 Host + 无转发头 → 直接通过
-2. **Bearer Token**：`Authorization: Bearer <token>` → 走 `authorizeGatewayConnect`（不允许 Tailscale）
-3. **私网回退**：私网 IP 且有同 IP 的已授权 WS 客户端 → 通过（让本机 UI 体验更好）
+三层逻辑：
+1. 本地直连：loopback 客户端 + 本地 Host + 无转发头，直接通过。
+2. Bearer Token：`Authorization: Bearer <token>`，走 `authorizeGatewayConnect`（不允许 Tailscale）。
+3. 私网回退：私网 IP 且有同 IP 的已授权 WS 客户端时通过，用于改善本机 UI 体验。
 
 ## 三、isLocalDirectRequest（精确实现）
 
@@ -226,16 +226,16 @@ export function attachGatewayUpgradeHandler(opts: {
 }
 ```
 
-**关键点：** Canvas WS 升级走 `authorizeCanvasRequest`（同 HTTP Canvas 路由），普通 WS 升级则直接交给 `wss`（认证在 ws-connection 的 connect 握手中进行）。
+要点：Canvas WS 升级走 `authorizeCanvasRequest`（同 HTTP Canvas 路由），普通 WS 升级则直接交给 `wss`（认证在 ws-connection 的 connect 握手中进行）。
 
 ## 六、plugin HTTP 的鉴权边界
 
 ```
-/api/channels/*    → 由 gateway 层强制鉴权（在 handleHooksRequest 之后）
-其他插件路由       → 由插件自己负责鉴权
+/api/channels/*    : 由 gateway 层强制鉴权（在 handleHooksRequest 之后）
+其他插件路由       : 由插件自己负责鉴权
 ```
 
-**这条边界非常重要：** 插件端点看起来在网关后面，但如果插件没有自行鉴权，实际上是裸露的。`/api/channels/*` 是特例，gateway 为其提供统一鉴权。
+这条边界需要单独记住：插件端点看起来在网关后面，但如果插件没有自行鉴权，实际上是裸露的。`/api/channels/*` 是特例，gateway 为其提供统一鉴权。
 
 ## 七、自检清单
 
@@ -248,7 +248,7 @@ export function attachGatewayUpgradeHandler(opts: {
 
 ## 八、开发避坑
 
-1. **路由顺序是代码顺序**，不是框架路由表。越靠前优先级越高，新增路由必须思考放在哪个位置。
-2. **Canvas 的 `authorizeCanvasRequest` 不允许 Tailscale auth**（`allowTailscale: false`），与普通 WS 握手不同。
-3. **500 错误被 catch 兜底**，但不记录具体错误信息（响应体只有 "Internal Server Error"）——调试时需看日志，不要指望从响应里获取信息。
-4. **`openResponsesEnabled` 和 `openAiChatCompletionsEnabled` 是运行时开关**，关闭后对应路由完全跳过。
+1. 路由顺序是代码顺序，不是框架路由表。越靠前优先级越高，新增路由必须思考放在哪个位置。
+2. Canvas 的 `authorizeCanvasRequest` 不允许 Tailscale auth（`allowTailscale: false`），与普通 WS 握手不同。
+3. 500 错误被 catch 兜底，但不记录具体错误信息（响应体只有 "Internal Server Error"）。调试时需看日志，不要指望从响应里获取信息。
+4. `openResponsesEnabled` 和 `openAiChatCompletionsEnabled` 是运行时开关，关闭后对应路由完全跳过。

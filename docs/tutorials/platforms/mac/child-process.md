@@ -8,13 +8,13 @@ title: "Gateway lifecycle"
 这页是从 OpenClaw 官方最新文档同步来的专题参考。新手不要一口气背完，先看标题和第一段；真正要配置这个功能时，再按步骤慢慢做。
 :::
 
-The macOS app **manages the Gateway via launchd** by default and does not spawn
+The macOS app manages the Gateway via launchd by default and does not spawn
 the Gateway as a child process. It first tries to attach to an already‑running
 Gateway on the configured port; if none is reachable, it enables the launchd
 service via the external `openclaw` CLI (no embedded runtime). This gives you
 reliable auto‑start at login and restart on crashes.
 
-Child‑process mode (Gateway spawned directly by the app) is **not in use** today.
+Child‑process mode (Gateway spawned directly by the app) is not in use today.
 If you need tighter coupling to the UI, run the Gateway manually in a terminal.
 
 ## Default behavior (launchd)
@@ -50,7 +50,7 @@ rm ~/.openclaw/disable-launchagent
 
 ## Attach-only mode
 
-To force the macOS app to **never install or manage launchd**, launch it with
+To force the macOS app to never install or manage launchd, launch it with
 `--attach-only` (or `--no-launchd`). This sets `~/.openclaw/disable-launchagent`,
 so the app only attaches to an already running Gateway. You can toggle the same
 behavior in Debug Settings.

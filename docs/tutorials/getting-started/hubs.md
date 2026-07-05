@@ -7,7 +7,7 @@ description: "OpenClaw 中文文档站的完整导览：从安装、Web 控制 U
 # 文档中心
 
 如果你第一次打开 OpenClaw，不要急着把所有页面都看完。
-先记住一句话：**OpenClaw 是一个运行在你自己电脑或服务器上的 AI 助手总机。**
+先记住一句话：OpenClaw 是一个运行在你自己电脑或服务器上的 AI 助手总机。
 
 它把 Telegram、WhatsApp、Slack、Discord、WebChat 等聊天入口接进来，再把消息交给后面的 AI 模型和工具去处理。你可以把它想成家里的“总开关”：灯、空调、门铃都接到这里，你只需要知道开关在哪。
 
@@ -54,13 +54,13 @@ description: "OpenClaw 中文文档站的完整导览：从安装、Web 控制 U
 
 ## Web 控制 UI
 
-新版 OpenClaw 很强调浏览器控制台。它不是装饰品，而是日常管理入口。
+新版 OpenClaw 把浏览器控制台作为日常管理入口。它不是装饰品，网关、频道、会话和配置都可以从这里查看。
 
 - [Web 控制 UI 总览](/tutorials/web/)：从浏览器查看网关、频道、会话和配置
 - 默认地址：`http://127.0.0.1:18789/`
 - 常用命令：`openclaw dashboard`
 
-如果你不知道现在 OpenClaw 有没有跑起来，先打开这里看一眼，通常比翻日志更直观。
+如果你不知道 OpenClaw 现在有没有跑起来，先打开这里看一眼，通常比翻日志更省事。
 
 ---
 
@@ -92,7 +92,7 @@ description: "OpenClaw 中文文档站的完整导览：从安装、Web 控制 U
 - [BlueBubbles / iMessage](/tutorials/channels/bluebubbles)：适合 Apple 生态
 - [Mattermost](/tutorials/channels/mattermost)、[Matrix](/tutorials/channels/matrix)、[Teams](/tutorials/channels/msteams)：适合团队和自托管协作场景
 
-频道在新版 OpenClaw 中多由插件承载。普通用户只需要知道：**能在向导里启用的，就按向导来；向导找不到的，再看对应插件说明。**
+频道在新版 OpenClaw 中多由插件承载。普通用户只需要知道：能在向导里启用的，就按向导来；向导找不到的，再看对应插件说明。
 
 ---
 
@@ -122,7 +122,7 @@ description: "OpenClaw 中文文档站的完整导览：从安装、Web 控制 U
 - [技能系统](/tutorials/tools/skills)：给 Agent 加一份“做事说明书”
 - [子智能体](/tutorials/tools/subagents)：把复杂任务拆给多个 Agent
 - [节点总览](/tutorials/nodes/)：手机、桌面或远程设备如何连接网关
-- [Canvas 工具](/tutorials/tools/canvas)：在节点上展示交互式画布
+- [Canvas 工具](/tutorials/tools/canvas)：在节点上显示交互式画布
 
 ---
 

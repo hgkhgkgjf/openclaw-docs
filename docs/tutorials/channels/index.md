@@ -3,7 +3,7 @@ title: "连接聊天软件（通道）"
 sidebarTitle: "连接聊天软件"
 ---
 
-# 连接聊天软件——让 AI 助手住进你的聊天 App
+# 连接聊天软件::让 AI 助手住进你的聊天 App
 
 OpenClaw 里的“通道”就是聊天入口。
 
@@ -28,16 +28,16 @@ OpenClaw 里的“通道”就是聊天入口。
 
 建议按这个顺序：
 
-1. **控制 UI**
+1. 控制 UI
    先运行 `openclaw dashboard`，确认 AI 能回复。
 
-2. **Telegram**
+2. Telegram
    最适合新手。只需要 Bot Token，配置快，排查也简单。
 
-3. **Discord 或 Slack**
+3. Discord 或 Slack
    适合社区、团队或工作空间。
 
-4. **WhatsApp / iMessage / 企业通道**
+4. WhatsApp / iMessage / 企业通道
    更贴近日常使用，但配置步骤更多。
 
 ---

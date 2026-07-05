@@ -40,7 +40,7 @@ export type AgentRunLoopResult =
   | { kind: "final"; payload: ReplyPayload }; // 直接终止（错误 payload 或特定退出路径）
 ```
 
-`kind: "final"` 意味着调用方**不需要再做任何回复拼装**，直接透传给通道。
+`kind: "final"` 意味着调用方不需要再做任何回复拼装，直接透传给通道。
 `kind: "success"` 意味着 runResult 需要上层继续处理（拼装 payload、发送到通道）。
 
 ## 步骤三：三个重试防护标志（各只允许一次）
@@ -74,17 +74,17 @@ if (params.sessionKey) {
 
 `registerAgentRunContext` 让 runId 与 sessionKey 关联，后续日志、流式事件可以按 runId 追踪归属。
 
-## 步骤五：Context overflow 双路径（最关键，最易漏实现）
+## 步骤五：Context overflow 双路径（最容易漏实现）
 
-OpenClaw 的 context overflow 有**两条独立路径**，都需要处理：
+OpenClaw 的 context overflow 有两条独立路径，都需要处理：
 
-**路径 A：runEmbeddedPiAgent 抛出异常**
+路径 A：runEmbeddedPiAgent 抛出异常
 ```ts
 // run.ts 抛 isContextOverflowError(err)
-// → runWithModelFallback 捕获后走 fallback 或继续循环
+// : runWithModelFallback 捕获后走 fallback 或继续循环
 ```
 
-**路径 B：error 藏在 meta 里（不抛异常）**
+路径 B：error 藏在 meta 里（不抛异常）
 ```ts
 // agent-runner-execution.ts 循环内检查
 const embeddedError = runResult.meta?.error;
@@ -104,13 +104,13 @@ if (
 }
 ```
 
-**复刻时必须同时实现两条路径**，否则路径 B 会导致 runResult 看起来成功，实际上回复内容是空的错误信息。
+复刻时必须同时实现两条路径，否则路径 B 会导致 runResult 看起来成功，实际上回复内容是空的错误信息。
 
 ## 步骤六：四种精确的用户可见错误消息（源码字面量）
 
 ```ts
 // 1. Context overflow（来自 isContextOverflowError 分支）
-"⚠️ Context overflow — prompt too large for this model. Try a shorter message or a larger-context model."
+"⚠️ Context overflow : prompt too large for this model. Try a shorter message or a larger-context model."
 
 // 2. Role ordering conflict（assistant/user 顺序错误）
 "⚠️ Message ordering conflict - please try again. If this persists, use /new to start a fresh session."
@@ -123,7 +123,7 @@ if (
 // 注：瞬时 HTTP 错误走 sanitizeUserFacingText 处理后进此分支
 ```
 
-这些消息是面向用户展示的，不是日志。复刻时保留这套错误语义，避免用户看到裸 stack trace。
+这些消息是面向用户显示的，不是日志。复刻时保留这套错误语义，避免用户看到裸 stack trace。
 
 ## 步骤七：CLI provider 分支（特殊路径）
 
@@ -182,7 +182,7 @@ runResult        = fallbackResult.result;
 
 ## 开发避坑
 
-1. 不要把 overflow 的两条路径合并——meta.error 路径不抛异常，必须主动检查。
+1. 不要把 overflow 的两条路径合并：meta.error 路径不抛异常，必须主动检查。
 2. `resetSessionAfterCompactionFailure` 是异步的（可能涉及文件 IO），不要忘记 await。
-3. 重试标志是局部变量，不是全局单例——每次 `runAgentTurnWithFallback` 调用都有独立的标志。
+3. 重试标志是局部变量，不是全局单例：每次 `runAgentTurnWithFallback` 调用都有独立的标志。
 4. `kind: "final"` 返回前不要再做任何回复拼装，否则会出现"双重回复"。

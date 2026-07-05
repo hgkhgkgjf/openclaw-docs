@@ -1,7 +1,7 @@
 ---
 title: "DigitalOcean 部署"
 sidebarTitle: "DigitalOcean"
-description: "OpenClaw 安装部署：在 DigitalOcean Droplet 上运行持续在线的 Gateway。"
+description: "OpenClaw 安装部署：在 DigitalOcean Droplet 上运行继续在线的 Gateway。"
 ---
 
 # DigitalOcean 部署

@@ -6,7 +6,7 @@ sidebarTitle: "工具系统"
 # 工具系统
 
 模型负责“想”，工具负责“做”。
-如果没有工具，AI 只能在聊天框里回答；有了工具，它就可以查网页、打开浏览器、读写文件、运行命令、生成图片，甚至让手机或桌面节点帮它拍照、录屏、展示画布。
+如果没有工具，AI 只能在聊天框里回答；有了工具，它就可以查网页、打开浏览器、读写文件、运行命令、生成图片，甚至让手机或桌面节点帮它拍照、录屏、打开画布。
 
 你可以把工具理解成给 AI 配的一套家用电器：浏览器像电视，命令行像工具箱，节点像远程遥控器。AI 不能随便乱碰，OpenClaw 会通过权限、审批和配置来约束它。
 
@@ -14,16 +14,16 @@ sidebarTitle: "工具系统"
 
 ## 新手先知道这 4 点
 
-1. **工具不是聊天内容，而是动作能力。**
+1. 工具不是聊天内容，而是动作能力。
    AI 回答“我建议你运行测试”是一句话；AI 真的运行测试，就是用了工具。
 
-2. **工具越强，越要审批。**
+2. 工具越强，越要审批。
    查网页风险低，运行命令、读写文件风险高。
 
-3. **先用默认权限。**
+3. 先用默认权限。
    不知道某个开关是什么意思时，不要急着放大权限。
 
-4. **出问题先看日志和审批记录。**
+4. 出问题先看日志和审批记录。
    很多“AI 没做事”，其实是工具没开、权限没给、或等待你批准。
 
 ---
@@ -39,7 +39,7 @@ sidebarTitle: "工具系统"
 | [Exec 命令工具](/tutorials/tools/exec) | 在允许范围内运行命令 | 构建项目、跑测试、查看日志 |
 | [Code Execution](/tutorials/tools/code-execution) | 远程 Python 沙盒分析 | 计算、统计、表格分析 |
 | [PDF 分析](/tutorials/tools/pdf) | 阅读 PDF 文件 | 合同、论文、说明书 |
-| [Canvas 画布](/tutorials/tools/canvas) | 在节点上展示可视化界面 | 手机/桌面交互、远程展示 |
+| [Canvas 画布](/tutorials/tools/canvas) | 在节点上打开可视化界面 | 手机/桌面交互、远程画布 |
 | [Image Generate 图像生成](/tutorials/tools/image-generate) | 生成图片 | 配图、草图、视觉素材 |
 | [Loop Detection 循环检测](/tutorials/tools/loop-detection) | 发现无意义重复 | 防止 Agent 卡住反复调用 |
 | [Goal 会话目标](/tutorials/tools/goal) | 固定当前会话目标 | 长任务、PR 收尾、文档更新 |
@@ -49,7 +49,7 @@ sidebarTitle: "工具系统"
 
 ## 扩展能力
 
-这些能力不一定像“一个按钮”那样直观，但非常有用。
+这些能力不一定像“一个按钮”那样好理解，但很实用。
 如果你是第一次使用，可以先跳过这一节，等常见工具用顺了再回来。
 
 - [技能 Skills](/tutorials/tools/skills)：给 Agent 加一份专门说明书，比如“写周报时按这个格式”
@@ -67,7 +67,7 @@ sidebarTitle: "工具系统"
 - [插件专题](/tutorials/plugins/)：通过 `openclaw.plugin.json` 声明和注册新能力
 - [Tokenjuice](/tutorials/tools/tokenjuice)：压短 noisy 命令输出
 - [轨迹导出](/tutorials/tools/trajectory)：导出会话飞行记录
-- [Diffs 差异展示](/tutorials/tools/diffs)：把修改内容渲染成对比视图
+- [Diffs 差异视图](/tutorials/tools/diffs)：把修改内容渲染成对比视图
 - [添加能力 Cookbook](/tutorials/tools/capability-cookbook)：核心贡献者添加新能力的路线图
 
 ---
@@ -104,7 +104,7 @@ sidebarTitle: "工具系统"
 
 ## 节点带来的工具
 
-新版 OpenClaw 里，节点是很重要的一块。
+新版 OpenClaw 里，节点承担外部设备能力接入。
 节点可以是手机、桌面应用，也可以是远程机器。它们会连到网关，然后把自己的能力交给网关调度。
 
 也就是说：手机不是另一个 OpenClaw 总服务台，它只是把相机、Canvas、语音这些能力借给 Gateway 使用。
@@ -114,7 +114,7 @@ sidebarTitle: "工具系统"
 - 摄像头：拍照或读取画面
 - 录屏：记录屏幕片段
 - 位置：读取设备位置
-- Canvas：展示交互式界面
+- Canvas：打开交互式界面
 - 音频：语音输入或播放
 
 先看 [节点总览](/tutorials/nodes/)，再看 [Canvas 工具](/tutorials/tools/canvas) 会更容易理解。

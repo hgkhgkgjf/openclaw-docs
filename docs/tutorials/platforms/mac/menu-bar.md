@@ -13,7 +13,7 @@ title: "Menu bar"
 - We surface the current agent work state in the menu bar icon and in the first status row of the menu.
 - Health status is hidden while work is active; it returns when all sessions are idle.
 - A root “Context” submenu contains recent sessions instead of expanding them directly in the root menu.
-- The “Nodes” block in the root menu lists **devices** only (paired nodes via `node.list`), not client/presence entries.
+- The “Nodes” block in the root menu lists devices only (paired nodes via `node.list`), not client/presence entries.
 - A root “Usage” section appears below Context when provider usage snapshots are available, followed by usage-cost details when available.
 
 ## State model
@@ -31,14 +31,14 @@ title: "Menu bar"
 - `workingOther(ActivityKind)`
 - `overridden(ActivityKind)` (debug override)
 
-### ActivityKind → glyph
+### ActivityKind glyph
 
-- `exec` → 💻
-- `read` → 📄
-- `write` → ✍️
-- `edit` → 📝
-- `attach` → 📎
-- default → 🛠️
+- `exec`: terminal glyph
+- `read`: document glyph
+- `write`: pen glyph
+- `edit`: note glyph
+- `attach`: paperclip glyph
+- default: tool glyph
 
 ### Visual mapping
 

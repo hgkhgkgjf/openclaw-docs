@@ -147,22 +147,22 @@ oc://FILE/SECTION/ITEM/FIELD?session=SCOPE
 Slot rules: `field` requires `item`, and `item` requires `section`. Across all
 four slots:
 
-- **Quoted segments** — `"a/b.c"` survives `/` and `.` separators.
+- Quoted segments : `"a/b.c"` survives `/` and `.` separators.
   Content is byte-literal; `"` and `\` are not allowed inside quotes.
   The file slot is also quote-aware: `oc://"skills/email-drafter"/Tools/$last`
   treats `skills/email-drafter` as a single file path.
-- **Predicates** — `[k=v]`, `[k!=v]`, `[k<v]`, `[k<=v]`, `[k>v]`,
+- Predicates : `[k=v]`, `[k!=v]`, `[k<v]`, `[k<=v]`, `[k>v]`,
   `[k>=v]`. Numeric ops require both sides to coerce to finite numbers.
-- **Unions** — `{a,b,c}` matches any of the alternatives.
-- **Wildcards** — `*` (single sub-segment) and `**` (zero-or-more,
+- Unions : `{a,b,c}` matches any of the alternatives.
+- Wildcards : `*` (single sub-segment) and `**` (zero-or-more,
   recursive). `find` accepts these; `resolve` and `set` reject them as
   ambiguous.
-- **Positional** — `$first` / `$last` resolve to the first / last index or
+- Positional : `$first` / `$last` resolve to the first / last index or
   declared key.
-- **Ordinal** — `#N` for Nth match by document order.
-- **Insertion markers** — `+`, `+key`, `+nnn` for keyed / indexed
+- Ordinal : `#N` for Nth match by document order.
+- Insertion markers : `+`, `+key`, `+nnn` for keyed / indexed
   insertion (use with `set`).
-- **Session scope** — `?session=cron-daily` etc. Orthogonal to slot
+- Session scope : `?session=cron-daily` etc. Orthogonal to slot
   nesting. Session values are raw, not percent-decoded; they may not contain
   control characters or reserved query delimiters (`?`, `&`, `%`).
 
@@ -316,14 +316,14 @@ leaf @ L9: "GitHub CLI" (string)
 
 $ openclaw path find 'oc://x.md/tools/*' --file frontmatter.md --human
 3 matches for oc://x.md/tools/*:
-  oc://x.md/tools/gh           →  node @ L9 [md-item]
-  oc://x.md/tools/curl         →  node @ L10 [md-item]
-  oc://x.md/tools/send-email   →  node @ L11 [md-item]
+  oc://x.md/tools/gh           :  node @ L9 [md-item]
+  oc://x.md/tools/curl         :  node @ L10 [md-item]
+  oc://x.md/tools/send-email   :  node @ L11 [md-item]
 ```
 
 The `[frontmatter]` predicate addresses the YAML frontmatter block; `tools`
 matches the `## Tools` heading via slug, and item leaves keep their slug form
-even when the source uses underscores (`send_email` → `send-email`).
+even when the source uses underscores (`send_email` : `send-email`).
 
 ### JSONC
 
@@ -365,7 +365,7 @@ JSONC edits go through `jsonc-parser`, so comments and whitespace survive a
 ```bash
 $ openclaw path find 'oc://session.jsonl/[event=action]/userId' --file session.jsonl --human
 1 match for oc://session.jsonl/[event=action]/userId:
-  oc://session.jsonl/L2/userId  →  leaf @ L2: "u1" (string)
+  oc://session.jsonl/L2/userId  :  leaf @ L2: "u1" (string)
 
 $ openclaw path resolve 'oc://session.jsonl/L2/ts' --file session.jsonl --human
 leaf @ L2: "2" (number)
@@ -409,7 +409,7 @@ adapter handles `.yaml`, `.yml`, and `.lobster` files.
 
 ### `resolve <oc-path>`
 
-Read a single leaf or node. Wildcards are rejected — use `find` for those.
+Read a single leaf or node. Wildcards are rejected : use `find` for those.
 Exits `0` on a match, `1` on a clean miss, `2` on a parse error or refused
 pattern.
 
@@ -422,7 +422,7 @@ openclaw path resolve 'oc://gateway.jsonc/server/port' --json
 
 Enumerate every match for a wildcard / predicate / union pattern. Exits `0`
 on at least one match, `1` on zero. File-slot wildcards are rejected with
-`OC_PATH_FILE_WILDCARD_UNSUPPORTED` — pass a concrete file (multi-file
+`OC_PATH_FILE_WILDCARD_UNSUPPORTED` : pass a concrete file (multi-file
 globbing is a follow-up feature).
 
 ```bash
@@ -468,7 +468,7 @@ Exits `0` when valid, `1` when invalid (with a structured `code` and
 ### `emit <file>`
 
 Round-trip a file through the per-kind parser and emitter. The output should
-be byte-identical to the input on a sound file — divergence indicates a
+be byte-identical to the input on a sound file : divergence indicates a
 parser bug or a sentinel hit. Useful for debugging substrate behavior on
 real-world inputs.
 

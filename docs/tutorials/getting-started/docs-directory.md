@@ -39,12 +39,12 @@ description: "OpenClaw 中文文档站精选索引：按新手、部署、频道
 
 一句话版：
 
-- **Gateway**：总机
-- **Channel**：聊天入口
-- **Provider**：AI 大脑
-- **Plugin**：扩展能力
-- **Node**：连接到网关的手机、桌面或远程设备
-- **Control UI**：浏览器里的管理台
+- Gateway：总机
+- Channel：聊天入口
+- Provider：AI 大脑
+- Plugin：扩展能力
+- Node：连接到网关的手机、桌面或远程设备
+- Control UI：浏览器里的管理台
 
 ---
 

@@ -6,19 +6,19 @@ description: "OpenClaw 工具系统：技能系统（Skills）。技能（Skills
 
 # 技能系统（Skills）
 
-技能（Skills）是预定义的指令集，以文件形式存在，在 Agent 启动时自动注入到提示词中。通过技能，你可以让 Agent 掌握特定领域的专业知识、固定工作流程或特殊行为模式——无需每次都重复描述。
+技能（Skills）是预定义的指令集，以文件形式存在，在 Agent 启动时自动注入到提示词中。通过技能，你可以让 Agent 掌握特定领域的专业知识、固定工作流程或特殊行为模式::无需每次都重复描述。
 
 ---
 
 ## 快速上手
 
-**第一步：创建技能目录**
+第一步：创建技能目录
 
 ```bash
 mkdir -p ~/.openclaw/skills/my-first-skill
 ```
 
-**第二步：创建技能定义文件**
+第二步：创建技能定义文件
 
 在技能目录下创建 `SKILL.md`：
 
@@ -41,7 +41,7 @@ mkdir -p ~/.openclaw/skills/my-first-skill
 给出具体、可操作的改进建议。
 ```
 
-**第三步：重启 OpenClaw**
+第三步：重启 OpenClaw
 
 技能文件会在 Agent 启动时自动加载，重启后即可生效。
 

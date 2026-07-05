@@ -188,7 +188,7 @@ Doctor 会尽量：
 ## Realtime 语音账单要特别注意
 
 OpenAI Realtime 语音不是消耗 ChatGPT/Codex 订阅额度。
-它走的是 **OpenAI Platform Realtime API**，需要 OpenAI Platform 组织有可用额度或账单。
+它走的是 OpenAI Platform Realtime API，需要 OpenAI Platform 组织有可用额度或账单。
 
 所以可能出现这种情况：
 

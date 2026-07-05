@@ -35,14 +35,14 @@ Use the WebSocket RPC path for OpenClaw clients and interactive tools that can k
 Enable the bundled plugin:
 
 
-  **CLI：**
+  CLI：
 
     ```bash
     openclaw plugins enable admin-http-rpc
     openclaw gateway restart
     ```
 
-  **Config：**
+  Config：
 
     ```json5
     {

@@ -3,7 +3,7 @@ title: "QA E2E Automation"
 sidebarTitle: "QA 自动化"
 ---
 
-# QA E2E Automation：从端到端证明 OpenClaw 没坏
+# QA E2E Automation：从端到端验证 OpenClaw 没坏
 
 QA E2E Automation 是维护者用来跑端到端场景的体系。它会启动测试 Gateway、模拟或连接真实通道，然后检查 Agent、通道、工具、消息投递是否按预期工作。
 

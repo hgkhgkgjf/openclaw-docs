@@ -6,7 +6,7 @@ description: "OpenClaw 核心概念：时区（Timezones）。OpenClaw 标准化
 
 # 时区（Timezones）
 
-OpenClaw 标准化时间戳，以便模型看到 **单一的参考时间**。
+OpenClaw 标准化时间戳，以便模型看到 单一的参考时间。
 
 ---
 
@@ -18,7 +18,7 @@ OpenClaw 标准化时间戳，以便模型看到 **单一的参考时间**。
 [Provider ... 2026-01-05 16:26 PST] message text
 ```
 
-信封中的时间戳 **默认是宿主机本地时间**，精确到分钟。
+信封中的时间戳 默认是宿主机本地时间，精确到分钟。
 
 你可以通过以下方式覆盖：
 
@@ -42,19 +42,19 @@ OpenClaw 标准化时间戳，以便模型看到 **单一的参考时间**。
 
 ### 示例
 
-**本地（默认）：**
+本地（默认）：
 
 ```text
 [Signal Alice +1555 2026-01-18 00:19 PST] hello
 ```
 
-**固定时区：**
+固定时区：
 
 ```text
 [Signal Alice +1555 2026-01-18 06:19 GMT+1] hello
 ```
 
-**经过时间：**
+经过时间：
 
 ```text
 [Signal Alice +1555 +2m 2026-01-18T05:19Z] follow-up
@@ -64,7 +64,7 @@ OpenClaw 标准化时间戳，以便模型看到 **单一的参考时间**。
 
 ## 工具负载（原始提供商数据 + 规范化字段）
 
-工具调用（`channels.discord.readMessages`、`channels.slack.readMessages` 等）返回 **原始提供商时间戳**。我们还附加规范化字段以保持一致性：
+工具调用（`channels.discord.readMessages`、`channels.slack.readMessages` 等）返回 原始提供商时间戳。我们还附加规范化字段以保持一致性：
 
 - `timestampMs`（UTC 纪元毫秒）
 - `timestampUtc`（ISO 8601 UTC 字符串）
@@ -75,7 +75,7 @@ OpenClaw 标准化时间戳，以便模型看到 **单一的参考时间**。
 
 ## 系统提示词的用户时区
 
-设置 `agents.defaults.userTimezone` 告诉模型用户的本地时区。如果未设置，OpenClaw 在 **运行时解析宿主时区**（不写入配置）。
+设置 `agents.defaults.userTimezone` 告诉模型用户的本地时区。如果未设置，OpenClaw 在 运行时解析宿主时区（不写入配置）。
 
 ```json5
 {

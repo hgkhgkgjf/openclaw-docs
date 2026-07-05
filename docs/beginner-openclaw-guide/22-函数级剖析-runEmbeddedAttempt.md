@@ -7,7 +7,7 @@ description: "OpenClaw 源码剖析：函数级剖析：runEmbeddedAttempt。是
 
 ## 模块定位
 
-`runEmbeddedAttempt` 是**单次 LLM 调用尝试**的完整生命周期管理器。它不负责 provider/model 轮换（那是 `runWithModelFallback` 的工作），只负责把当前指定的模型跑一次完整的 agent 循环。
+`runEmbeddedAttempt` 是单次 LLM 调用尝试的完整生命周期管理器。它不负责 provider/model 轮换（那是 `runWithModelFallback` 的工作），只负责把当前指定的模型跑一次完整的 agent 循环。
 
 ## 一、五个执行阶段（精确顺序）
 
@@ -105,10 +105,10 @@ const prior = await sanitizeSessionHistory({
 
 // 2. 按 provider 做 turn 验证
 const validatedGemini = transcriptPolicy.validateGeminiTurns
-  ? validateGeminiTurns(prior)      // Gemini 严格交替 user→assistant
+  ? validateGeminiTurns(prior)      // Gemini 严格交替 user:assistant
   : prior;
 const validated = transcriptPolicy.validateAnthropicTurns
-  ? validateAnthropicTurns(validatedGemini)  // Anthropic 严格交替 user→assistant
+  ? validateAnthropicTurns(validatedGemini)  // Anthropic 严格交替 user:assistant
   : validatedGemini;
 
 // 3. 限制历史轮次（DM 模式的 token 控制）
@@ -215,13 +215,13 @@ export async function sanitizeSessionHistory(params: {
 }): Promise<AgentMessage[]>
 ```
 
-**内部处理链：**
-1. `annotateInterSessionUserMessages` — 标注跨 session 的用户消息
-2. `sanitizeSessionMessagesImages` — 图片清理（mode/toolCallId/signature 处理）
-3. `sanitizeAntigravityThinkingBlocks` — 思考块清理（Gemini 特有）
-4. `sanitizeToolCallInputs` — tool call 输入清理
-5. `sanitizeToolUseResultPairing` — tool use 配对修复
-6. `stripToolResultDetails` — 移除 tool 结果详情
+内部处理链：
+1. `annotateInterSessionUserMessages` : 标注跨 session 的用户消息
+2. `sanitizeSessionMessagesImages` : 图片清理（mode/toolCallId/signature 处理）
+3. `sanitizeAntigravityThinkingBlocks` : 思考块清理（Gemini 特有）
+4. `sanitizeToolCallInputs` : tool call 输入清理
+5. `sanitizeToolUseResultPairing` : tool use 配对修复
+6. `stripToolResultDetails` : 移除 tool 结果详情
 
 ### limitHistoryTurns
 
@@ -290,7 +290,7 @@ export async function flushPendingToolResultsAfterIdle(opts: {
 }
 ```
 
-**为什么必须等待 idle 再 flush：** 工具可能还在异步执行中，过早 flush 会导致 tool result 丢失，前端看到"假缺失"错误。
+为什么必须等待 idle 再 flush： 工具可能还在异步执行中，过早 flush 会导致 tool result 丢失，前端看到"假缺失"错误。
 
 ## 三、appendCacheTtlTimestamp（位置敏感）
 
@@ -310,7 +310,7 @@ export function appendCacheTtlTimestamp(sessionManager: unknown, data: CacheTtlE
 }
 ```
 
-**关键约束（Issue #9282）：** 必须在 `prompt + compaction retry` 完成后追加。原因：如果在 prompt 前追加，自定义条目会插入在 compaction 和下一个 prompt 之间，破坏 `prepareCompaction()` 的 last-entry-type 检查，导致双重 compaction。
+关键约束（Issue #9282）： 必须在 `prompt + compaction retry` 完成后追加。原因：如果在 prompt 前追加，自定义条目会插入在 compaction 和下一个 prompt 之间，破坏 `prepareCompaction()` 的 last-entry-type 检查，导致双重 compaction。
 
 ## 四、自检清单
 
@@ -323,7 +323,7 @@ export function appendCacheTtlTimestamp(sessionManager: unknown, data: CacheTtlE
 
 ## 五、开发避坑
 
-1. **process.chdir** 有全局副作用，finally 必须恢复 `prevCwd`，否则影响后续所有文件操作。
-2. **skill 环境变量** 同理，`applySkillEnvOverrides` 返回的 `restoreSkillEnv` 必须在 finally 中调用。
-3. **timeout 处理**：超时触发 abort，若在 compaction 期间超时会设置 `timedOutDuringCompaction=true` 标记，避免误判为普通模型超时。
-4. **clientToolCall 路径**：`toClientToolDefinitions` 注册的工具被调用时设置 `clientToolCallDetected`，`run.ts` 在返回时检查此标记，设置 `stopReason="tool_calls"`。
+1. process.chdir 有全局副作用，finally 必须恢复 `prevCwd`，否则影响后续所有文件操作。
+2. skill 环境变量 同理，`applySkillEnvOverrides` 返回的 `restoreSkillEnv` 必须在 finally 中调用。
+3. timeout 处理：超时触发 abort，若在 compaction 期间超时会设置 `timedOutDuringCompaction=true` 标记，避免误判为普通模型超时。
+4. clientToolCall 路径：`toClientToolDefinitions` 注册的工具被调用时设置 `clientToolCallDetected`，`run.ts` 在返回时检查此标记，设置 `stopReason="tool_calls"`。

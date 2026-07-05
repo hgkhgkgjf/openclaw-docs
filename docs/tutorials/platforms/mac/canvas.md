@@ -2,7 +2,7 @@
 title: "Canvas"
 ---
 
-The macOS app embeds an agent‑controlled **Canvas panel** using `WKWebView`. It
+The macOS app embeds an agent‑controlled Canvas panel using `WKWebView`. It
 is a lightweight visual workspace for HTML/CSS/JS, A2UI, and small interactive
 UI surfaces.
 
@@ -12,7 +12,7 @@ Canvas state is stored under Application Support:
 
 - `~/Library/Application Support/OpenClaw/canvas/<session>/...`
 
-The Canvas panel serves those files via a **custom URL scheme**:
+The Canvas panel serves those files via a custom URL scheme:
 
 - `openclaw-canvas://<session>/<path>`
 
@@ -22,7 +22,7 @@ Examples:
 - `openclaw-canvas://main/assets/app.css` → `<canvasRoot>/main/assets/app.css`
 - `openclaw-canvas://main/widgets/todo/` → `<canvasRoot>/main/widgets/todo/index.html`
 
-If no `index.html` exists at the root, the app shows a **built‑in scaffold page**.
+If no `index.html` exists at the root, the app shows a built‑in scaffold page.
 
 ## Panel behavior
 
@@ -31,12 +31,12 @@ If no `index.html` exists at the root, the app shows a **built‑in scaffold pag
 - Auto‑reloads when local canvas files change.
 - Only one Canvas panel is visible at a time (session is switched as needed).
 
-Canvas can be disabled from Settings → **Allow Canvas**. When disabled, canvas
+Canvas can be disabled from Settings → Allow Canvas. When disabled, canvas
 node commands return `CANVAS_DISABLED`.
 
 ## Agent API surface
 
-Canvas is exposed via the **Gateway WebSocket**, so the agent can:
+Canvas is exposed via the Gateway WebSocket, so the agent can:
 
 - show/hide the panel
 - navigate to a path or URL
@@ -54,7 +54,7 @@ openclaw nodes canvas snapshot --node <id>
 
 Notes:
 
-- `canvas.navigate` accepts **local canvas paths**, `http(s)` URLs, and `file://` URLs.
+- `canvas.navigate` accepts local canvas paths, `http(s)` URLs, and `file://` URLs.
 - If you pass `"/"`, the Canvas shows the local scaffold or `index.html`.
 
 ## A2UI in Canvas
@@ -71,7 +71,7 @@ http://<gateway-host>:18789/__openclaw__/a2ui/
 
 ### A2UI commands (v0.8)
 
-Canvas currently accepts **A2UI v0.8** server→client messages:
+Canvas currently accepts A2UI v0.8 server→client messages:
 
 - `beginRendering`
 - `surfaceUpdate`

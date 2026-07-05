@@ -32,9 +32,9 @@ openclaw plugins install ./extensions/line
 
 1. 创建 LINE Developers 账户并打开控制台：
    [https://developers.line.biz/console/](https://developers.line.biz/console/)
-2. 创建（或选择）一个 Provider 并添加 **Messaging API** 通道。
-3. 从通道设置中复制 **Channel access token** 和 **Channel secret**。
-4. 在 Messaging API 设置中启用 **Use webhook**。
+2. 创建（或选择）一个 Provider 并添加 Messaging API 通道。
+3. 从通道设置中复制 Channel access token 和 Channel secret。
+4. 在 Messaging API 设置中启用 Use webhook。
 5. 将 Webhook URL 设置为你的网关端点（需要 HTTPS）：
 
 ```text
@@ -181,6 +181,6 @@ LINE 插件还提供了 `/card` 命令用于 Flex 消息预设：
 
 ## 故障排查
 
-- **Webhook 验证失败：** 确保 Webhook URL 是 HTTPS 且 `channelSecret` 与 LINE 控制台匹配。
-- **没有入站事件：** 确认 Webhook 路径与 `channels.line.webhookPath` 匹配且网关可从 LINE 访问。
-- **媒体下载错误：** 如果媒体超过默认限制，请增大 `channels.line.mediaMaxMb`。
+- Webhook 验证失败： 确保 Webhook URL 是 HTTPS 且 `channelSecret` 与 LINE 控制台匹配。
+- 没有入站事件： 确认 Webhook 路径与 `channels.line.webhookPath` 匹配且网关可从 LINE 访问。
+- 媒体下载错误： 如果媒体超过默认限制，请增大 `channels.line.mediaMaxMb`。

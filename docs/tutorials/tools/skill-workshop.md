@@ -8,7 +8,7 @@ description: "OpenClaw 工具系统：通过受控提案流程创建和更新 wo
 
 Skill Workshop 是 OpenClaw 创建和更新 workspace skills 的受控流程。
 
-它的核心原则是：**先生成提案，再由人或受信策略应用**。Agent 不会直接把生成内容写成生效的 `SKILL.md`；它会先创建 `PROPOSAL.md`，经过扫描和审批后才变成真实 skill。
+它的核心原则是：先生成提案，再由人或受信策略应用。Agent 不会直接把生成内容写成生效的 `SKILL.md`；它会先创建 `PROPOSAL.md`，经过扫描和审批后才变成真实 skill。
 
 ---
 

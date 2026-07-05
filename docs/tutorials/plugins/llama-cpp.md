@@ -6,7 +6,7 @@ description: "OpenClaw 插件专题：llama.cpp Provider。用于本地 GGUF 向
 
 # llama.cpp Provider
 
-`llama-cpp` 是 OpenClaw 官方提供的一个外部 Provider 插件，主要用途不是普通聊天，而是**给本地记忆检索提供 GGUF 向量嵌入能力**。
+`llama-cpp` 是 OpenClaw 官方提供的一个外部 Provider 插件，主要用途不是普通聊天，而是给本地记忆检索提供 GGUF 向量嵌入能力。
 
 最常见的触发条件是：
 

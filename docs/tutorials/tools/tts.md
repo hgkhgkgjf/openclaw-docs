@@ -85,7 +85,7 @@ OpenClaw 支持多种语音提供商，常见有：
 
 ## Talk 场景不要改全局 TTS
 
-Talk session 的 provider 选择是**单次会话范围**。
+Talk session 的 provider 选择是单次会话范围。
 
 Talk 客户端应该先调用：
 

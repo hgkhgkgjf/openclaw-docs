@@ -27,9 +27,9 @@ OpenClaw 会从以下两个位置加载脚本：
 
 OpenClaw 支持以下脚本语言：
 
-- **Bash / Shell**（`.sh`）—— 适合系统操作、文件处理
-- **Python**（`.py`）—— 适合数据处理、复杂逻辑
-- **Node.js**（`.js` / `.ts`）—— 适合 Web 相关操作
+- Bash / Shell（`.sh`）：适合系统操作、文件处理
+- Python（`.py`）：适合数据处理、复杂逻辑
+- Node.js（`.js` / `.ts`）：适合 Web 相关操作
 
 所有脚本文件必须有可执行权限：
 
@@ -43,7 +43,7 @@ chmod +x ~/.openclaw/scripts/my-tool.py
 ## 命名规范
 
 - 使用描述性名称，能从名称判断脚本用途
-- 用连字符（`-`）分隔单词，**避免使用空格**
+- 用连字符（`-`）分隔单词，避免使用空格
 - 建议带上动词前缀：`fetch-`、`process-`、`send-` 等
 
 ```text
@@ -112,7 +112,7 @@ if __name__ == "__main__":
 
 ## 最佳实践
 
-**1. 脚本应该是幂等的（Idempotent）**
+1. 脚本应该是幂等的（Idempotent）
 
 同一个脚本多次执行，产生的结果应该与执行一次相同。避免每次执行都追加数据或创建重复资源。
 
@@ -126,11 +126,11 @@ fi
 mkdir "$TARGET_DIR"
 ```
 
-**2. 做好错误处理**
+2. 做好错误处理
 
 Bash 脚本开头加 `set -euo pipefail`，遇到错误立即退出，避免静默失败。Python 脚本中使用 `try/except` 捕获异常并输出有用的错误信息。
 
-**3. 避免硬编码路径**
+3. 避免硬编码路径
 
 使用环境变量代替绝对路径，让脚本在不同机器和用户环境下都能正常运行：
 
@@ -142,7 +142,7 @@ CONFIG_PATH="${OPENCLAW_CONFIG:-$HOME/.openclaw/config.json5}"
 CONFIG_PATH="/Users/alice/.openclaw/config.json5"
 ```
 
-**4. 输出清晰的状态信息**
+4. 输出清晰的状态信息
 
 脚本执行时应输出必要的进度信息，方便调试：
 

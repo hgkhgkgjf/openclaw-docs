@@ -56,9 +56,9 @@ C:\Users\<你的用户名>\.openclaw\extensions\chrome
 
 你可以将扩展连接到特定的 Agent 会话：
 
-**附加（Attach）**：在控制面板选择目标 Agent 会话，点击"附加"后扩展会与该 Agent 绑定，Agent 的浏览器操作将通过当前 Chrome 窗口执行。
+附加（Attach）：在控制面板选择目标 Agent 会话，点击"附加"后扩展会与该 Agent 绑定，Agent 的浏览器操作将通过当前 Chrome 窗口执行。
 
-**分离（Detach）**：完成任务后点击"分离"，断开扩展与 Agent 的绑定关系。
+分离（Detach）：完成任务后点击"分离"，断开扩展与 Agent 的绑定关系。
 
 ---
 

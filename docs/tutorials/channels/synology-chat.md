@@ -28,8 +28,8 @@ openclaw plugins install ./extensions/synology-chat
 ## 快速设置
 
 1. 安装并启用 Synology Chat 插件
-2. 在 Synology Chat 集成里创建 **incoming webhook**，复制 URL
-3. 再创建 **outgoing webhook**，复制其 secret token
+2. 在 Synology Chat 集成里创建 incoming webhook，复制 URL
+3. 再创建 outgoing webhook，复制其 secret token
 4. 将 outgoing webhook 指向你的 OpenClaw 网关地址
 5. 配置 `channels.synology-chat`
 6. 重启网关后，给 Synology Chat 机器人发送私信测试

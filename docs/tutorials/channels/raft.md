@@ -7,7 +7,7 @@ description: "OpenClaw 通道接入：Raft External Agent。通过本机 Raft CL
 # Raft
 
 `Raft` 通道不是普通“收到消息就直接推给 Gateway”的聊天接入。
-它更像一条**本机 CLI 桥接路线**：Raft 给 OpenClaw 一个经过认证的 wake 提示，OpenClaw 再通过本机 `raft` CLI 去检查消息、发送回复。
+它更像一条本机 CLI 桥接路线：Raft 给 OpenClaw 一个经过认证的 wake 提示，OpenClaw 再通过本机 `raft` CLI 去检查消息、发送回复。
 
 ## 适合什么场景
 
@@ -28,7 +28,7 @@ openclaw gateway restart
 - Gateway 主机上已经能执行 `raft`
 - 对应的 `raft` profile 已经登录，并绑定到目标 External Agent
 
-Raft 的鉴权状态由 **Raft CLI 自己**保存，OpenClaw 不替你保管这份登录态。
+Raft 的鉴权状态由 Raft CLI 自己保存，OpenClaw 不替你保管这份登录态。
 
 ## 基本配置
 
@@ -79,7 +79,7 @@ raft --profile openclaw message check
 raft --profile openclaw message send
 ```
 
-这意味着一个关键区别：
+这意味着一个主要区别：
 
 ```text
 Raft wake bridge 负责“叫醒”

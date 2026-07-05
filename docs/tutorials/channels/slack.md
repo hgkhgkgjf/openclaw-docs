@@ -12,16 +12,14 @@ description: "OpenClaw 通道接入：Slack。状态：通过 Slack 应用集成
 同事在私信或频道里找这个 App，它就把消息转给 Gateway，再把 AI 回复发回 Slack。
 
 ::: tip 新手先选 Socket Mode
-如果你不知道该选哪种模式，就选 **Socket Mode**。
+如果你不知道该选哪种模式，就选 Socket Mode。
 它不需要你准备公网域名，也不需要 Slack 从外网打到你的 Gateway。
 :::
 
 
-  - [配对](/tutorials/channels/pairing) — Slack 私信默认为配对模式。
-
-  - [斜杠命令](/tutorials/tools/slash-commands) — 原生命令行为和命令目录。
-
-  - [通道故障排查](/tutorials/channels/troubleshooting) — 跨通道诊断和修复手册。
+- [配对](/tutorials/channels/pairing)：Slack 私信默认为配对模式。
+- [斜杠命令](/tutorials/tools/slash-commands)：原生命令行为和命令目录。
+- [通道故障排查](/tutorials/channels/troubleshooting)：跨通道诊断和修复手册。
 
 ---
 
@@ -41,21 +39,21 @@ description: "OpenClaw 通道接入：Slack。状态：通过 Slack 应用集成
 ## 快速设置
 
 
-  **Socket Mode（默认）：**
+### Socket Mode（默认）
 
 
-      ### 步骤 1：创建 Slack 应用和 Token
+#### 步骤 1：创建 Slack 应用和 Token
 
-        在 Slack 应用设置中：
+在 Slack 应用设置中：
 
-        - 打开 [api.slack.com/apps](https://api.slack.com/apps)
-        - 创建新应用，选择你的 workspace
-        - 启用 **Socket Mode**
-        - 创建 **App Token**（`xapp-...`），带 `connections:write` 权限
-        - 安装应用并复制 **Bot Token**（`xoxb-...`）
+- 打开 [api.slack.com/apps](https://api.slack.com/apps)
+- 创建新应用，选择你的 workspace
+- 启用 Socket Mode
+- 创建 App Token（`xapp-...`），带 `connections:write` 权限
+- 安装应用并复制 Bot Token（`xoxb-...`）
 
 
-      ### 步骤 2：配置 OpenClaw
+#### 步骤 2：配置 OpenClaw
 
 
 ```json5
@@ -71,7 +69,7 @@ description: "OpenClaw 通道接入：Slack。状态：通过 Slack 应用集成
 }
 ```
 
-        环境变量回退（仅默认账户）：
+环境变量回退（仅默认账户）：
 
 ```bash
 SLACK_APP_TOKEN=xapp-...
@@ -79,21 +77,21 @@ SLACK_BOT_TOKEN=xoxb-...
 ```
 
 
-      ### 步骤 3：订阅应用事件
+#### 步骤 3：订阅应用事件
 
-        订阅以下机器人事件：
+订阅以下机器人事件：
 
-        - `app_mention`
-        - `message.channels`、`message.groups`、`message.im`、`message.mpim`
-        - `reaction_added`、`reaction_removed`
-        - `member_joined_channel`、`member_left_channel`
-        - `channel_rename`
-        - `pin_added`、`pin_removed`
+- `app_mention`
+- `message.channels`、`message.groups`、`message.im`、`message.mpim`
+- `reaction_added`、`reaction_removed`
+- `member_joined_channel`、`member_left_channel`
+- `channel_rename`
+- `pin_added`、`pin_removed`
 
-        同时启用 App Home 的 **Messages Tab** 以支持私信。
+同时启用 App Home 的 Messages Tab 以支持私信。
 
 
-      ### 步骤 4：重启网关，让 Slack 配置生效
+#### 步骤 4：重启网关，让 Slack 配置生效
 
 
 ```bash
@@ -102,19 +100,18 @@ openclaw channels status --probe
 ```
 
 
-  **HTTP Events API 模式：**
+### HTTP Events API 模式
 
 
-      ### 步骤 5：为 HTTP 配置 Slack 应用
+#### 步骤 5：为 HTTP 配置 Slack 应用
+
+- 将模式设为 HTTP（`channels.slack.mode="http"`）
+- 复制 Slack Signing Secret
+- 将 Event Subscriptions + Interactivity + Slash command Request URL 设为相同的 Webhook 路径（默认 `/slack/events`）
+- 确认 Slack 能通过公网 HTTPS 访问这个路径
 
 
-        - 将模式设为 HTTP（`channels.slack.mode="http"`）
-        - 复制 Slack **Signing Secret**
-        - 将 Event Subscriptions + Interactivity + Slash command Request URL 设为相同的 Webhook 路径（默认 `/slack/events`）
-        - 确认 Slack 能通过公网 HTTPS 访问这个路径
-
-
-      ### 步骤 6：配置 OpenClaw HTTP 模式
+#### 步骤 6：配置 OpenClaw HTTP 模式
 
 
 ```json5
@@ -132,11 +129,11 @@ openclaw channels status --probe
 ```
 
 
-      ### 步骤 7：多账户 HTTP 使用唯一 Webhook 路径
+#### 步骤 7：多账户 HTTP 使用唯一 Webhook 路径
 
-        支持按账户的 HTTP 模式。
+支持按账户的 HTTP 模式。
 
-        为每个账户设置不同的 `webhookPath` 以避免注册冲突。
+为每个账户设置不同的 `webhookPath` 以避免注册冲突。
 
 ---
 
@@ -158,7 +155,7 @@ openclaw channels status --probe
 ## 访问控制和路由
 
 
-  **私信策略：**
+  私信策略：
 
     `channels.slack.dmPolicy` 控制私信访问（旧版：`channels.slack.dm.policy`）：
 
@@ -178,7 +175,7 @@ openclaw channels status --probe
     私信配对使用 `openclaw pairing approve slack <code>`。
 
 
-  **频道策略：**
+  频道策略：
 
     `channels.slack.groupPolicy` 控制频道处理：
 
@@ -196,7 +193,7 @@ openclaw channels status --probe
     - 未解析的条目保持原配置
 
 
-  **提及和频道用户：**
+  提及和频道用户：
 
     频道消息默认进行提及门控。
 
@@ -219,7 +216,7 @@ openclaw channels status --probe
 
 ## 命令和斜杠行为
 
-- Slack 的原生命令自动模式为 **关闭**（`commands.native: "auto"` 不为 Slack 启用原生命令）。
+- Slack 的原生命令自动模式为 关闭（`commands.native: "auto"` 不为 Slack 启用原生命令）。
 - 使用 `channels.slack.commands.native: true`（或全局 `commands.native: true`）启用原生 Slack 命令处理器。
 - 启用原生命令时，在 Slack 中注册对应的斜杠命令（`/<command>` 名称）。
 - 如果未启用原生命令，你可以通过 `channels.slack.slashCommand` 运行单个配置的斜杠命令。

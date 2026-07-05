@@ -6,7 +6,7 @@ description: "OpenClaw 模型接入：千帆提供商指南。千帆是百度的
 
 # 千帆提供商指南
 
-千帆是百度的 MaaS 平台，提供一个**统一 API**，通过单一端点和 API 密钥将请求路由到多种模型。它兼容 OpenAI，因此大多数 OpenAI SDK 只需切换基础 URL 即可使用。
+千帆是百度的 MaaS 平台，提供一个统一 API，通过单一端点和 API 密钥将请求路由到多种模型。它兼容 OpenAI，因此大多数 OpenAI SDK 只需切换基础 URL 即可使用。
 
 ---
 

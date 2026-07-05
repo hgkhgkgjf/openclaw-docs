@@ -12,14 +12,14 @@ Use this when OpenClaw needs a new shared domain such as image generation, video
 
 The rule:
 
-- **plugin** = ownership boundary
-- **capability** = shared core contract
+- plugin = ownership boundary
+- capability = shared core contract
 
 Do not start by wiring a vendor directly into a channel or a tool. Start by defining the capability.
 
 ## When to create a capability
 
-Create a new capability when **all** of these are true:
+Create a new capability when all of these are true:
 
 1. More than one vendor could plausibly implement it.
 2. Channels, tools, or feature plugins should consume it without caring about the vendor.
@@ -39,7 +39,7 @@ If the work is vendor-only and no shared contract exists yet, stop and define th
 
 ## What goes where
 
-**Core:**
+Core:
 
 - Request/response types.
 - Provider registry + resolution.
@@ -47,23 +47,23 @@ If the work is vendor-only and no shared contract exists yet, stop and define th
 - Config schema with propagated `title` / `description` docs metadata on nested object, wildcard, array-item, and composition nodes.
 - Runtime helper surface.
 
-**Vendor plugin:**
+Vendor plugin:
 
 - Vendor API calls.
 - Vendor auth handling.
 - Vendor-specific request normalization.
 - Registration of the capability implementation.
 
-**Feature/channel plugin:**
+Feature/channel plugin:
 
 - Calls `api.runtime.*` or the matching `plugin-sdk/*-runtime` helper.
 - Never calls a vendor implementation directly.
 
 ## Provider and harness seams
 
-Use **provider hooks** when the behavior belongs to the model provider contract rather than the generic agent loop. Examples include provider-specific request params after transport selection, auth-profile preference, prompt overlays, and follow-up fallback routing after model/profile failover.
+Use provider hooks when the behavior belongs to the model provider contract rather than the generic agent loop. Examples include provider-specific request params after transport selection, auth-profile preference, prompt overlays, and follow-up fallback routing after model/profile failover.
 
-Use **agent harness hooks** when the behavior belongs to the runtime that is executing a turn. Harnesses can classify successful-but-unusable attempt results such as empty, reasoning-only, or planning-only responses so the outer model fallback policy can make the retry decision.
+Use agent harness hooks when the behavior belongs to the runtime that is executing a turn. Harnesses can classify successful-but-unusable attempt results such as empty, reasoning-only, or planning-only responses so the outer model fallback policy can make the retry decision.
 
 Keep both seams narrow:
 
@@ -120,7 +120,7 @@ If a PR skips the capability layer and hardcodes vendor behavior into a channel/
 
 ## Related
 
-- [Plugin internals](/tutorials/plugins/architecture) — capability model, ownership, load pipeline, runtime helpers.
-- [Building plugins](/tutorials/plugins/building-plugins) — first-plugin tutorial.
-- [SDK overview](/tutorials/plugins/sdk-overview) — import map and registration API reference.
-- [Creating skills](/tutorials/tools/creating-skills) — companion contributor surface.
+- [Plugin internals](/tutorials/plugins/architecture)：capability model、ownership、load pipeline、runtime helpers。
+- [Building plugins](/tutorials/plugins/building-plugins)：first-plugin tutorial。
+- [SDK overview](/tutorials/plugins/sdk-overview)：import map 和 registration API reference。
+- [Creating skills](/tutorials/tools/creating-skills)：配套 contributor surface。

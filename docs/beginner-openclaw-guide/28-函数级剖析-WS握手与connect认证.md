@@ -33,7 +33,7 @@ attachGatewayWsConnectionHandler({
 每次新 WS 连接触发时的行为：
 1. 生成唯一 `connId = randomUUID()`
 2. 记录连接上下文：`remoteAddr`、`origin`、`ua`（User-Agent）
-3. **启动握手超时定时器**：调用 `getHandshakeTimeoutMs()`（默认 10 秒），超时后关闭连接
+3. 启动握手超时定时器：调用 `getHandshakeTimeoutMs()`（默认 10 秒），超时后关闭连接
 4. 立即向客户端发送 `connect.challenge`（含随机 `nonce`）
 5. 在 `close` 事件中做全量清理：presence、node unregister、unsubscribeAll
 
@@ -62,14 +62,14 @@ attachGatewayWsMessageHandler({
 })
 ```
 
-**两阶段状态机：**
+两阶段状态机：
 
 | 阶段 | 接受的帧 | 拒绝时行为 |
 |------|---------|----------|
 | 未连接 | 仅 `method=connect` | 关闭连接，不允许其他方法 |
 | 已连接 | 普通 request frame | 交给 `handleGatewayRequest` |
 
-**关键安全检查（connect 阶段）：**
+关键安全检查（connect 阶段）：
 1. 协议版本：`minProtocol/maxProtocol` 必须覆盖 `PROTOCOL_VERSION`
 2. 角色：只接受 `operator` 或 `node`
 3. origin：浏览器类客户端（control-ui/webchat）额外校验 origin
@@ -95,7 +95,7 @@ export async function authorizeGatewayConnect(params: {
 }): Promise<GatewayAuthResult>
 ```
 
-**认证判定顺序：**
+认证判定顺序：
 1. `trusted-proxy` 模式：验证代理来源 + 指定用户头
 2. 限速检查（`rateLimiter`）
 3. tailscale 身份验证（`tailscaleWhois`，`allowTailscale=true` 时）
@@ -126,7 +126,7 @@ export function isLocalDirectRequest(req?: IncomingMessage, trustedProxies?: str
 }
 ```
 
-**判定逻辑：**客户端 IP 是 loopback **且** Host 是本地域名（或 `.ts.net`）**且** （无转发头 **或** 转发来自可信代理）→ 判定为本地直连。
+判定逻辑：客户端 IP 是 loopback 且 Host 是本地域名（或 `.ts.net`）且 （无转发头 或 转发来自可信代理）: 判定为本地直连。
 
 ## 五、device nonce 校验
 
@@ -140,7 +140,7 @@ if (providedNonce && providedNonce !== connectNonce) {
 }
 ```
 
-**为什么需要 nonce：**
+为什么需要 nonce：
 - 纯 token 校验存在重放攻击风险
 - `connect.challenge` 携带随机 nonce，客户端签名必须包含该 nonce
 - 旧签名无法复用到新连接（nonce 不同就拒绝）
@@ -159,9 +159,9 @@ const verified = verifyDeviceSignature({
 });
 ```
 
-**v1/v2 兼容：** 系统支持 legacy v1 签名格式的回退验证，确保老版本客户端平滑升级。
+v1/v2 兼容： 系统支持 legacy v1 签名格式的回退验证，确保老版本客户端平滑升级。
 
-**校验内容：**
+校验内容：
 - `device.id` 与公钥推导一致
 - 签名时间戳未过期
 - 非本地场景必须带正确 nonce
@@ -200,17 +200,17 @@ const verified = verifyDeviceSignature({
 ```
 客户端                    服务端
   │                          │
-  │── WS upgrade ──────────→ │ 生成 connId，启动握手超时（10s）
+  │── WS upgrade ──────────: │ 生成 connId，启动握手超时（10s）
   │                          │
   │←── connect.challenge ──── │ 发送 {type: "challenge", nonce: "..."}
   │                          │
-  │── connect req ─────────→ │ 校验 protocol/role/origin/auth
+  │── connect req ─────────: │ 校验 protocol/role/origin/auth
   │  {method: "connect",     │ authorizeGatewayConnect(...)
   │   auth: {token, nonce}}  │ 校验 device 签名（如有）
   │                          │
   │←── hello-ok ──────────── │ 清除握手超时，组装 hello-ok
   │                          │
-  │── 正常 req 帧 ──────────→ │ handleGatewayRequest(...)
+  │── 正常 req 帧 ──────────: │ handleGatewayRequest(...)
 ```
 
 ## 九、自检清单
@@ -224,7 +224,7 @@ const verified = verifyDeviceSignature({
 
 ## 十、开发避坑
 
-1. 握手超时计时器必须在 hello-ok 发送**之后**清除，否则超时竞争会断正常连接。
+1. 握手超时计时器必须在 hello-ok 发送之后清除，否则超时竞争会断正常连接。
 2. 代理头（`x-forwarded-for`）只能来自 `trustedProxies` 列表中的 IP，否则忽略（防伪造本地身份）。
-3. device token 和 shared secret 使用**独立限速 scope**，互不影响计数。
-4. `buildDeviceAuthPayload` + `verifyDeviceSignature` 是 device 认证的两端——调试签名失败时先确认两侧使用相同的 payload 构建规则。
+3. device token 和 shared secret 使用独立限速 scope，互不影响计数。
+4. `buildDeviceAuthPayload` + `verifyDeviceSignature` 是 device 认证的两端。调试签名失败时，先确认两侧使用相同的 payload 构建规则。

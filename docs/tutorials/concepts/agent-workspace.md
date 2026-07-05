@@ -10,7 +10,7 @@ description: "OpenClaw 核心概念：智能体工作区（Agent Workspace）。
 
 这与存储配置、凭证和会话（Session）的 `~/.openclaw/` 是分开的。
 
-**重要：** 工作区是 **默认 cwd**，而非硬隔离的沙箱（Sandbox）。工具会将相对路径解析到工作区，但绝对路径仍然可以访问宿主机上的其他位置，除非启用了沙箱。如果需要隔离，请使用 [`agents.defaults.sandbox`](/tutorials/gateway/sandboxing)（和/或每个智能体的沙箱配置）。当启用沙箱且 `workspaceAccess` 不是 `"rw"` 时，工具在 `~/.openclaw/sandboxes` 下的沙箱工作区中操作，而非宿主工作区。
+重要： 工作区是 默认 cwd，而非硬隔离的沙箱（Sandbox）。工具会将相对路径解析到工作区，但绝对路径仍然可以访问宿主机上的其他位置，除非启用了沙箱。如果需要隔离，请使用 [`agents.defaults.sandbox`](/tutorials/gateway/sandboxing)（和/或每个智能体的沙箱配置）。当启用沙箱且 `workspaceAccess` 不是 `"rw"` 时，工具在 `~/.openclaw/sandboxes` 下的沙箱工作区中操作，而非宿主工作区。
 
 ---
 
@@ -40,7 +40,7 @@ description: "OpenClaw 核心概念：智能体工作区（Agent Workspace）。
 
 旧版安装可能创建了 `~/openclaw`。保留多个工作区目录可能导致认证或状态混乱，因为同一时间只有一个工作区处于活动状态。
 
-**建议：** 保留单一活动工作区。如果不再使用额外的文件夹，请归档或移至回收站（例如 `trash ~/openclaw`）。如果有意保留多个工作区，请确保 `agents.defaults.workspace` 指向活动的那个。
+建议： 保留单一活动工作区。如果不再使用额外的文件夹，请归档或移至回收站（例如 `trash ~/openclaw`）。如果有意保留多个工作区，请确保 `agents.defaults.workspace` 指向活动的那个。
 
 `openclaw doctor` 会在检测到额外工作区目录时发出警告。
 
@@ -107,7 +107,7 @@ description: "OpenClaw 核心概念：智能体工作区（Agent Workspace）。
 
 ## 不在工作区中的内容
 
-以下内容位于 `~/.openclaw/` 下，**不应**提交到工作区仓库：
+以下内容位于 `~/.openclaw/` 下，不应提交到工作区仓库：
 
 - `~/.openclaw/openclaw.json`（配置）
 - `~/.openclaw/credentials/`（OAuth Token、API 密钥）
@@ -120,7 +120,7 @@ description: "OpenClaw 核心概念：智能体工作区（Agent Workspace）。
 
 ## Git 备份（推荐，私有）
 
-将工作区视为私有记忆。放入一个 **私有** git 仓库以便备份和恢复。
+将工作区视为私有记忆。放入一个 私有 git 仓库以便备份和恢复。
 
 在网关运行的机器上执行以下步骤（工作区就在那里）。
 
@@ -139,7 +139,7 @@ git commit -m "Add agent workspace"
 
 选项 A：GitHub 网页界面
 
-1. 在 GitHub 上创建一个新的 **私有** 仓库。
+1. 在 GitHub 上创建一个新的 私有 仓库。
 2. 不要使用 README 初始化（避免合并冲突）。
 3. 复制 HTTPS 远程 URL。
 4. 添加远程并推送：
@@ -159,7 +159,7 @@ gh repo create openclaw-workspace --private --source . --remote origin --push
 
 选项 C：GitLab 网页界面
 
-1. 在 GitLab 上创建一个新的 **私有** 仓库。
+1. 在 GitLab 上创建一个新的 私有 仓库。
 2. 不要使用 README 初始化（避免合并冲突）。
 3. 复制 HTTPS 远程 URL。
 4. 添加远程并推送：

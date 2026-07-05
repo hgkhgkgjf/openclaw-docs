@@ -59,12 +59,12 @@ openclaw onboard --non-interactive \
 
 Together AI 提供对许多热门开源模型的访问：
 
-- **GLM 4.7 Fp8** - 默认模型，200K 上下文窗口
-- **Llama 3.3 70B Instruct Turbo** - 快速、高效的指令遵循
-- **Llama 4 Scout** - 视觉模型，支持图像理解
-- **Llama 4 Maverick** - 高级视觉和推理
-- **DeepSeek V3.1** - 强大的编程和推理模型
-- **DeepSeek R1** - 高级推理模型
-- **Kimi K2 Instruct** - 高性能模型，262K 上下文窗口
+- GLM 4.7 Fp8 - 默认模型，200K 上下文窗口
+- Llama 3.3 70B Instruct Turbo - 快速、高效的指令遵循
+- Llama 4 Scout - 视觉模型，支持图像理解
+- Llama 4 Maverick - 高级视觉和推理
+- DeepSeek V3.1 - 适合编程和推理任务的模型
+- DeepSeek R1 - 高级推理模型
+- Kimi K2 Instruct - 高性能模型，262K 上下文窗口
 
 所有模型都支持标准聊天补全，并兼容 OpenAI API。

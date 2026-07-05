@@ -173,14 +173,14 @@ openclaw run --agent analyst --dry-run "执行 ls /etc"
 
 旧版本使用扁平化的 `allowedTools` 数组，新版本改为按 Agent 分组的结构：
 
-**旧版配置：**
+旧版配置：
 ```json5
 {
   allowedTools: ["web", "exec"]
 }
 ```
 
-**新版配置：**
+新版配置：
 ```json5
 {
   tools: {
@@ -201,11 +201,11 @@ openclaw config migrate --from v1 --to v2
 
 ::: warning 常见配置问题
 
-**Agent 使用了不在 allowed 列表中的工具**：检查会话级配置是否意外覆盖了 Agent 级配置。会话级配置优先级最高，会覆盖 Agent 级设置。
+Agent 使用了不在 allowed 列表中的工具：检查会话级配置是否意外覆盖了 Agent 级配置。会话级配置优先级最高，会覆盖 Agent 级设置。
 
-**sandbox: none 不生效**：部分部署环境会强制启用最低沙箱级别，检查 OpenClaw 的部署配置文件（`deploy.config.json`）中是否有 `forceSandbox` 选项。
+sandbox: none 不生效：部分部署环境会强制启用最低沙箱级别，检查 OpenClaw 的部署配置文件（`deploy.config.json`）中是否有 `forceSandbox` 选项。
 
-**工具权限继承异常**：如果全局配置和 Agent 级配置都设置了 `allowed`，Agent 级配置会完全替换（而非合并）全局配置。如需合并，使用 `extend: true` 选项。
+工具权限继承异常：如果全局配置和 Agent 级配置都设置了 `allowed`，Agent 级配置会完全替换（而非合并）全局配置。如需合并，使用 `extend: true` 选项。
 :::
 
 ---

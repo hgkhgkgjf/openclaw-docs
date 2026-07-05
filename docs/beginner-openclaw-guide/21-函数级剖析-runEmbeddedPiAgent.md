@@ -25,7 +25,7 @@ export function resolveGlobalLane(lane?: string) {
 }
 ```
 
-**执行结构：**
+执行结构：
 ```ts
 const sessionLane = resolveSessionLane(params.sessionKey?.trim() || params.sessionId);
 const globalLane = resolveGlobalLane(params.lane);
@@ -59,13 +59,13 @@ export function evaluateContextWindowGuard(params: {
   return {
     ...params.info,
     tokens,
-    shouldWarn: tokens > 0 && tokens < warnBelow,    // tokens < 32_000 → 告警
-    shouldBlock: tokens > 0 && tokens < hardMin,      // tokens < 16_000 → 抛 FailoverError
+    shouldWarn: tokens > 0 && tokens < warnBelow,    // tokens < 32_000 : 告警
+    shouldBlock: tokens > 0 && tokens < hardMin,      // tokens < 16_000 : 抛 FailoverError
   };
 }
 ```
 
-**`resolveContextWindowInfo` 返回类型：**
+`resolveContextWindowInfo` 返回类型：
 ```ts
 type ContextWindowInfo = {
   tokens: number;
@@ -89,7 +89,7 @@ export function resolveAuthProfileOrder(params: {
 }): string[]  // 返回排好序的 profileId 数组
 ```
 
-**排序优先级：**
+排序优先级：
 1. `preferredProfile`（显式指定）排最前
 2. 有 explicitOrder：可用（非冷却）的在前，冷却中的在后
 3. 无 explicitOrder：round-robin，按类型（oauth > token > api_key）和 `lastUsed`（最旧优先）
@@ -155,29 +155,29 @@ let overflowCompactionAttempts = 0;
 let toolResultTruncationAttempted = false;
 ```
 
-**恢复流程（while 循环内）：**
+恢复流程（while 循环内）：
 
 ```
 检测到 contextOverflowError
     │
     ▼
 1. 尝试 compaction（最多 3 次，非 compaction_failure 错误才执行）
-   overflowCompactionAttempts++ → compactEmbeddedPiSessionDirect(...)
-   成功 → autoCompactionCount++ + continue（重试 prompt）
+   overflowCompactionAttempts++，compactEmbeddedPiSessionDirect(...)
+   成功：autoCompactionCount++ + continue（重试 prompt）
     │
     ▼（compaction 失败或达 MAX = 3）
 2. 尝试 toolResult 截断（只尝试一次）
    !toolResultTruncationAttempted
    sessionLikelyHasOversizedToolResults({ messages, contextWindowTokens })
-   有超大 → truncateOversizedToolResultsInSession(...)
-   成功 → overflowCompactionAttempts = 0（重置！允许再 compact）+ continue
+   有超大：truncateOversizedToolResultsInSession(...)
+   成功：overflowCompactionAttempts = 0（重置，允许再 compact）+ continue
     │
     ▼（全部失败）
 3. 返回用户可读错误
    "Context overflow: prompt too large for the model."
 ```
 
-**toolResult 过大判定（`tool-result-truncation.ts`）：**
+toolResult 过大判定（`tool-result-truncation.ts`）：
 ```ts
 const MAX_TOOL_RESULT_CONTEXT_SHARE = 0.3;        // 单条不超过 context 30%
 export const HARD_MAX_TOOL_RESULT_CHARS = 400_000; // 硬上限 40 万字符
@@ -186,10 +186,10 @@ export const HARD_MAX_TOOL_RESULT_CHARS = 400_000; // 硬上限 40 万字符
 // 超过此值的 toolResult 视为 oversized，触发截断
 ```
 
-**截断保留规则：**
+截断保留规则：
 - 最少保留 `MIN_KEEP_CHARS = 2_000` 字符
 - 在 `keepChars * 0.8` 处尽量在换行符截断（不切断单行）
-- 追加提示：`"[Content truncated — original was too large..."]`
+- 追加提示：`"[Content truncated: original was too large..."]`
 
 ## 五、主循环关键分支
 
@@ -198,22 +198,22 @@ while (true) {
   const attempt = await runEmbeddedAttempt({ ... });
   const { aborted, promptError, timedOut, timedOutDuringCompaction, ... } = attempt;
 
-  // 1. context overflow → 见上方恢复链
+  // 1. context overflow：见上方恢复链
   if (contextOverflowError) { ... }
 
-  // 2. promptError（非 overflow）→ 尝试 thinking fallback 或 profile 轮换
+  // 2. promptError（非 overflow）：尝试 thinking fallback 或 profile 轮换
   if (promptError && !aborted) {
     if (isRoleOrderingError) { return userFriendlyError; }
     if (isImageSizeError)    { return userFriendlyError; }
     if (isFailoverError && (await advanceAuthProfile())) { continue; }
-    // 无法 advance → throw promptError
+    // 无法 advance：throw promptError
   }
 
   // 3. thinking level 回退（不支持当前 level）
   const fallbackThinking = pickFallbackThinkingLevel({ attempted: attemptedThinking });
   if (fallbackThinking && !aborted) { thinkLevel = fallbackThinking; continue; }
 
-  // 4. auth/rate-limit/billing/timeout → shouldRotate
+  // 4. auth/rate-limit/billing/timeout：shouldRotate
   const shouldRotate = (!aborted && failoverFailure) || (timedOut && !timedOutDuringCompaction);
   if (shouldRotate) {
     await markAuthProfileFailure({ ... });
@@ -284,13 +284,13 @@ return {
 
 1. `shouldBlock`（tokens < 16_000）直接抛 `FailoverError`，不进入主循环。
 2. `advanceAuthProfile` 遇到 `lockedProfileId` 直接返回 false，不尝试切换。
-3. overflow 恢复顺序：compaction（最多 3 次）→ toolResult 截断（仅一次）→ 错误响应。
+3. overflow 恢复顺序：compaction（最多 3 次）: toolResult 截断（仅一次）: 错误响应。
 4. tool 截断成功后 `overflowCompactionAttempts = 0`，允许再次 compact。
-5. `markAuthProfileGood` + `markAuthProfileUsed` 仅在**正常返回**时调用。
+5. `markAuthProfileGood` + `markAuthProfileUsed` 仅在正常返回时调用。
 
 ## 九、开发避坑
 
-1. **timeout 等于隐性 rate limit**：`timedOut && !timedOutDuringCompaction` → 触发 profile 轮换标记。
-2. **`lastCallUsage` vs `usage`**：前者反映 context 实际大小，后者是累积值（工具循环叠加），不能混用。
-3. **overflow 截断后 attempts 归零**：截断成功后 compaction 计数归零，让 compact 有机会再次执行。
-4. **思考级别降级（thinking fallback）**：不支持的 thinking level 会自动降级重试，不算失败。
+1. timeout 等于隐性 rate limit：`timedOut && !timedOutDuringCompaction` 会触发 profile 轮换标记。
+2. `lastCallUsage` vs `usage`：前者反映 context 实际大小，后者是累积值（工具循环叠加），不能混用。
+3. overflow 截断后 attempts 归零：截断成功后 compaction 计数归零，让 compact 有机会再次执行。
+4. 思考级别降级（thinking fallback）：不支持的 thinking level 会自动降级重试，不算失败。

@@ -27,7 +27,7 @@ export class NodeRegistry {
   private pendingInvokes = new Map<string, PendingInvoke>(); // key=requestId (randomUUID)
 ```
 
-**PendingInvoke 类型（行 23-29）：**
+PendingInvoke 类型（行 23-29）：
 ```ts
 type PendingInvoke = {
   nodeId: string;
@@ -76,7 +76,7 @@ async invoke(params: {
 }
 ```
 
-**默认超时：30_000 ms（30 秒）**。超时后 Promise resolve（而非 reject），返回 `{ ok: false, error: { code: "TIMEOUT" } }`。
+默认超时：30_000 ms（30 秒）。超时后 Promise resolve（而非 reject），返回 `{ ok: false, error: { code: "TIMEOUT" } }`。
 
 ## 三、handleInvokeResult（行 157-181）
 
@@ -106,8 +106,8 @@ handleInvokeResult(params: {
 }
 ```
 
-**requestId + nodeId 双重校验：** 防止恶意节点用别人的 requestId 抢答，造成安全漏洞。
-**迟到结果：** 超时后迟来的 result 因 `pendingInvokes.delete` 已执行，`get` 返回 undefined，return false（静默丢弃）。
+requestId + nodeId 双重校验： 防止恶意节点用别人的 requestId 抢答，造成安全漏洞。
+迟到结果： 超时后迟来的 result 因 `pendingInvokes.delete` 已执行，`get` 返回 undefined，return false（静默丢弃）。
 
 ## 四、sanitizeNodeInvokeParamsForForwarding
 
@@ -136,7 +136,7 @@ export function sanitizeNodeInvokeParamsForForwarding(opts: {
 }
 ```
 
-**结论：** 只有 `system.run` 需要额外审批处理，其他命令原样转发。
+结论： 只有 `system.run` 需要额外审批处理，其他命令原样转发。
 
 ## 五、DEFAULT_DANGEROUS_NODE_COMMANDS
 
@@ -171,11 +171,11 @@ export function resolveNodeCommandAllowlist(
 
 export const handleNodeEvent = async (ctx: NodeEventContext, nodeId: string, evt: NodeEvent) => {
   switch (evt.event) {
-    case "voice.transcript":   // 语音转录 → 触发 agentCommand
+    case "voice.transcript":   // 语音转录 : 触发 agentCommand
     case "agent.request":      // 节点发起代理请求（带 deliver/channel/to/timeout）
     case "chat.subscribe":     // 订阅 sessionKey 推送
     case "chat.unsubscribe":   // 取消订阅
-    case "exec.started":       // exec 开始 → enqueueSystemEvent
+    case "exec.started":       // exec 开始 : enqueueSystemEvent
     case "exec.finished":      // exec 结束（含 exitCode/timedOut/output）
     case "exec.denied":        // exec 被拒绝（含 reason/command）
     default:
@@ -184,7 +184,7 @@ export const handleNodeEvent = async (ctx: NodeEventContext, nodeId: string, evt
 };
 ```
 
-**NodeEvent 类型：**
+NodeEvent 类型：
 ```ts
 export type NodeEvent = {
   event: string;          // 字符串匹配，非 enum
@@ -194,7 +194,7 @@ export type NodeEvent = {
 
 ## 七、节点订阅管理
 
-订阅关系由 `createNodeSubscriptionManager()` 管理，维护 node → session 双向索引：
+订阅关系由 `createNodeSubscriptionManager()` 管理，维护 node 与 session 的双向索引：
 
 ```
 node.event("chat.subscribe")
@@ -203,7 +203,7 @@ node.event("chat.subscribe")
 subscriptionManager.subscribe(nodeId, sessionKey)
     │
     ▼
-session 有推送时 → subscriptionManager.getNodeIds(sessionKey) → 广播
+session 有推送时，先通过 `subscriptionManager.getNodeIds(sessionKey)` 找到节点，再广播。
 ```
 
 - 支持按 sessionKey 精准广播（只推送订阅了该 session 的节点）
@@ -251,11 +251,11 @@ export type DeviceAuthTokenSummary = {
   rotatedAtMs?: number;
   revokedAtMs?: number;
   lastUsedAtMs?: number;
-  // 无 token 字段 —— 这就是"脱敏"
+  // 无 token 字段：这就是"脱敏"
 };
 ```
 
-**脱敏原则：** 去掉 `token` 明文字段，只保留元信息（角色、权限、时间戳）。
+脱敏原则： 去掉 `token` 明文字段，只保留元信息（角色、权限、时间戳）。
 
 ## 十、自检清单
 
@@ -267,7 +267,7 @@ export type DeviceAuthTokenSummary = {
 
 ## 十一、开发避坑
 
-1. **`system.execApprovals.*` 必须走专用审批方法**：不能通过 `node.invoke` 直接调用，nodes.ts 里有明确检查。
-2. **迟到的 invoke result 静默丢弃**：不报错，调用方已拿到 TIMEOUT 结果，后续 result 无用。
-3. **voice.transcript 触发完整 agent run**：不是简单消息转发，会走 agentCommand 完整链路。
-4. **device.pair.resolved 是广播事件**：所有连接的客户端（包括 admin UI）都会收到，可用于实时更新配对状态。
+1. `system.execApprovals.*` 必须走专用审批方法：不能通过 `node.invoke` 直接调用，nodes.ts 里有明确检查。
+2. 迟到的 invoke result 静默丢弃：不报错，调用方已拿到 TIMEOUT 结果，后续 result 无用。
+3. voice.transcript 触发完整 agent run：不是简单消息转发，会走 agentCommand 完整链路。
+4. device.pair.resolved 是广播事件：所有连接的客户端（包括 admin UI）都会收到，可用于实时更新配对状态。

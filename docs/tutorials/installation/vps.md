@@ -39,16 +39,16 @@ tuning that applies everywhere.
   - [Raspberry Pi](/tutorials/installation/raspberry-pi) - ARM self-hosted
 
 
-**AWS (EC2 / Lightsail / free tier)** also works well.
+AWS (EC2 / Lightsail / free tier) also works well.
 A community video walkthrough is available at
 [x.com/techfrenAJ/status/2014934471095812547](https://x.com/techfrenAJ/status/2014934471095812547)
 (community resource -- may become unavailable).
 
 ## How cloud setups work
 
-- The **Gateway runs on the VPS** and owns state + workspace.
-- You connect from your laptop or phone via the **Control UI** or **Tailscale/SSH**.
-- Treat the VPS as the source of truth and **back up** the state + workspace regularly.
+- The Gateway runs on the VPS and owns state + workspace.
+- You connect from your laptop or phone via the Control UI or Tailscale/SSH.
+- Treat the VPS as the source of truth and back up the state + workspace regularly.
 - Secure default: keep the Gateway on loopback and access it via SSH tunnel or Tailscale Serve.
   If you bind to `lan` or `tailnet`, require `gateway.auth.token` or `gateway.auth.password`.
 
@@ -81,7 +81,7 @@ Security model details: [Security](/tutorials/gateway/security).
 
 ## Using nodes with a VPS
 
-You can keep the Gateway in the cloud and pair **nodes** on your local devices
+You can keep the Gateway in the cloud and pair nodes on your local devices
 (Mac/iOS/Android/headless). Nodes provide local screen/camera/canvas and `system.run`
 capabilities while the Gateway stays in the cloud.
 

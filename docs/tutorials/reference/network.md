@@ -15,13 +15,13 @@ devices across localhost, LAN, and tailnet.
 
 Most operations flow through the Gateway (`openclaw gateway`), a single long-running process that owns channel connections and the WebSocket control plane.
 
-- **Loopback first**: the Gateway WS defaults to `ws://127.0.0.1:18789`.
+- Loopback first: the Gateway WS defaults to `ws://127.0.0.1:18789`.
   Non-loopback binds require a valid gateway auth path: shared-secret
   token/password auth, or a correctly configured non-loopback
   `trusted-proxy` deployment.
-- **One Gateway per host** is recommended. For isolation, run multiple gateways with isolated profiles and ports ([Multiple Gateways](/tutorials/gateway/multiple-gateways)).
-- **Canvas host** is served on the same port as the Gateway (`/__openclaw__/canvas/`, `/__openclaw__/a2ui/`), protected by Gateway auth when bound beyond loopback.
-- **Remote access** is typically SSH tunnel or Tailscale VPN ([Remote Access](/tutorials/gateway/remote)).
+- One Gateway per host is recommended. For isolation, run multiple gateways with isolated profiles and ports ([Multiple Gateways](/tutorials/gateway/multiple-gateways)).
+- Canvas host is served on the same port as the Gateway (`/__openclaw__/canvas/`, `/__openclaw__/a2ui/`), protected by Gateway auth when bound beyond loopback.
+- Remote access is typically SSH tunnel or Tailscale VPN ([Remote Access](/tutorials/gateway/remote)).
 
 Key references:
 

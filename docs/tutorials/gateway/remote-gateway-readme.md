@@ -1,12 +1,12 @@
 ---
 title: "远程网关（Gateway）设置"
 sidebarTitle: "远程网关"
-description: "OpenClaw Gateway：使用远程网关（Gateway）运行 OpenClaw.app。OpenClaw.app 使用 SSH 隧道连接到远程网关（Gateway）。本指南展示如何设置。"
+description: "OpenClaw Gateway：使用远程网关（Gateway）运行 OpenClaw.app。OpenClaw.app 使用 SSH 隧道连接到远程网关（Gateway）。本页说明配置步骤。"
 ---
 
 # 使用远程网关（Gateway）运行 OpenClaw.app
 
-OpenClaw.app 使用 SSH 隧道连接到远程网关（Gateway）。本指南展示如何设置。
+OpenClaw.app 使用 SSH 隧道连接到远程网关（Gateway）。下面按 SSH 配置、Token、隧道和自动启动几个步骤说明。
 
 ## 概览
 
@@ -117,7 +117,7 @@ launchctl bootstrap gui/$UID ~/Library/LaunchAgents/bot.molt.ssh-tunnel.plist
 
 - 在你登录时自动启动
 - 崩溃时自动重启
-- 在后台持续运行
+- 在后台保持运行
 
 遗留说明：如果存在旧的 `com.openclaw.ssh-tunnel` LaunchAgent，请将其移除。
 
@@ -125,20 +125,20 @@ launchctl bootstrap gui/$UID ~/Library/LaunchAgents/bot.molt.ssh-tunnel.plist
 
 ## 故障排除
 
-**检查隧道是否在运行：**
+检查隧道是否在运行：
 
 ```bash
 ps aux | grep "ssh -N remote-gateway" | grep -v grep
 lsof -i :18789
 ```
 
-**重启隧道：**
+重启隧道：
 
 ```bash
 launchctl kickstart -k gui/$UID/bot.molt.ssh-tunnel
 ```
 
-**停止隧道：**
+停止隧道：
 
 ```bash
 launchctl bootout gui/$UID/bot.molt.ssh-tunnel

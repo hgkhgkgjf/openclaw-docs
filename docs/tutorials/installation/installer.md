@@ -1,7 +1,7 @@
 ---
 title: "安装器内部机制"
 sidebarTitle: "安装器内部机制"
-description: "OpenClaw 安装部署：安装器内部机制。OpenClaw 提供三个安装脚本，托管在 。"
+description: "OpenClaw 安装部署：安装器内部机制。OpenClaw 提供三个托管在 openclaw.ai 的安装脚本。"
 ---
 
 # 安装器内部机制
@@ -10,14 +10,14 @@ OpenClaw 提供三个安装脚本，托管在 `openclaw.ai`。
 
 | 脚本                               | 平台                 | 功能                                                                                          |
 | ---------------------------------- | -------------------- | --------------------------------------------------------------------------------------------- |
-| [`install.sh`](#installsh)         | macOS / Linux / WSL  | 如需安装 Node，通过 npm（默认）或 git 安装 OpenClaw，可运行引导。                                |
+| [`install.sh`](#installsh)         | macOS / Linux / WSL  | 检查 Node，通过 npm（默认）或 git 安装 OpenClaw，并按条件运行引导。                                |
 | [`install-cli.sh`](#install-clish) | macOS / Linux / WSL  | 将 Node + OpenClaw 安装到本地前缀（`~/.openclaw`）。无需 root 权限。                              |
-| [`install.ps1`](#installps1)       | Windows (PowerShell) | 如需安装 Node，通过 npm（默认）或 git 安装 OpenClaw，可运行引导。                                |
+| [`install.ps1`](#installps1)       | Windows (PowerShell) | 检查 Node，通过 npm（默认）或 git 安装 OpenClaw，并按条件运行引导。                                |
 
 ## 快速命令
 
 
-  **install.sh：**
+### install.sh
 
 ```bash
 curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash
@@ -28,7 +28,7 @@ curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -
 ```
 
 
-  **install-cli.sh：**
+### install-cli.sh
 
 ```bash
 curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install-cli.sh | bash
@@ -39,7 +39,7 @@ curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install-cli.sh | bash 
 ```
 
 
-  **install.ps1：**
+### install.ps1
 
 ```powershell
 iwr -useb https://openclaw.ai/install.ps1 | iex
@@ -67,32 +67,32 @@ iwr -useb https://openclaw.ai/install.ps1 | iex
 ### 流程（install.sh）
 
 
-  ### 步骤 1：检测操作系统
+### 步骤 1：检测操作系统
 
-    支持 macOS 和 Linux（包括 WSL）。如果检测到 macOS，会在缺失时安装 Homebrew。
+支持 macOS 和 Linux（包括 WSL）。如果检测到 macOS，会在缺失时安装 Homebrew。
 
-  ### 步骤 2：确保原生编译工具链（仅 Linux）
+### 步骤 2：确保原生编译工具链（仅 Linux）
 
-    在 Linux（包括 WSL）上，安装 Node.js **之前**，脚本会自动预装原生编译工具链（`make`、`g++`、`cmake`、`python3`），避免后续 npm 原生模块安装失败。macOS 会跳过这一步。
+在 Linux（包括 WSL）上，安装 Node.js 之前，脚本会自动预装原生编译工具链（`make`、`g++`、`cmake`、`python3`），避免后续 npm 原生模块安装失败。macOS 会跳过这一步。
 
-  ### 步骤 3：确保 Node.js 24（或兼容的 22.19+）
+### 步骤 3：确保 Node.js 24（或兼容的 22.19+）
 
-    检查 Node 版本，如需安装会优先准备 Node 24（macOS 上使用 Homebrew，Linux 上使用 NodeSource 设置脚本，适用于 apt/dnf/yum）。
+检查 Node 版本，如需安装会优先准备 Node 24（macOS 上使用 Homebrew，Linux 上使用 NodeSource 设置脚本，适用于 apt/dnf/yum）。
 
-  ### 步骤 4：确保 Git
+### 步骤 4：确保 Git
 
-    如果缺失则安装 Git。如果是 `npm` 安装方式，也会检查 Git——因为某些 npm 依赖使用 git URL，缺少 Git 会导致 `spawn git ENOENT` 错误。
+如果缺失则安装 Git。如果是 `npm` 安装方式，也会检查 Git，因为某些 npm 依赖使用 git URL，缺少 Git 会导致 `spawn git ENOENT` 错误。
 
-  ### 步骤 5：安装 OpenClaw
+### 步骤 5：安装 OpenClaw
 
-    - `npm` 方式（默认）：全局 npm 安装
-    - `git` 方式：克隆/更新仓库，使用 pnpm 安装依赖，构建，然后在 `~/.local/bin/openclaw` 安装包装器
+- `npm` 方式（默认）：全局 npm 安装
+- `git` 方式：克隆/更新仓库，使用 pnpm 安装依赖，构建，然后在 `~/.local/bin/openclaw` 安装包装器
 
-  ### 步骤 6：安装后任务
+### 步骤 6：安装后任务
 
-    - 在升级和 git 安装时运行 `openclaw doctor --non-interactive`（尽力而为）
-    - 在适当时尝试引导（TTY 可用、引导未被禁用、且引导/配置检查通过）
-    - 默认设置 `SHARP_IGNORE_GLOBAL_LIBVIPS=1`
+- 在升级和 git 安装时运行 `openclaw doctor --non-interactive`（尽力而为）
+- 在适当时尝试引导（TTY 可用、引导未被禁用、且引导/配置检查通过）
+- 默认设置 `SHARP_IGNORE_GLOBAL_LIBVIPS=1`
 
 
 ### 源码 checkout 检测
@@ -109,25 +109,25 @@ iwr -useb https://openclaw.ai/install.ps1 | iex
 ### 示例（install.sh）
 
 
-  **默认：**
+默认：
 
 ```bash
 curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash
 ```
 
-  **跳过引导：**
+跳过引导：
 
 ```bash
 curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --no-onboard
 ```
 
-  **Git 安装：**
+  Git 安装：
 
 ```bash
 curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --install-method git
 ```
 
-  **试运行：**
+  试运行：
 
 ```bash
 curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --dry-run
@@ -206,25 +206,25 @@ curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -
 ### 示例（install-cli.sh）
 
 
-  **默认：**
+  默认：
 
 ```bash
 curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install-cli.sh | bash
 ```
 
-  **自定义前缀 + 版本：**
+  自定义前缀 + 版本：
 
 ```bash
 curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install-cli.sh | bash -s -- --prefix /opt/openclaw --version latest
 ```
 
-  **自动化 JSON 输出：**
+  自动化 JSON 输出：
 
 ```bash
 curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install-cli.sh | bash -s -- --json --prefix /opt/openclaw
 ```
 
-  **运行引导：**
+  运行引导：
 
 ```bash
 curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install-cli.sh | bash -s -- --onboard
@@ -294,31 +294,31 @@ curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install-cli.sh | bash 
 ### 示例（install.ps1）
 
 
-  **默认：**
+  默认：
 
 ```powershell
 iwr -useb https://openclaw.ai/install.ps1 | iex
 ```
 
-  **Git 安装：**
+  Git 安装：
 
 ```powershell
 & ([scriptblock]::Create((iwr -useb https://openclaw.ai/install.ps1))) -InstallMethod git
 ```
 
-  **自定义 git 目录：**
+  自定义 git 目录：
 
 ```powershell
 & ([scriptblock]::Create((iwr -useb https://openclaw.ai/install.ps1))) -InstallMethod git -GitDir "C:\openclaw"
 ```
 
-  **试运行：**
+  试运行：
 
 ```powershell
 & ([scriptblock]::Create((iwr -useb https://openclaw.ai/install.ps1))) -DryRun
 ```
 
-  **调试跟踪：**
+  调试跟踪：
 
 ```powershell
 # install.ps1 目前还没有专门的 -Verbose 标志。
@@ -371,26 +371,26 @@ Set-PSDebug -Trace 0
 使用非交互式标志/环境变量以获得可预测的运行。
 
 
-  **install.sh（非交互式 npm）：**
+  install.sh（非交互式 npm）：
 
 ```bash
 curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --no-prompt --no-onboard
 ```
 
-  **install.sh（非交互式 git）：**
+  install.sh（非交互式 git）：
 
 ```bash
 OPENCLAW_INSTALL_METHOD=git OPENCLAW_NO_PROMPT=1 \
   curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash
 ```
 
-  **install-cli.sh（JSON）：**
+  install-cli.sh（JSON）：
 
 ```bash
 curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install-cli.sh | bash -s -- --json --prefix /opt/openclaw
 ```
 
-  **install.ps1（跳过引导）：**
+  install.ps1（跳过引导）：
 
 ```powershell
 & ([scriptblock]::Create((iwr -useb https://openclaw.ai/install.ps1))) -NoOnboard

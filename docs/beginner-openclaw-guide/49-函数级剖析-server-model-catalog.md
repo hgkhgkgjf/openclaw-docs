@@ -29,13 +29,13 @@ loadModelCatalog({ config: loadConfig() })   ← src/agents/model-catalog.ts
 
 ## 二、为什么单独封一层（而不是直接调 loadModelCatalog）
 
-1. **依赖注入**：网关的 `context` 对象统一提供 `loadGatewayModelCatalog`，
+1. 依赖注入：网关的 `context` 对象统一提供 `loadGatewayModelCatalog`，
    各方法通过 context 调用而不是直接 import，便于测试 mock。
 
-2. **测试隔离**：提供 `__resetModelCatalogCacheForTest()` 函数，
+2. 测试隔离：提供 `__resetModelCatalogCacheForTest()` 函数，
    允许测试之间清空缓存，避免测试用例串扰（前一个测试的 catalog 影响后一个）。
 
-3. **关注点分离**："目录加载"和"回合选模"是两件不同的事，分开维护，各自可独立演进。
+3. 关注点分离："目录加载"和"回合选模"是两件不同的事，分开维护，各自可独立演进。
 
 ## 三、loadModelCatalog 的缓存行为
 
