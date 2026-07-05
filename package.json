@@ -6,7 +6,8 @@
     "docs:dev": "vitepress dev docs --host 0.0.0.0",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "docs:audit-humanizer": "node scripts/audit-humanizer.mjs"
+    "docs:audit-humanizer": "node scripts/audit-humanizer.mjs",
+    "docs:audit-seo": "node scripts/audit-seo.mjs"
   },
   "devDependencies": {
     "mermaid": "^11.12.3",

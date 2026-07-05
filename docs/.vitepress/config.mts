@@ -112,8 +112,10 @@ const tutWeb = listMdItems('tutorials/web')
 const tutNodes = listMdItems('tutorials/nodes')
 
 const SITE_URL = 'https://openclaw-docs.dx3n.cn'
+const DEFAULT_TITLE = 'OpenClaw 中文文档 | 源码剖析 · 安装教程 · AI智能体框架'
+const DEFAULT_DESCRIPTION = 'OpenClaw 中文完整文档，覆盖安装部署、源码剖析、Gateway配置、Web控制UI、节点、WhatsApp/Telegram/Discord/飞书多通道接入，支持 Claude、DeepSeek、Ollama 本地模型。'
 
-const jsonLd = JSON.stringify({
+const homepageJsonLd = JSON.stringify({
   '@context': 'https://schema.org',
   '@graph': [
     {
@@ -122,7 +124,7 @@ const jsonLd = JSON.stringify({
       url: `${SITE_URL}/`,
       name: 'OpenClaw 中文文档',
       alternateName: ['ClawdBot 文档', 'ClawdBot Docs', 'openclaw docs', 'OpenClaw 源码剖析'],
-      description: 'OpenClaw 中文完整文档，767篇教程，覆盖安装部署、源码剖析、Gateway配置、Web控制UI、节点、多通道接入与AI模型集成。',
+      description: DEFAULT_DESCRIPTION,
       inLanguage: 'zh-CN',
       potentialAction: {
         '@type': 'SearchAction',
@@ -203,6 +205,73 @@ const jsonLd = JSON.stringify({
   ],
 })
 
+function stripHtml(value: string): string {
+  return value.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()
+}
+
+function pagePathToUrl(page: string): { path: string; canonical: string } {
+  const path = page
+    .replace(/(^|\/)index\.md$/, '$1')
+    .replace(/\.md$/, '')
+  return {
+    path,
+    canonical: path ? `${SITE_URL}/${path}` : `${SITE_URL}/`,
+  }
+}
+
+function sectionName(path: string): string {
+  if (!path) return '首页'
+  if (path.startsWith('beginner-openclaw-guide')) return '完整工程主线'
+  if (path.startsWith('beginner-openclaw-framework-focus')) return 'AI 核心框架'
+  if (path.startsWith('tutorials/getting-started')) return '快速入门'
+  if (path.startsWith('tutorials/installation')) return '安装部署'
+  if (path.startsWith('tutorials/gateway')) return 'Gateway'
+  if (path.startsWith('tutorials/channels')) return '通道接入'
+  if (path.startsWith('tutorials/providers')) return '模型 Provider'
+  if (path.startsWith('tutorials/concepts')) return '核心概念'
+  if (path.startsWith('tutorials/tools')) return '工具系统'
+  if (path.startsWith('tutorials/plugins')) return '插件专题'
+  if (path.startsWith('tutorials/cli')) return 'CLI 命令'
+  if (path.startsWith('tutorials/automation')) return '自动化'
+  if (path.startsWith('tutorials/help')) return '帮助与调试'
+  return 'OpenClaw 教程'
+}
+
+function buildPageJsonLd(path: string, canonical: string, title: string, description: string): string {
+  if (!path) return homepageJsonLd
+
+  const titleText = stripHtml(title || DEFAULT_TITLE)
+  const descriptionText = stripHtml(description || DEFAULT_DESCRIPTION)
+  const section = sectionName(path)
+  const sectionPath = path.includes('/') ? `${SITE_URL}/${path.split('/')[0]}/` : canonical
+
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${canonical}#breadcrumb`,
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: '首页', item: `${SITE_URL}/` },
+          { '@type': 'ListItem', position: 2, name: section, item: sectionPath },
+          { '@type': 'ListItem', position: 3, name: titleText, item: canonical },
+        ],
+      },
+      {
+        '@type': 'TechArticle',
+        '@id': `${canonical}#article`,
+        headline: titleText,
+        description: descriptionText,
+        inLanguage: 'zh-CN',
+        url: canonical,
+        mainEntityOfPage: canonical,
+        isPartOf: { '@id': `${SITE_URL}/#website` },
+        publisher: { '@id': `${SITE_URL}/#organization` },
+      },
+    ],
+  })
+}
+
 export default withMermaid(defineConfig({
   markdown: {
     config(md) {
@@ -230,9 +299,9 @@ export default withMermaid(defineConfig({
     },
   },
   lang: 'zh-CN',
-  title: 'OpenClaw 中文文档 | 源码剖析 · 安装教程 · AI智能体框架',
+  title: DEFAULT_TITLE,
   titleTemplate: ':title | OpenClaw 中文文档',
-  description: 'OpenClaw 中文完整文档，767篇教程，覆盖安装部署、源码剖析、Gateway配置、Web控制UI、节点、WhatsApp/Telegram/Discord/飞书多通道接入，支持 Claude、DeepSeek、Ollama 本地模型。',
+  description: DEFAULT_DESCRIPTION,
   cleanUrls: true,
   lastUpdated: true,
   ignoreDeadLinks: true,
@@ -264,7 +333,6 @@ export default withMermaid(defineConfig({
     ['meta', { name: 'robots', content: 'index, follow, max-image-preview:large' }],
     ['meta', { name: 'keywords', content: 'OpenClaw, ClawdBot, clawdbot, openclaw, AI智能体, AI Agent, 多通道机器人, WhatsApp机器人, Telegram机器人, Discord机器人, Slack机器人, 飞书机器人, Signal机器人, iMessage机器人, Mattermost, MS Teams, 自动回复, 群聊机器人, 智能体框架, 通道适配器, 上下文管理, 状态机, Gateway, 本地大模型, Ollama, DeepSeek, 通义千问, Kimi, 智谱GLM, OpenRouter, MCP, 私有部署, 本地部署, Node.js, TypeScript, Docker, 源码剖析, 项目拆解, 开源AI助手, 开源AI框架' }],
     ['meta', { name: 'theme-color', content: '#161412' }],
-    ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
     ['meta', { property: 'og:site_name', content: 'OpenClaw 中文文档' }],
     ['meta', { property: 'og:image', content: `${SITE_URL}/og-image.png` }],
@@ -272,24 +340,22 @@ export default withMermaid(defineConfig({
     ['meta', { property: 'og:image:height', content: '630' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:image', content: `${SITE_URL}/og-image.png` }],
-    ['script', { type: 'application/ld+json' }, jsonLd],
     // Microsoft Clarity
     ['script', { type: 'text/javascript' }, `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window, document, "clarity", "script", "vo93r5hbry");`],
   ],
   transformHead({ page, title, description: pageDesc }) {
-    const path = page
-      .replace(/(^|\/)index\.md$/, '$1')
-      .replace(/\.md$/, '')
-    const canonical = path ? `${SITE_URL}/${path}` : `${SITE_URL}/`
-    const ogTitle = title || 'OpenClaw 中文文档 | 源码剖析 · 安装教程 · AI智能体框架'
-    const ogDesc = pageDesc || 'OpenClaw 中文完整文档，767篇教程，覆盖安装部署、源码剖析、Gateway配置、Web控制UI、节点、WhatsApp/Telegram/Discord/飞书多通道接入，支持 Claude、DeepSeek、Ollama 本地模型。'
+    const { path, canonical } = pagePathToUrl(page)
+    const ogTitle = stripHtml(title || DEFAULT_TITLE)
+    const ogDesc = stripHtml(pageDesc || DEFAULT_DESCRIPTION)
     return [
       ['link', { rel: 'canonical', href: canonical }],
+      ['meta', { property: 'og:type', content: path ? 'article' : 'website' }],
       ['meta', { property: 'og:url', content: canonical }],
       ['meta', { property: 'og:title', content: ogTitle }],
       ['meta', { property: 'og:description', content: ogDesc }],
       ['meta', { name: 'twitter:title', content: ogTitle }],
       ['meta', { name: 'twitter:description', content: ogDesc }],
+      ['script', { type: 'application/ld+json' }, buildPageJsonLd(path, canonical, ogTitle, ogDesc)],
     ]
   },
   themeConfig: {

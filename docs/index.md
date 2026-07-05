@@ -125,7 +125,7 @@ hero:
 <article class="oc-home-entry">
 <h3>Track C</h3>
 <p class="oc-home-entry-title">通道适配器框架</p>
-<p>重点学习通道接口合同、注册机制、账号生命周期、路由与发送解耦，是对接外部平台的主要。</p>
+<p>重点学习通道接口合同、注册机制、账号生命周期、路由与发送解耦，这是对接外部平台的主线。</p>
 <a href="/beginner-openclaw-guide/53-函数级剖析-通道适配器框架实现">看函数级实战 &rarr;</a>
 </article>
 </section>

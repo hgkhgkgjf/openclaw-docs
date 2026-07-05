@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://openclaw-docs.dx3n.cn/sitemap.xml
+Host: openclaw-docs.dx3n.cn
